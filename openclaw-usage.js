@@ -175,6 +175,103 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
   };
 }
 
+function toDay(iso) {
+  return new Date(iso).toISOString().slice(0, 10);
+}
+
+function ensureDailyRollups(root, history) {
+  const dir = path.join(root, 'reports', 'daily-rollups');
+  fs.mkdirSync(dir, { recursive: true });
+
+  const byDay = new Map();
+  for (const snap of history) {
+    const day = toDay(snap.capturedAt || new Date().toISOString());
+    const prev = byDay.get(day);
+    if (!prev || new Date(snap.capturedAt) > new Date(prev.capturedAt)) byDay.set(day, snap);
+  }
+
+  const days = Array.from(byDay.keys()).sort();
+  for (const day of days) {
+    const s = byDay.get(day);
+    const payload = {
+      date: day,
+      capturedAt: s.capturedAt,
+      tokens: s.estimatedUsedTokens || 0,
+      estimatedCostUsd: s.estimatedCostUsd || 0,
+      byModel: s.byModelEstimatedTokens || {},
+      byAgent: s.byAgentEstimatedTokens || {},
+      attributionBuckets: s.byBucketEstimatedTokens || {},
+      securityCounts: s.securityCounts || {},
+      contextProfilerTotals: s.contextProfiler ? {
+        fileCount: s.contextProfiler.fileCount || 0,
+        totalBytes: s.contextProfiler.totalBytes || 0,
+        totalLines: s.contextProfiler.totalLines || 0,
+        totalEstimatedTokens: s.contextProfiler.totalEstimatedTokens || 0,
+      } : {},
+    };
+    fs.writeFileSync(path.join(dir, `${day}.json`), JSON.stringify(payload, null, 2));
+  }
+
+  const last5 = days.slice(-5).map(d => ({ day: d, snap: byDay.get(d) }));
+  const tokenSeries = last5.map(x => Number(x.snap.estimatedUsedTokens || 0));
+  const totalDelta = tokenSeries.length > 1 ? tokenSeries[tokenSeries.length - 1] - tokenSeries[0] : 0;
+
+  const sumBy = (arr, field) => {
+    const out = {};
+    for (const x of arr) {
+      for (const [k, v] of Object.entries(x.snap[field] || {})) out[k] = (out[k] || 0) + Number(v || 0);
+    }
+    return Object.entries(out).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  };
+
+  const topModels = sumBy(last5, 'byModelEstimatedTokens');
+  const topAgents = sumBy(last5, 'byAgentEstimatedTokens');
+  const topBuckets = sumBy(last5, 'byBucketEstimatedTokens');
+
+  const anomalies = [];
+  for (let i = 1; i < tokenSeries.length; i++) {
+    const prevT = tokenSeries[i - 1] || 1;
+    const pct = ((tokenSeries[i] - prevT) / prevT) * 100;
+    if (Math.abs(pct) >= 15) anomalies.push(`${last5[i].day}: ${pct >= 0 ? '+' : ''}${pct.toFixed(1)}% token shift vs previous day`);
+  }
+
+  const md = [
+    '# 5-day AI Insights',
+    '',
+    `Window: ${last5[0]?.day || 'n/a'} → ${last5[last5.length - 1]?.day || 'n/a'} (${last5.length} day(s))`,
+    '',
+    '## Trend narrative',
+    `- Estimated tokens moved ${totalDelta >= 0 ? 'up' : 'down'} by ${Math.abs(totalDelta).toLocaleString()} across the available window.`,
+    `- Estimated daily costs track token movement and remain rough heuristics.`,
+    '',
+    '## Biggest drivers',
+    `- Top models: ${topModels.map(([k, v]) => `${k} (${Math.round(v * 1000).toLocaleString()} est tokens)`).join(' · ') || 'n/a'}`,
+    `- Top agents: ${topAgents.map(([k, v]) => `${k} (${Math.round(v * 1000).toLocaleString()} est tokens)`).join(' · ') || 'n/a'}`,
+    `- Top attribution buckets: ${topBuckets.map(([k, v]) => `${k} (${Math.round(v * 1000).toLocaleString()} est tokens)`).join(' · ') || 'n/a'}`,
+    '',
+    '## Anomalies',
+    ...(anomalies.length ? anomalies.map(a => `- ${a}`) : ['- No strong day-over-day anomalies detected (>=15% threshold).']),
+    '',
+    '## Recommended actions',
+    '- Cap high-churn context files and trim non-essential markdown to reduce prompt footprint.',
+    '- Review cron-heavy windows and reduce redundant scheduled runs where possible.',
+    '- Keep fallback model usage visible; investigate spikes when model mix changes suddenly.',
+    '',
+    '_Note: generated from local snapshot artifacts using heuristic summarization (LLM-style narrative)._',
+  ].join('\n');
+
+  fs.writeFileSync(path.join(dir, 'summary-5d.md'), md);
+
+  return {
+    rollupDir: dir,
+    daysAvailable: days.length,
+    daysUsed: last5.length,
+    last5Days: last5.map(x => x.day),
+    partial: last5.length < 5,
+    summaryPath: path.join(dir, 'summary-5d.md'),
+  };
+}
+
 function renderHtml(history, buildId) {
   const latest = history[history.length - 1] || {};
   const prev = history[history.length - 2] || {};
@@ -190,6 +287,7 @@ function renderHtml(history, buildId) {
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const topSessions = latest.topSessions || [];
   const contextProfiler = latest.contextProfiler || { fileCount: 0, totalBytes: 0, totalLines: 0, totalEstimatedTokens: 0, files: [], top10: [] };
+  const insights = latest.aiInsights || { partial: true, last5Days: [], bullets: [], rollupLinks: [] };
   const bucketEntries = Object.entries(latest.byBucketEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const bucketModel = latest.byBucketByModel || {};
   const attributionRules = latest.attributionRules || {};
@@ -232,6 +330,9 @@ function renderHtml(history, buildId) {
   const profilerRows = (contextProfiler.files || []).map(f => `<tr><td title="${f.path}">${f.path}</td><td data-sort="bytes">${Number(f.bytes || 0).toLocaleString()}</td><td data-sort="lines">${Number(f.lineCount || 0).toLocaleString()}</td><td data-sort="tokens">${Number(f.estimatedTokens || 0).toLocaleString()}</td><td data-sort="modified">${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
 
   const top10Rows = (contextProfiler.top10 || []).map((f, i) => `<tr><td>${i + 1}</td><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td></tr>`).join('') || '<tr><td colspan="4">No files</td></tr>';
+
+  const insightBullets = (insights.bullets || []).map(b => `<li>${b}</li>`).join('') || '<li>No insight bullets generated.</li>';
+  const insightLinks = (insights.rollupLinks || []).map(l => `<li><a href="${l}" target="_blank" rel="noreferrer">${l}</a></li>`).join('') || '<li>No rollup links.</li>';
 
   const historyRows = history.slice(-20).map((h, i) => `<tr><td>${i + 1}</td><td>${new Date(h.capturedAt).toLocaleString('en-GB')}</td><td>${h.sessionCount || 0}</td><td>${Math.round(Number(h.estimatedUsedTokens || 0)).toLocaleString()}</td><td>${h.securitySummary || '-'}</td></tr>`).join('');
 
@@ -315,6 +416,14 @@ function renderHtml(history, buildId) {
     <table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table>
   </div>
 
+  <div class="card">
+    <h3>5-day AI Insights ${insights.partial ? '(partial window)' : ''}</h3>
+    <div class="badge">days used: ${(insights.last5Days || []).length}/5</div>
+    <ul>${insightBullets}</ul>
+    <div class="k">Latest rollups:</div>
+    <ul>${insightLinks}</ul>
+  </div>
+
   <div class="card"><h3>Snapshot history</h3>
     <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table>
   </div>
@@ -364,6 +473,19 @@ function cmdCapture(root) {
   history.push(summary);
   history = history.slice(-200);
 
+  const rollupMeta = ensureDailyRollups(root, history);
+  let summaryMd = '';
+  try { summaryMd = fs.readFileSync(rollupMeta.summaryPath, 'utf8'); } catch {}
+  const bulletLines = summaryMd.split('\n').filter(l => l.startsWith('- ')).slice(0, 6).map(l => l.replace(/^-\s*/, ''));
+  summary.aiInsights = {
+    partial: rollupMeta.partial,
+    last5Days: rollupMeta.last5Days,
+    bullets: bulletLines,
+    rollupLinks: rollupMeta.last5Days.map(d => `reports/daily-rollups/${d}.json`),
+    summaryPath: 'reports/daily-rollups/summary-5d.md',
+  };
+  history[history.length - 1] = summary;
+
   const buildId = Date.now();
   const dashboardHtml = renderHtml(history, buildId);
 
@@ -376,6 +498,16 @@ function cmdCapture(root) {
   fs.mkdirSync(docsDir, { recursive: true });
   fs.writeFileSync(path.join(docsDir, 'index.html'), dashboardHtml);
   fs.writeFileSync(path.join(docsDir, 'version.json'), JSON.stringify({ buildId, capturedAt: summary.capturedAt }, null, 2));
+
+  // Mirror rollups into docs for GitHub Pages links.
+  const docsRollups = path.join(docsDir, 'reports', 'daily-rollups');
+  fs.mkdirSync(docsRollups, { recursive: true });
+  const srcRollups = path.join(root, 'reports', 'daily-rollups');
+  if (fs.existsSync(srcRollups)) {
+    for (const file of fs.readdirSync(srcRollups)) {
+      fs.copyFileSync(path.join(srcRollups, file), path.join(docsRollups, file));
+    }
+  }
 
   console.log('Captured OpenClaw usage snapshot.');
   console.log(`Sessions: ${summary.sessionCount}, estimated tokens: ${summary.estimatedUsedTokens.toLocaleString()}`);

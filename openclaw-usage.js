@@ -20,6 +20,84 @@ function parseSecurityCounts(summary) {
   return { critical: pick('critical'), warn: pick('warn'), info: pick('info') };
 }
 
+function walk(dir, visitor) {
+  if (!fs.existsSync(dir)) return;
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  for (const e of entries) {
+    const full = path.join(dir, e.name);
+    if (e.isDirectory()) walk(full, visitor);
+    else if (e.isFile()) visitor(full);
+  }
+}
+
+function estimateTokensFromChars(chars) {
+  return Math.round(chars / 4);
+}
+
+function buildContextProfiler(root) {
+  const files = new Set();
+  const workspaceRoot = path.resolve(root, '..', '..');
+
+  // 1) root: *.md
+  for (const name of fs.readdirSync(root)) {
+    if (name.toLowerCase().endsWith('.md')) files.add(path.join(root, name));
+  }
+
+  // 2) memory/*.md
+  const memoryDir = path.join(root, 'memory');
+  if (fs.existsSync(memoryDir)) {
+    for (const name of fs.readdirSync(memoryDir)) {
+      if (name.toLowerCase().endsWith('.md')) files.add(path.join(memoryDir, name));
+    }
+  }
+
+  // 3) agents/**/(SOUL|USER|MEMORY|AGENTS|TOOLS).md
+  const agentFiles = new Set(['SOUL.md', 'USER.md', 'MEMORY.md', 'AGENTS.md', 'TOOLS.md']);
+  const agentsDir = path.join(workspaceRoot, 'agents');
+  walk(agentsDir, (full) => {
+    if (agentFiles.has(path.basename(full))) files.add(full);
+  });
+
+  const rows = [];
+  let totalBytes = 0;
+  let totalLines = 0;
+  let totalEstimatedTokens = 0;
+
+  for (const full of files) {
+    try {
+      const stat = fs.statSync(full);
+      const text = fs.readFileSync(full, 'utf8');
+      const lines = text.length === 0 ? 0 : text.split(/\r?\n/).length;
+      const bytes = stat.size;
+      const estimatedTokens = estimateTokensFromChars(text.length);
+      totalBytes += bytes;
+      totalLines += lines;
+      totalEstimatedTokens += estimatedTokens;
+      rows.push({
+        path: path.relative(root, full),
+        bytes,
+        lineCount: lines,
+        estimatedTokens,
+        lastModified: stat.mtime.toISOString(),
+      });
+    } catch {
+      // ignore unreadable file
+    }
+  }
+
+  rows.sort((a, b) => b.bytes - a.bytes);
+
+  return {
+    fileCount: rows.length,
+    totalBytes,
+    totalLines,
+    totalEstimatedTokens,
+    files: rows,
+    top10: rows.slice(0, 10),
+    notes: 'Estimated tokens uses chars/4 heuristic.',
+  };
+}
+
 function summarizeAllAgents(statusParsed, sessionsJsonText) {
   const data = JSON.parse(sessionsJsonText);
   const sessions = Array.isArray(data.sessions) ? data.sessions : [];
@@ -88,6 +166,7 @@ function renderHtml(history, buildId) {
   const modelEntries = Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const topSessions = latest.topSessions || [];
+  const contextProfiler = latest.contextProfiler || { fileCount: 0, totalBytes: 0, totalLines: 0, totalEstimatedTokens: 0, files: [], top10: [] };
 
   const totalAgentK = agentEntries.reduce((s, [, k]) => s + Number(k || 0), 0) || 1;
 
@@ -112,6 +191,10 @@ function renderHtml(history, buildId) {
     const short = key.length > 64 ? key.slice(0, 64) + '…' : key;
     return `<tr><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td></tr>`;
   }).join('') || '<tr><td colspan="4">No sessions</td></tr>';
+
+  const profilerRows = (contextProfiler.files || []).map(f => `<tr><td title="${f.path}">${f.path}</td><td data-sort="bytes">${Number(f.bytes || 0).toLocaleString()}</td><td data-sort="lines">${Number(f.lineCount || 0).toLocaleString()}</td><td data-sort="tokens">${Number(f.estimatedTokens || 0).toLocaleString()}</td><td data-sort="modified">${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
+
+  const top10Rows = (contextProfiler.top10 || []).map((f, i) => `<tr><td>${i + 1}</td><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td></tr>`).join('') || '<tr><td colspan="4">No files</td></tr>';
 
   const historyRows = history.slice(-20).map((h, i) => `<tr><td>${i + 1}</td><td>${new Date(h.capturedAt).toLocaleString('en-GB')}</td><td>${h.sessionCount || 0}</td><td>${Math.round(Number(h.estimatedUsedTokens || 0)).toLocaleString()}</td><td>${h.securitySummary || '-'}</td></tr>`).join('');
 
@@ -162,10 +245,53 @@ function renderHtml(history, buildId) {
     <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th></tr></thead><tbody>${topRows}</tbody></table>
   </div>
 
+  <div class="card">
+    <h3>Context File Profiler</h3>
+    <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div>
+    <div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div>
+    <div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div>
+    <div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
+    <div class="badge">${contextProfiler.notes || ''}</div>
+    <table id="context-profiler-table">
+      <thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead>
+      <tbody>${profilerRows}</tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h3>Top-10 Heaviest Context Files</h3>
+    <table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table>
+  </div>
+
   <div class="card"><h3>Snapshot history</h3>
     <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table>
   </div>
 </div>
+<script>
+(function(){
+  var table = document.getElementById('context-profiler-table');
+  if (!table) return;
+  var headers = table.querySelectorAll('thead th');
+  headers.forEach(function(h, idx){
+    if (idx === 0 || idx === 4) return;
+    h.style.cursor = 'pointer';
+    h.title = 'Click to sort';
+    h.addEventListener('click', function(){
+      var rows = Array.from(table.querySelectorAll('tbody tr'));
+      var dir = h.getAttribute('data-dir') === 'asc' ? 'desc' : 'asc';
+      headers.forEach(function(x){ x.removeAttribute('data-dir'); });
+      h.setAttribute('data-dir', dir);
+      rows.sort(function(a,b){
+        var av = Number((a.children[idx].textContent || '').replace(/,/g,'')) || 0;
+        var bv = Number((b.children[idx].textContent || '').replace(/,/g,'')) || 0;
+        return dir === 'asc' ? av - bv : bv - av;
+      });
+      var tbody = table.querySelector('tbody');
+      rows.forEach(function(r){ tbody.appendChild(r); });
+    });
+  });
+})();
+</script>
 </body>
 </html>`;
 }
@@ -178,6 +304,7 @@ function cmdCapture(root) {
   const parsed = parseStatus(raw);
   const sessionsRaw = run('openclaw sessions --all-agents --json');
   const summary = summarizeAllAgents(parsed, sessionsRaw);
+  summary.contextProfiler = buildContextProfiler(root);
 
   const snapshotsPath = path.join(reportsDir, 'usage-history.json');
   let history = [];

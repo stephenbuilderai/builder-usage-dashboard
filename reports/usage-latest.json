@@ -1,11 +1,11 @@
 {
   "parsed": {
-    "capturedAt": "2026-03-05T19:00:27.501Z",
+    "capturedAt": "2026-03-05T19:23:56.125Z",
     "securitySummary": "6 critical · 3 warn · 1 info",
-    "raw": "OpenClaw status\n\nOverview\n┌─────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────┐\n│ Item            │ Value                                                                                             │\n├─────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────┤\n│ Dashboard       │ http://127.0.0.1:18789/                                                                           │\n│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │\n│ Tailscale       │ off                                                                                               │\n│ Channel         │ stable (config)                                                                                   │\n│ Update          │ available · pnpm · npm update 2026.3.2                                                            │\n│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 37ms · auth token · 2bf5bd64c8d3 (172.  │\n│                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │\n│ Gateway service │ systemd not installed                                                                             │\n│ Node service    │ systemd not installed                                                                             │\n│ Agents          │ 8 · 8 bootstrap files present · sessions 31 · default main active 1m ago                          │\n│ Memory          │ 11 files · 15 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │\n│                 │ (50)                                                                                              │\n│ Probes          │ skipped (use --deep)                                                                              │\n│ Events          │ none                                                                                              │\n│ Heartbeat       │ 30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled    │\n│                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth- │\n│                 │ strategist)                                                                                       │\n│ Sessions        │ 31 active · default gpt-5-mini (400k ctx) · 8 stores                                              │\n└─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘\n\nSecurity audit\nSummary: 6 critical · 3 warn · 1 info\n  CRITICAL DANGEROUS: Control UI device auth disabled\n    gateway.controlUi.dangerouslyDisableDeviceAuth=true disables device identity checks for the Control UI.\n    Fix: Disable it unless you are in a short-lived break-glass scenario.\n  CRITICAL Open groupPolicy with elevated tools enabled\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy With tools.elevate…\n    Fix: Set groupPolicy=\"allowlist\" and keep elevated allowlists extremely tight.\n  CRITICAL Open groupPolicy with runtime/filesystem tools exposed\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy Risky tool exposur…\n    Fix: For open groups, prefer tools.profile=\"messaging\" (or deny group:runtime/group:fs), set tools.fs.workspaceOnly=true, and use agents.defaults.sandbox.mode=\"all\" for exposed agents.\n  CRITICAL Telegram security warning\n    Telegram groups: groupPolicy=\"open\" allows any member in allowed groups to trigger (mention-gated). Set channels.telegram.groupPolicy=\"allowlist\" + channels.te…\n  CRITICAL Discord slash commands are unrestricted\n    commands.useAccessGroups=false disables sender allowlists for Discord slash commands unless a per-guild/channel users allowlist is configured; with no users al…\n    Fix: Set commands.useAccessGroups=true (recommended), or configure channels.discord.guilds.<id>.users (or channels.discord.guilds.<id>.channels.<channel>.users).\n  CRITICAL Discord security warning\n    Discord guilds: groupPolicy=\"open\" allows any channel not explicitly denied to trigger (mention-gated). Set channels.discord.groupPolicy=\"allowlist\" and config…\n… +3 more\nFull report: openclaw security audit\nDeep probe: openclaw security audit --deep\n\nChannels\n┌─────────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────┐\n│ Channel     │ Enabled │ State  │ Detail                                                                             │\n├─────────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────┤\n│ Telegram    │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows          │\n│             │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…             │\n│ WhatsApp    │ ON      │ WARN   │ missing file (~/.openclaw/credentials/whatsapp/default) · gateway: Not linked (no  │\n│             │         │        │ WhatsApp Web session).                                                             │\n│ Discord     │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                   │\n│ Google Chat │ ON      │ SETUP  │ not configured                                                                     │\n│ Slack       │ ON      │ SETUP  │ no tokens (need bot+app)                                                           │\n│ Nostr       │ ON      │ SETUP  │ not configured                                                                     │\n└─────────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────┘\n\nSessions\n┌────────────────────────────────────────────────┬────────┬─────────┬───────────────┬─────────────────────────────────┐\n│ Key                                            │ Kind   │ Age     │ Model         │ Tokens                          │\n├────────────────────────────────────────────────┼────────┼─────────┼───────────────┼─────────────────────────────────┤\n│ agent:main:main                                │ group  │ 1m ago  │ gpt-5.3-codex │ 72k/272k (26%) · 🗄️ 82% cached  │\n│ agent:main:telegram:group:-1003…               │ group  │ 4m ago  │ gpt-5.3-codex │ 128k/272k (47%) · 🗄️ 96% cached │\n│ agent:builder:telegram:group:-1…               │ group  │ 2h ago  │ gpt-5.3-codex │ 74k/272k (27%) · 🗄️ 400% cached │\n│ agent:main:cron:ddcb38d2-6d24-4…               │ direct │ 4h ago  │ gpt-5.2       │ 13k/272k (5%)                   │\n│ agent:main:cron:ddcb38d2-6d24-4…               │ direct │ 4h ago  │ gpt-5.2       │ 13k/272k (5%)                   │\n│ agent:main:cron:ba9af08c-6dca-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 13k/400k (3%)                   │\n│ agent:main:cron:ba9af08c-6dca-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 13k/400k (3%)                   │\n│ agent:main:cron:bd120469-dc1c-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 14k/400k (3%) · 🗄️ 94% cached   │\n│ agent:main:cron:bd120469-dc1c-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 14k/400k (3%) · 🗄️ 94% cached   │\n│ agent:main:cron:ba9af08c-6dca-4…               │ direct │ 8h ago  │ gpt-5-mini    │ 13k/400k (3%)                   │\n└────────────────────────────────────────────────┴────────┴─────────┴───────────────┴─────────────────────────────────┘\n\nFAQ: https://docs.openclaw.ai/faq\nTroubleshooting: https://docs.openclaw.ai/troubleshooting\n\nUpdate available (npm 2026.3.2). Run: openclaw update\n\nNext steps:\n  Need to share?      openclaw status --all\n  Need to debug live? openclaw logs --follow\n  Need to test channels? openclaw status --deep\n"
+    "raw": "OpenClaw status\n\nOverview\n┌─────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────┐\n│ Item            │ Value                                                                                             │\n├─────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────┤\n│ Dashboard       │ http://127.0.0.1:18789/                                                                           │\n│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │\n│ Tailscale       │ off                                                                                               │\n│ Channel         │ stable (config)                                                                                   │\n│ Update          │ available · pnpm · npm update 2026.3.2                                                            │\n│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 17ms · auth token · 2bf5bd64c8d3 (172.  │\n│                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │\n│ Gateway service │ systemd not installed                                                                             │\n│ Node service    │ systemd not installed                                                                             │\n│ Agents          │ 8 · 8 bootstrap files present · sessions 31 · default main active 1m ago                          │\n│ Memory          │ 11 files · 15 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │\n│                 │ (50)                                                                                              │\n│ Probes          │ skipped (use --deep)                                                                              │\n│ Events          │ none                                                                                              │\n│ Heartbeat       │ 30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled    │\n│                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth- │\n│                 │ strategist)                                                                                       │\n│ Sessions        │ 31 active · default gpt-5-mini (400k ctx) · 8 stores                                              │\n└─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘\n\nSecurity audit\nSummary: 6 critical · 3 warn · 1 info\n  CRITICAL DANGEROUS: Control UI device auth disabled\n    gateway.controlUi.dangerouslyDisableDeviceAuth=true disables device identity checks for the Control UI.\n    Fix: Disable it unless you are in a short-lived break-glass scenario.\n  CRITICAL Open groupPolicy with elevated tools enabled\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy With tools.elevate…\n    Fix: Set groupPolicy=\"allowlist\" and keep elevated allowlists extremely tight.\n  CRITICAL Open groupPolicy with runtime/filesystem tools exposed\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy Risky tool exposur…\n    Fix: For open groups, prefer tools.profile=\"messaging\" (or deny group:runtime/group:fs), set tools.fs.workspaceOnly=true, and use agents.defaults.sandbox.mode=\"all\" for exposed agents.\n  CRITICAL Telegram security warning\n    Telegram groups: groupPolicy=\"open\" allows any member in allowed groups to trigger (mention-gated). Set channels.telegram.groupPolicy=\"allowlist\" + channels.te…\n  CRITICAL Discord slash commands are unrestricted\n    commands.useAccessGroups=false disables sender allowlists for Discord slash commands unless a per-guild/channel users allowlist is configured; with no users al…\n    Fix: Set commands.useAccessGroups=true (recommended), or configure channels.discord.guilds.<id>.users (or channels.discord.guilds.<id>.channels.<channel>.users).\n  CRITICAL Discord security warning\n    Discord guilds: groupPolicy=\"open\" allows any channel not explicitly denied to trigger (mention-gated). Set channels.discord.groupPolicy=\"allowlist\" and config…\n… +3 more\nFull report: openclaw security audit\nDeep probe: openclaw security audit --deep\n\nChannels\n┌─────────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────┐\n│ Channel     │ Enabled │ State  │ Detail                                                                             │\n├─────────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────┤\n│ Telegram    │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows          │\n│             │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…             │\n│ WhatsApp    │ ON      │ WARN   │ missing file (~/.openclaw/credentials/whatsapp/default) · gateway: Not linked (no  │\n│             │         │        │ WhatsApp Web session).                                                             │\n│ Discord     │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                   │\n│ Google Chat │ ON      │ SETUP  │ not configured                                                                     │\n│ Slack       │ ON      │ SETUP  │ no tokens (need bot+app)                                                           │\n│ Nostr       │ ON      │ SETUP  │ not configured                                                                     │\n└─────────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────┘\n\nSessions\n┌────────────────────────────────────────────────┬────────┬─────────┬───────────────┬─────────────────────────────────┐\n│ Key                                            │ Kind   │ Age     │ Model         │ Tokens                          │\n├────────────────────────────────────────────────┼────────┼─────────┼───────────────┼─────────────────────────────────┤\n│ agent:main:telegram:group:-1003…               │ group  │ 1m ago  │ gpt-5.3-codex │ 146k/272k (54%) · 🗄️ 99% cached │\n│ agent:builder:telegram:group:-1…               │ group  │ 2m ago  │ gpt-5.3-codex │ 74k/272k (27%) · 🗄️ 400% cached │\n│ agent:main:main                                │ group  │ 4m ago  │ gpt-5.3-codex │ 75k/272k (28%) · 🗄️ 2% cached   │\n│ agent:main:telegram:group:-1003…               │ group  │ 22m ago │ gpt-5-mini    │ unknown/400k (?%)               │\n│ agent:main:cron:ddcb38d2-6d24-4…               │ direct │ 4h ago  │ gpt-5.2       │ 13k/272k (5%)                   │\n│ agent:main:cron:ddcb38d2-6d24-4…               │ direct │ 4h ago  │ gpt-5.2       │ 13k/272k (5%)                   │\n│ agent:main:cron:ba9af08c-6dca-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 13k/400k (3%)                   │\n│ agent:main:cron:ba9af08c-6dca-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 13k/400k (3%)                   │\n│ agent:main:cron:bd120469-dc1c-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 14k/400k (3%) · 🗄️ 94% cached   │\n│ agent:main:cron:bd120469-dc1c-4…               │ direct │ 4h ago  │ gpt-5-mini    │ 14k/400k (3%) · 🗄️ 94% cached   │\n└────────────────────────────────────────────────┴────────┴─────────┴───────────────┴─────────────────────────────────┘\n\nFAQ: https://docs.openclaw.ai/faq\nTroubleshooting: https://docs.openclaw.ai/troubleshooting\n\nUpdate available (npm 2026.3.2). Run: openclaw update\n\nNext steps:\n  Need to share?      openclaw status --all\n  Need to debug live? openclaw logs --follow\n  Need to test channels? openclaw status --deep\n"
   },
   "summary": {
-    "capturedAt": "2026-03-05T19:00:27.501Z",
+    "capturedAt": "2026-03-05T19:23:56.125Z",
     "securitySummary": "6 critical · 3 warn · 1 info",
     "securityCounts": {
       "critical": 6,
@@ -16,24 +16,24 @@
     "totalSessions": 31,
     "sessionCount": 21,
     "knownTokenSessions": 21,
-    "estimatedUsedTokens": 658631,
-    "estimatedCostUsd": 5.27,
+    "estimatedUsedTokens": 667353,
+    "estimatedCostUsd": 5.34,
     "byModelEstimatedTokens": {
-      "gpt-5.3-codex": 534.867,
+      "gpt-5.3-codex": 543.589,
       "gpt-5.2": 70.989,
       "gpt-5-mini": 52.775
     },
     "byAgentEstimatedTokens": {
-      "main": 573.757,
+      "main": 582.479,
       "builder": 84.874
     },
     "byAgentMeta": {
       "main": {
-        "lastActiveAt": 1772737156137,
+        "lastActiveAt": 1772738576058,
         "sessions": 19
       },
       "builder": {
-        "lastActiveAt": 1772729354738,
+        "lastActiveAt": 1772738541069,
         "sessions": 2
       }
     },
@@ -49,22 +49,22 @@
         "agent": "main",
         "key": "agent:main:telegram:group:-1003842752959:topic:3",
         "model": "gpt-5.3-codex",
-        "tokens": 127658,
-        "updatedAt": 1772737004200
+        "tokens": 145772,
+        "updatedAt": 1772738576058
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:main",
+        "model": "gpt-5.3-codex",
+        "tokens": 75255,
+        "updatedAt": 1772738423460
       },
       {
         "agent": "builder",
         "key": "agent:builder:telegram:group:-1003842752959:topic:3",
         "model": "gpt-5.3-codex",
         "tokens": 74105,
-        "updatedAt": 1772729354738
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:main",
-        "model": "gpt-5.3-codex",
-        "tokens": 72004,
-        "updatedAt": 1772737156137
+        "updatedAt": 1772738541069
       },
       {
         "agent": "main",
@@ -144,7 +144,319 @@
         "updatedAt": 1772724600009
       }
     ],
-    "dedupeApplied": true
+    "dedupeApplied": true,
+    "contextProfiler": {
+      "fileCount": 33,
+      "totalBytes": 65897,
+      "totalLines": 2027,
+      "totalEstimatedTokens": 16356,
+      "files": [
+        {
+          "path": "../growth-analyst/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:50.030Z"
+        },
+        {
+          "path": "../growth-content/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:47.396Z"
+        },
+        {
+          "path": "../growth-publisher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:45.285Z"
+        },
+        {
+          "path": "../growth-researcher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:40.897Z"
+        },
+        {
+          "path": "BOOTSTRAP.md",
+          "bytes": 1470,
+          "lineCount": 56,
+          "estimatedTokens": 363,
+          "lastModified": "2026-03-04T21:31:06.220Z"
+        },
+        {
+          "path": "SOUL.md",
+          "bytes": 1190,
+          "lineCount": 50,
+          "estimatedTokens": 297,
+          "lastModified": "2026-03-04T21:41:43.012Z"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 1182,
+          "lineCount": 32,
+          "estimatedTokens": 295,
+          "lastModified": "2026-03-04T23:24:04.286Z"
+        },
+        {
+          "path": "PROCESS.md",
+          "bytes": 1095,
+          "lineCount": 36,
+          "estimatedTokens": 274,
+          "lastModified": "2026-03-05T01:14:37.542Z"
+        },
+        {
+          "path": "TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-04T21:31:06.217Z"
+        },
+        {
+          "path": "../growth-analyst/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:50.031Z"
+        },
+        {
+          "path": "../growth-content/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:47.397Z"
+        },
+        {
+          "path": "../growth-publisher/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:45.286Z"
+        },
+        {
+          "path": "../growth-researcher/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:40.898Z"
+        },
+        {
+          "path": "TOKEN_AUDIT.md",
+          "bytes": 781,
+          "lineCount": 30,
+          "estimatedTokens": 195,
+          "lastModified": "2026-03-05T01:11:44.652Z"
+        },
+        {
+          "path": "IDENTITY.md",
+          "bytes": 636,
+          "lineCount": 24,
+          "estimatedTokens": 159,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        },
+        {
+          "path": "USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        },
+        {
+          "path": "../growth-analyst/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:50.032Z"
+        },
+        {
+          "path": "../growth-content/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:43.030Z"
+        },
+        {
+          "path": "../growth-engagement/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:47.397Z"
+        },
+        {
+          "path": "../growth-publisher/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:45.286Z"
+        },
+        {
+          "path": "../growth-researcher/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:38.661Z"
+        },
+        {
+          "path": "../growth-strategist/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:40.899Z"
+        },
+        {
+          "path": "../growth-researcher/SOUL.md",
+          "bytes": 476,
+          "lineCount": 17,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:49:13.173Z"
+        },
+        {
+          "path": "../growth-content/SOUL.md",
+          "bytes": 472,
+          "lineCount": 17,
+          "estimatedTokens": 118,
+          "lastModified": "2026-03-05T16:49:13.176Z"
+        },
+        {
+          "path": "../growth-strategist/SOUL.md",
+          "bytes": 469,
+          "lineCount": 17,
+          "estimatedTokens": 117,
+          "lastModified": "2026-03-05T16:49:13.175Z"
+        },
+        {
+          "path": "../growth-publisher/SOUL.md",
+          "bytes": 463,
+          "lineCount": 17,
+          "estimatedTokens": 116,
+          "lastModified": "2026-03-05T16:49:13.178Z"
+        },
+        {
+          "path": "../growth-analyst/SOUL.md",
+          "bytes": 462,
+          "lineCount": 17,
+          "estimatedTokens": 116,
+          "lastModified": "2026-03-05T16:49:13.181Z"
+        },
+        {
+          "path": "../growth-engagement/SOUL.md",
+          "bytes": 460,
+          "lineCount": 17,
+          "estimatedTokens": 115,
+          "lastModified": "2026-03-05T16:49:13.180Z"
+        },
+        {
+          "path": "HEARTBEAT.md",
+          "bytes": 168,
+          "lineCount": 6,
+          "estimatedTokens": 42,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        }
+      ],
+      "top10": [
+        {
+          "path": "../growth-analyst/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:50.030Z"
+        },
+        {
+          "path": "../growth-content/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:47.396Z"
+        },
+        {
+          "path": "../growth-publisher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:45.285Z"
+        },
+        {
+          "path": "../growth-researcher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:40.897Z"
+        },
+        {
+          "path": "BOOTSTRAP.md",
+          "bytes": 1470,
+          "lineCount": 56,
+          "estimatedTokens": 363,
+          "lastModified": "2026-03-04T21:31:06.220Z"
+        },
+        {
+          "path": "SOUL.md",
+          "bytes": 1190,
+          "lineCount": 50,
+          "estimatedTokens": 297,
+          "lastModified": "2026-03-04T21:41:43.012Z"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 1182,
+          "lineCount": 32,
+          "estimatedTokens": 295,
+          "lastModified": "2026-03-04T23:24:04.286Z"
+        },
+        {
+          "path": "PROCESS.md",
+          "bytes": 1095,
+          "lineCount": 36,
+          "estimatedTokens": 274,
+          "lastModified": "2026-03-05T01:14:37.542Z"
+        }
+      ],
+      "notes": "Estimated tokens uses chars/4 heuristic."
+    }
   },
-  "sessionsRaw": "{\n  \"path\": null,\n  \"stores\": [\n    {\n      \"agentId\": \"main\",\n      \"path\": \"/data/.openclaw/agents/main/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"builder\",\n      \"path\": \"/data/.openclaw/agents/builder/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-researcher\",\n      \"path\": \"/data/.openclaw/agents/growth-researcher/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-strategist\",\n      \"path\": \"/data/.openclaw/agents/growth-strategist/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-content\",\n      \"path\": \"/data/.openclaw/agents/growth-content/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-publisher\",\n      \"path\": \"/data/.openclaw/agents/growth-publisher/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-engagement\",\n      \"path\": \"/data/.openclaw/agents/growth-engagement/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-analyst\",\n      \"path\": \"/data/.openclaw/agents/growth-analyst/sessions/sessions.json\"\n    }\n  ],\n  \"allAgents\": true,\n  \"count\": 31,\n  \"activeMinutes\": null,\n  \"sessions\": [\n    {\n      \"key\": \"agent:main:main\",\n      \"updatedAt\": 1772737156137,\n      \"ageMs\": 73362,\n      \"sessionId\": \"65c37073-99b4-4691-b23c-7b2e53fa58b0\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 12996,\n      \"outputTokens\": 388,\n      \"totalTokens\": 72004,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:3\",\n      \"updatedAt\": 1772737004200,\n      \"ageMs\": 225300,\n      \"sessionId\": \"b310caf8-11fd-4349-982c-45cf2f7424c3\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 123267,\n      \"outputTokens\": 1520,\n      \"totalTokens\": 127658,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:builder:telegram:group:-1003842752959:topic:3\",\n      \"updatedAt\": 1772729354738,\n      \"ageMs\": 7874763,\n      \"sessionId\": \"d8d96354-365c-4c10-ab56-8e731aa1c4d7\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 72614,\n      \"outputTokens\": 684,\n      \"totalTokens\": 74105,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"builder\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f\",\n      \"updatedAt\": 1772724600009,\n      \"ageMs\": 12629491,\n      \"sessionId\": \"40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"systemSent\": true,\n      \"inputTokens\": 13015,\n      \"outputTokens\": 290,\n      \"totalTokens\": 13015,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f:run:40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"updatedAt\": 1772724600009,\n      \"ageMs\": 12629491,\n      \"sessionId\": \"40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"systemSent\": true,\n      \"inputTokens\": 13015,\n      \"outputTokens\": 290,\n      \"totalTokens\": 13015,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673\",\n      \"updatedAt\": 1772722817535,\n      \"ageMs\": 14411964,\n      \"sessionId\": \"4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 432,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"updatedAt\": 1772722817535,\n      \"ageMs\": 14411965,\n      \"sessionId\": \"4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 432,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9\",\n      \"updatedAt\": 1772722800014,\n      \"ageMs\": 14429485,\n      \"sessionId\": \"305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"systemSent\": true,\n      \"inputTokens\": 871,\n      \"outputTokens\": 373,\n      \"totalTokens\": 13799,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"updatedAt\": 1772722800014,\n      \"ageMs\": 14429486,\n      \"sessionId\": \"305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"systemSent\": true,\n      \"inputTokens\": 871,\n      \"outputTokens\": 373,\n      \"totalTokens\": 13799,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:5fdd686b-99ce-4343-8152-cc868df62182\",\n      \"updatedAt\": 1772708409608,\n      \"ageMs\": 28819892,\n      \"sessionId\": \"5fdd686b-99ce-4343-8152-cc868df62182\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 236,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:3bb04827-9182-4dfb-885f-b46448030808\",\n      \"updatedAt\": 1772708400010,\n      \"ageMs\": 28829490,\n      \"sessionId\": \"3bb04827-9182-4dfb-885f-b46448030808\",\n      \"systemSent\": true,\n      \"inputTokens\": 12902,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12902,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:7bd72fc5-86e4-46f4-afc1-4f8584b41f2d\",\n      \"updatedAt\": 1772694008726,\n      \"ageMs\": 43220774,\n      \"sessionId\": \"7bd72fc5-86e4-46f4-afc1-4f8584b41f2d\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:2c42007f-60db-4d6d-844e-7a965251d47e\",\n      \"updatedAt\": 1772694000013,\n      \"ageMs\": 43229487,\n      \"sessionId\": \"2c42007f-60db-4d6d-844e-7a965251d47e\",\n      \"systemSent\": true,\n      \"inputTokens\": 12902,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12902,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3\",\n      \"updatedAt\": 1772682000006,\n      \"ageMs\": 55229493,\n      \"sessionId\": \"55795e73-8735-43ab-9a64-d366683057e4\",\n      \"systemSent\": true,\n      \"inputTokens\": 170,\n      \"outputTokens\": 5,\n      \"totalTokens\": 14122,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3:run:55795e73-8735-43ab-9a64-d366683057e4\",\n      \"updatedAt\": 1772682000006,\n      \"ageMs\": 55229494,\n      \"sessionId\": \"55795e73-8735-43ab-9a64-d366683057e4\",\n      \"systemSent\": true,\n      \"inputTokens\": 170,\n      \"outputTokens\": 5,\n      \"totalTokens\": 14122,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525\",\n      \"updatedAt\": 1772681400007,\n      \"ageMs\": 55829492,\n      \"sessionId\": \"83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"systemSent\": true,\n      \"inputTokens\": 556,\n      \"outputTokens\": 76,\n      \"totalTokens\": 13484,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525:run:83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"updatedAt\": 1772681400007,\n      \"ageMs\": 55829493,\n      \"sessionId\": \"83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"systemSent\": true,\n      \"inputTokens\": 556,\n      \"outputTokens\": 76,\n      \"totalTokens\": 13484,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec\",\n      \"updatedAt\": 1772679600016,\n      \"ageMs\": 57629483,\n      \"sessionId\": \"909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"systemSent\": true,\n      \"inputTokens\": 15393,\n      \"outputTokens\": 430,\n      \"totalTokens\": 15393,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec:run:909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"updatedAt\": 1772679600016,\n      \"ageMs\": 57629484,\n      \"sessionId\": \"909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"systemSent\": true,\n      \"inputTokens\": 15393,\n      \"outputTokens\": 430,\n      \"totalTokens\": 15393,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1477069238991720579\",\n      \"updatedAt\": 1772661124471,\n      \"ageMs\": 76105029,\n      \"sessionId\": \"1964e8d6-74db-43ab-8310-9e00064fc4d4\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 151675,\n      \"outputTokens\": 1933,\n      \"totalTokens\": 157834,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:builder:main\",\n      \"updatedAt\": 1772660493684,\n      \"ageMs\": 76735817,\n      \"sessionId\": \"f2ab2787-21cf-4cb7-a242-39ef660b4a2f\",\n      \"abortedLastRun\": false,\n      \"inputTokens\": 9233,\n      \"outputTokens\": 6,\n      \"totalTokens\": 10769,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"builder\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"telegram:slash:1773262118\",\n      \"updatedAt\": 1772653568669,\n      \"ageMs\": 83660831,\n      \"sessionId\": \"abe7e1ad-a761-4359-847e-ffe688e28c01\",\n      \"totalTokens\": null,\n      \"totalTokensFresh\": false,\n      \"model\": \"gpt-5-mini\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959\",\n      \"updatedAt\": 1772638229001,\n      \"ageMs\": 99000499,\n      \"sessionId\": \"2384a5fb-b44a-432c-963b-fc7c4b83fc04\",\n      \"abortedLastRun\": false,\n      \"inputTokens\": 19490,\n      \"outputTokens\": 270,\n      \"totalTokens\": 23074,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1460618635105145074\",\n      \"updatedAt\": 1772486158075,\n      \"ageMs\": 251071425,\n      \"sessionId\": \"aa2f37ad-3e71-4277-a40e-915a8efd47a6\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 11714,\n      \"outputTokens\": 403,\n      \"totalTokens\": 15100,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1460363718759288947\",\n      \"updatedAt\": 1772485729606,\n      \"ageMs\": 251499894,\n      \"sessionId\": \"85122d33-59ce-46f4-915b-d4526a99b9c6\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 8659,\n      \"outputTokens\": 134,\n      \"totalTokens\": 14291,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:203\",\n      \"updatedAt\": 1772485334493,\n      \"ageMs\": 251895006,\n      \"sessionId\": \"a874d0a5-18ed-487c-adcd-57201935a6c0\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 22893,\n      \"outputTokens\": 1459,\n      \"totalTokens\": 27389,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:cron:f566e9f2-51cd-49fc-9bd9-0f5b5f43cddd\",\n      \"updatedAt\": 1772471986799,\n      \"ageMs\": 265242700,\n      \"sessionId\": \"beb78204-b642-4d87-b1e3-831e02d57c67\",\n      \"systemSent\": true,\n      \"inputTokens\": 11412,\n      \"outputTokens\": 279,\n      \"totalTokens\": 11412,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad\",\n      \"updatedAt\": 1772471900390,\n      \"ageMs\": 265329110,\n      \"sessionId\": \"50be6cf4-38b5-4cb2-8abf-95ae7088b671\",\n      \"systemSent\": true,\n      \"inputTokens\": 34521,\n      \"outputTokens\": 1056,\n      \"totalTokens\": 14975,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:2\",\n      \"updatedAt\": 1772454009255,\n      \"ageMs\": 283220245,\n      \"sessionId\": \"6c907823-173e-4ec0-9711-ad57005d9d04\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 829,\n      \"outputTokens\": 467,\n      \"totalTokens\": 14653,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:slash:1773262118\",\n      \"updatedAt\": 1772453464229,\n      \"ageMs\": 283765271,\n      \"sessionId\": \"91cbf5bd-fe18-4ede-be04-fb8d2d59477d\",\n      \"totalTokens\": null,\n      \"totalTokensFresh\": false,\n      \"model\": \"gpt-5.3-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:1\",\n      \"updatedAt\": 1772315644073,\n      \"ageMs\": 421585426,\n      \"sessionId\": \"f19dbda0-4016-4cbe-862b-d9e24fc5c2ac\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 8035,\n      \"outputTokens\": 48,\n      \"totalTokens\": 12643,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    }\n  ]\n}\n"
+  "sessionsRaw": "{\n  \"path\": null,\n  \"stores\": [\n    {\n      \"agentId\": \"main\",\n      \"path\": \"/data/.openclaw/agents/main/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"builder\",\n      \"path\": \"/data/.openclaw/agents/builder/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-researcher\",\n      \"path\": \"/data/.openclaw/agents/growth-researcher/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-strategist\",\n      \"path\": \"/data/.openclaw/agents/growth-strategist/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-content\",\n      \"path\": \"/data/.openclaw/agents/growth-content/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-publisher\",\n      \"path\": \"/data/.openclaw/agents/growth-publisher/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-engagement\",\n      \"path\": \"/data/.openclaw/agents/growth-engagement/sessions/sessions.json\"\n    },\n    {\n      \"agentId\": \"growth-analyst\",\n      \"path\": \"/data/.openclaw/agents/growth-analyst/sessions/sessions.json\"\n    }\n  ],\n  \"allAgents\": true,\n  \"count\": 31,\n  \"activeMinutes\": null,\n  \"sessions\": [\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:3\",\n      \"updatedAt\": 1772738576058,\n      \"ageMs\": 62051,\n      \"sessionId\": \"b310caf8-11fd-4349-982c-45cf2f7424c3\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 146068,\n      \"outputTokens\": 469,\n      \"totalTokens\": 145772,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:builder:telegram:group:-1003842752959:topic:3\",\n      \"updatedAt\": 1772738541069,\n      \"ageMs\": 97041,\n      \"sessionId\": \"d8d96354-365c-4c10-ab56-8e731aa1c4d7\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 72614,\n      \"outputTokens\": 684,\n      \"totalTokens\": 74105,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"builder\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:main\",\n      \"updatedAt\": 1772738423460,\n      \"ageMs\": 214648,\n      \"sessionId\": \"65c37073-99b4-4691-b23c-7b2e53fa58b0\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 73719,\n      \"outputTokens\": 43,\n      \"totalTokens\": 75255,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:1\",\n      \"updatedAt\": 1772737322819,\n      \"ageMs\": 1315289,\n      \"sessionId\": \"53b2b9da-c1e0-4865-835d-4b9be72ceb76\",\n      \"systemSent\": false,\n      \"abortedLastRun\": false,\n      \"totalTokens\": null,\n      \"totalTokensFresh\": false,\n      \"model\": \"gpt-5.3-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f\",\n      \"updatedAt\": 1772724600009,\n      \"ageMs\": 14038100,\n      \"sessionId\": \"40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"systemSent\": true,\n      \"inputTokens\": 13015,\n      \"outputTokens\": 290,\n      \"totalTokens\": 13015,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f:run:40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"updatedAt\": 1772724600009,\n      \"ageMs\": 14038100,\n      \"sessionId\": \"40ba905b-5c95-41cd-aca6-6402105a331c\",\n      \"systemSent\": true,\n      \"inputTokens\": 13015,\n      \"outputTokens\": 290,\n      \"totalTokens\": 13015,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673\",\n      \"updatedAt\": 1772722817535,\n      \"ageMs\": 15820573,\n      \"sessionId\": \"4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 432,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"updatedAt\": 1772722817535,\n      \"ageMs\": 15820574,\n      \"sessionId\": \"4a7a8e21-a732-4f4f-aad9-f5ca8c072d04\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 432,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9\",\n      \"updatedAt\": 1772722800014,\n      \"ageMs\": 15838094,\n      \"sessionId\": \"305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"systemSent\": true,\n      \"inputTokens\": 871,\n      \"outputTokens\": 373,\n      \"totalTokens\": 13799,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"updatedAt\": 1772722800014,\n      \"ageMs\": 15838095,\n      \"sessionId\": \"305a9081-2597-4529-a8aa-e14e8756e0bd\",\n      \"systemSent\": true,\n      \"inputTokens\": 871,\n      \"outputTokens\": 373,\n      \"totalTokens\": 13799,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:5fdd686b-99ce-4343-8152-cc868df62182\",\n      \"updatedAt\": 1772708409608,\n      \"ageMs\": 30228501,\n      \"sessionId\": \"5fdd686b-99ce-4343-8152-cc868df62182\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 236,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:3bb04827-9182-4dfb-885f-b46448030808\",\n      \"updatedAt\": 1772708400010,\n      \"ageMs\": 30238099,\n      \"sessionId\": \"3bb04827-9182-4dfb-885f-b46448030808\",\n      \"systemSent\": true,\n      \"inputTokens\": 12902,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12902,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ba9af08c-6dca-41e9-9d4f-52569e3d5673:run:7bd72fc5-86e4-46f4-afc1-4f8584b41f2d\",\n      \"updatedAt\": 1772694008726,\n      \"ageMs\": 44629383,\n      \"sessionId\": \"7bd72fc5-86e4-46f4-afc1-4f8584b41f2d\",\n      \"systemSent\": true,\n      \"inputTokens\": 12911,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12911,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9:run:2c42007f-60db-4d6d-844e-7a965251d47e\",\n      \"updatedAt\": 1772694000013,\n      \"ageMs\": 44638096,\n      \"sessionId\": \"2c42007f-60db-4d6d-844e-7a965251d47e\",\n      \"systemSent\": true,\n      \"inputTokens\": 12902,\n      \"outputTokens\": 303,\n      \"totalTokens\": 12902,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3\",\n      \"updatedAt\": 1772682000006,\n      \"ageMs\": 56638102,\n      \"sessionId\": \"55795e73-8735-43ab-9a64-d366683057e4\",\n      \"systemSent\": true,\n      \"inputTokens\": 170,\n      \"outputTokens\": 5,\n      \"totalTokens\": 14122,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3:run:55795e73-8735-43ab-9a64-d366683057e4\",\n      \"updatedAt\": 1772682000006,\n      \"ageMs\": 56638103,\n      \"sessionId\": \"55795e73-8735-43ab-9a64-d366683057e4\",\n      \"systemSent\": true,\n      \"inputTokens\": 170,\n      \"outputTokens\": 5,\n      \"totalTokens\": 14122,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525\",\n      \"updatedAt\": 1772681400007,\n      \"ageMs\": 57238101,\n      \"sessionId\": \"83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"systemSent\": true,\n      \"inputTokens\": 556,\n      \"outputTokens\": 76,\n      \"totalTokens\": 13484,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525:run:83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"updatedAt\": 1772681400007,\n      \"ageMs\": 57238102,\n      \"sessionId\": \"83f3c6b3-722e-49ef-afe3-5ea5df14a542\",\n      \"systemSent\": true,\n      \"inputTokens\": 556,\n      \"outputTokens\": 76,\n      \"totalTokens\": 13484,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec\",\n      \"updatedAt\": 1772679600016,\n      \"ageMs\": 59038092,\n      \"sessionId\": \"909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"systemSent\": true,\n      \"inputTokens\": 15393,\n      \"outputTokens\": 430,\n      \"totalTokens\": 15393,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec:run:909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"updatedAt\": 1772679600016,\n      \"ageMs\": 59038093,\n      \"sessionId\": \"909a9676-1c0f-4a48-8943-4f9fd3443757\",\n      \"systemSent\": true,\n      \"inputTokens\": 15393,\n      \"outputTokens\": 430,\n      \"totalTokens\": 15393,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1477069238991720579\",\n      \"updatedAt\": 1772661124471,\n      \"ageMs\": 77513638,\n      \"sessionId\": \"1964e8d6-74db-43ab-8310-9e00064fc4d4\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 151675,\n      \"outputTokens\": 1933,\n      \"totalTokens\": 157834,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:builder:main\",\n      \"updatedAt\": 1772660493684,\n      \"ageMs\": 78144426,\n      \"sessionId\": \"f2ab2787-21cf-4cb7-a242-39ef660b4a2f\",\n      \"abortedLastRun\": false,\n      \"inputTokens\": 9233,\n      \"outputTokens\": 6,\n      \"totalTokens\": 10769,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"builder\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"telegram:slash:1773262118\",\n      \"updatedAt\": 1772653568669,\n      \"ageMs\": 85069440,\n      \"sessionId\": \"abe7e1ad-a761-4359-847e-ffe688e28c01\",\n      \"totalTokens\": null,\n      \"totalTokensFresh\": false,\n      \"model\": \"gpt-5-mini\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959\",\n      \"updatedAt\": 1772638229001,\n      \"ageMs\": 100409108,\n      \"sessionId\": \"2384a5fb-b44a-432c-963b-fc7c4b83fc04\",\n      \"abortedLastRun\": false,\n      \"inputTokens\": 19490,\n      \"outputTokens\": 270,\n      \"totalTokens\": 23074,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1460618635105145074\",\n      \"updatedAt\": 1772486158075,\n      \"ageMs\": 252480034,\n      \"sessionId\": \"aa2f37ad-3e71-4277-a40e-915a8efd47a6\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 11714,\n      \"outputTokens\": 403,\n      \"totalTokens\": 15100,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:discord:channel:1460363718759288947\",\n      \"updatedAt\": 1772485729606,\n      \"ageMs\": 252908503,\n      \"sessionId\": \"85122d33-59ce-46f4-915b-d4526a99b9c6\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 8659,\n      \"outputTokens\": 134,\n      \"totalTokens\": 14291,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:203\",\n      \"updatedAt\": 1772485334493,\n      \"ageMs\": 253303615,\n      \"sessionId\": \"a874d0a5-18ed-487c-adcd-57201935a6c0\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 22893,\n      \"outputTokens\": 1459,\n      \"totalTokens\": 27389,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.3-codex\",\n      \"modelProvider\": \"openai-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:cron:f566e9f2-51cd-49fc-9bd9-0f5b5f43cddd\",\n      \"updatedAt\": 1772471986799,\n      \"ageMs\": 266651309,\n      \"sessionId\": \"beb78204-b642-4d87-b1e3-831e02d57c67\",\n      \"systemSent\": true,\n      \"inputTokens\": 11412,\n      \"outputTokens\": 279,\n      \"totalTokens\": 11412,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad\",\n      \"updatedAt\": 1772471900390,\n      \"ageMs\": 266737719,\n      \"sessionId\": \"50be6cf4-38b5-4cb2-8abf-95ae7088b671\",\n      \"systemSent\": true,\n      \"inputTokens\": 34521,\n      \"outputTokens\": 1056,\n      \"totalTokens\": 14975,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5.2\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    },\n    {\n      \"key\": \"agent:main:telegram:group:-1003842752959:topic:2\",\n      \"updatedAt\": 1772454009255,\n      \"ageMs\": 284628854,\n      \"sessionId\": \"6c907823-173e-4ec0-9711-ad57005d9d04\",\n      \"systemSent\": true,\n      \"abortedLastRun\": false,\n      \"inputTokens\": 829,\n      \"outputTokens\": 467,\n      \"totalTokens\": 14653,\n      \"totalTokensFresh\": true,\n      \"model\": \"gpt-5-mini\",\n      \"modelProvider\": \"openai\",\n      \"contextTokens\": 400000,\n      \"agentId\": \"main\",\n      \"kind\": \"group\"\n    },\n    {\n      \"key\": \"agent:main:telegram:slash:1773262118\",\n      \"updatedAt\": 1772453464229,\n      \"ageMs\": 285173880,\n      \"sessionId\": \"91cbf5bd-fe18-4ede-be04-fb8d2d59477d\",\n      \"totalTokens\": null,\n      \"totalTokensFresh\": false,\n      \"model\": \"gpt-5.3-codex\",\n      \"contextTokens\": 272000,\n      \"agentId\": \"main\",\n      \"kind\": \"direct\"\n    }\n  ]\n}\n"
 }

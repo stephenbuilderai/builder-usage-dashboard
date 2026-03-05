@@ -7,9 +7,9 @@ Window: 2026-03-05 → 2026-03-05 (1 day(s))
 - Estimated daily costs track token movement and remain rough heuristics.
 
 ## Biggest drivers
-- Top models: gpt-5.3-codex (668,419 est tokens) · gpt-5.2 (70,989 est tokens) · gpt-5-mini (63,933 est tokens)
-- Top agents: main (695,520 est tokens) · builder (96,663 est tokens) · growth-researcher (11,158 est tokens)
-- Top attribution buckets: interactive (694,230 est tokens) · cron (109,111 est tokens) · system/other (0 est tokens)
+- Top models: gpt-5.3-codex (720,928 est tokens) · gpt-5-mini (97,583 est tokens) · gpt-5.2 (81,655 est tokens)
+- Top agents: main (742,312 est tokens) · builder (102,380 est tokens) · growth-researcher (11,678 est tokens)
+- Top attribution buckets: interactive (791,055 est tokens) · cron (109,111 est tokens) · system/other (0 est tokens)
 
 ## Anomalies
 - No strong day-over-day anomalies detected (>=15% threshold).

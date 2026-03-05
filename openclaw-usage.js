@@ -282,7 +282,6 @@ function renderHtml(history, buildId) {
 
   const sec = latest.securityCounts || parseSecurityCounts(latest.securitySummary || '');
   const psec = prev.securityCounts || parseSecurityCounts(prev.securitySummary || '');
-
   const modelEntries = Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const topSessions = latest.topSessions || [];
@@ -293,11 +292,19 @@ function renderHtml(history, buildId) {
   const attributionRules = latest.attributionRules || {};
 
   const totalAgentK = agentEntries.reduce((s, [, k]) => s + Number(k || 0), 0) || 1;
+  const topBurner = topSessions[0] || {};
+  const anomaly = Math.abs(prevTotal) > 0 && Math.abs((delta / prevTotal) * 100) >= 15;
+
+  const recommendedActions = [];
+  if ((contextProfiler.totalEstimatedTokens || 0) > 15000) recommendedActions.push('Trim high-size context markdown files (top-10 card) to reduce prompt load.');
+  if ((bucketEntries.find(([k]) => k === 'cron')?.[1] || 0) * 1000 > total * 0.25) recommendedActions.push('Cron bucket is heavy — reduce redundant scheduled runs or lower frequency.');
+  if (sec.critical > 0) recommendedActions.push('Address security critical findings first (`openclaw security audit --deep`).');
+  while (recommendedActions.length < 3) recommendedActions.push('Monitor daily rollups and act on >15% day-over-day token spikes.');
 
   const modelRows = modelEntries.map(([m, k]) => {
     const tokens = Math.round(Number(k) * 1000);
     const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
-    return `<tr><td>${m}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
+    return `<tr data-model="${m.toLowerCase()}"><td>${m}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
   }).join('') || '<tr><td colspan="3">No model data</td></tr>';
 
   const agentRows = agentEntries.map(([a, k]) => {
@@ -307,19 +314,19 @@ function renderHtml(history, buildId) {
     const trend = Number(k) === prevK ? '→' : Number(k) > prevK ? '↑' : '↓';
     const meta = (latest.byAgentMeta || {})[a] || {};
     const last = meta.lastActiveAt ? new Date(meta.lastActiveAt).toLocaleString('en-GB') : 'n/a';
-    return `<tr><td>${a}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td><td>${trend}</td><td>${last}</td></tr>`;
+    return `<tr data-agent="${a.toLowerCase()}"><td>${a}</td><td>${tokens.toLocaleString()}</td><td><span class="bar"><span style="width:${pct}%"></span></span>${pct}%</td><td>${trend}</td><td>${last}</td></tr>`;
   }).join('') || '<tr><td colspan="5">No agent data</td></tr>';
 
   const topRows = topSessions.map(s => {
     const key = String(s.key || '');
     const short = key.length > 64 ? key.slice(0, 64) + '…' : key;
-    return `<tr><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td><td>${s.bucket || 'n/a'}</td></tr>`;
+    return `<tr data-agent="${(s.agent || '').toLowerCase()}" data-model="${(s.model || '').toLowerCase()}" data-bucket="${(s.bucket || '').toLowerCase()}"><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td><td>${s.bucket || 'n/a'}</td></tr>`;
   }).join('') || '<tr><td colspan="5">No sessions</td></tr>';
 
   const bucketRows = bucketEntries.map(([bucket, valK]) => {
     const tokens = Math.round(Number(valK || 0) * 1000);
     const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
-    return `<tr><td>${bucket}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
+    return `<tr data-bucket="${bucket.toLowerCase()}"><td>${bucket}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
   }).join('') || '<tr><td colspan="3">No attribution data</td></tr>';
 
   const bucketModelRows = Object.entries(bucketModel).map(([bucket, models]) => {
@@ -327,130 +334,117 @@ function renderHtml(history, buildId) {
     return `<tr><td>${bucket}</td><td>${modelLine || 'n/a'}</td></tr>`;
   }).join('') || '<tr><td colspan="2">No bucket/model data</td></tr>';
 
-  const profilerRows = (contextProfiler.files || []).map(f => `<tr><td title="${f.path}">${f.path}</td><td data-sort="bytes">${Number(f.bytes || 0).toLocaleString()}</td><td data-sort="lines">${Number(f.lineCount || 0).toLocaleString()}</td><td data-sort="tokens">${Number(f.estimatedTokens || 0).toLocaleString()}</td><td data-sort="modified">${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
-
+  const profilerRows = (contextProfiler.files || []).map(f => `<tr data-path="${f.path.toLowerCase()}"><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.lineCount || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td><td>${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
   const top10Rows = (contextProfiler.top10 || []).map((f, i) => `<tr><td>${i + 1}</td><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td></tr>`).join('') || '<tr><td colspan="4">No files</td></tr>';
 
   const insightBullets = (insights.bullets || []).map(b => `<li>${b}</li>`).join('') || '<li>No insight bullets generated.</li>';
   const insightLinks = (insights.rollupLinks || []).map(l => `<li><a href="${l}" target="_blank" rel="noreferrer">${l}</a></li>`).join('') || '<li>No rollup links.</li>';
-
   const historyRows = history.slice(-20).map((h, i) => `<tr><td>${i + 1}</td><td>${new Date(h.capturedAt).toLocaleString('en-GB')}</td><td>${h.sessionCount || 0}</td><td>${Math.round(Number(h.estimatedUsedTokens || 0)).toLocaleString()}</td><td>${h.securitySummary || '-'}</td></tr>`).join('');
 
   return `<!doctype html>
 <html>
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>OpenClaw Usage Dashboard</title>
-  <style>
-    :root { --bg:#0b1020; --panel:#121a30; --panel2:#18223f; --line:#2f3d67; --text:#e7ecff; --muted:#9caad6; }
-    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%);color:var(--text);font-family:Inter,system-ui,sans-serif;padding:16px}
-    .container{max-width:1160px;margin:0 auto}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
-    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.k{color:var(--muted);font-size:.8rem}.v{font-size:1.35rem;font-weight:700}
-    .badge{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.75rem;margin-right:6px}
-    table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left} th{color:var(--muted);font-size:.8rem}
-    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-  </style>
+<meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OpenClaw Usage Dashboard</title>
+<style>
+:root{--bg:#0b1020;--panel:#121a30;--panel2:#18223f;--line:#2f3d67;--text:#e7ecff;--muted:#9caad6;--accent:#6ea8fe}
+*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%);color:var(--text);font-family:Inter,system-ui,sans-serif;padding:14px;line-height:1.35}
+.container{max-width:1200px;margin:0 auto}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+.k{color:var(--muted);font-size:.78rem}.v{font-size:1.35rem;font-weight:700}.badge{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.75rem;margin:4px 6px 0 0}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tabs{display:flex;flex-wrap:wrap;gap:8px}.tabbtn{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#192447;color:#dce7ff;font-size:.85rem}
+table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left} th{color:var(--muted);font-size:.8rem}
+summary{cursor:pointer;color:#c6d6ff}.hidden{display:none}.bar{display:inline-block;width:120px;height:8px;background:#233560;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}.bar>span{display:block;height:100%;background:linear-gradient(90deg,#5f8cff,#79d0ff)}
+.filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}.input{width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
+@media(max-width:900px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.filter{grid-template-columns:1fr 1fr}}
+</style>
 </head>
 <body>
 <div class="container">
-  <h1>OpenClaw Usage Dashboard</h1>
-  <div class="badge">Live snapshot data • token & cost values are estimates</div>
-  <div class="badge">build: ${buildId}</div>
+  <h1>OpenClaw Executive Dashboard</h1>
+  <div class="badge">Live snapshot data • token/cost are estimates</div><div class="badge">build: ${buildId}</div>
 
-  <div class="grid card">
-    <div><div class="k">Last updated</div><div class="v">${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div></div>
-    <div><div class="k">Estimated tokens</div><div class="v">${total.toLocaleString()}</div></div>
-    <div><div class="k">Delta vs previous</div><div class="v">${delta >= 0 ? '+' : ''}${delta.toLocaleString()}</div></div>
-    <div><div class="k">Sample size</div><div class="v">${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0}</div></div>
+  <div class="card strip">
+    <div><div class="k">Estimated cost today</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
+    <div><div class="k">Estimated tokens today</div><div class="v">${total.toLocaleString()}</div></div>
+    <div><div class="k">Top burner</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,38)}</div></div>
+    <div><div class="k">Anomaly / regression flag</div><div class="v" style="color:${anomaly ? '#ff8080' : '#88e7b8'}">${anomaly ? 'ALERT' : 'normal'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs prev</div></div>
   </div>
 
-  <div class="card"><h3>Security panel</h3>
+  <div class="card tabs">
+    <button class="tabbtn" data-tab="overview">Overview</button>
+    <button class="tabbtn" data-tab="cost">Cost & Models</button>
+    <button class="tabbtn" data-tab="agents">Agents</button>
+    <button class="tabbtn" data-tab="context">Context Files</button>
+    <button class="tabbtn" data-tab="security">Security</button>
+    <button class="tabbtn" data-tab="insights">Insights</button>
+  </div>
+
+  <div class="card filter">
+    <input id="q" class="input" placeholder="Search session/file text" />
+    <input id="fAgent" class="input" placeholder="Filter agent" />
+    <input id="fModel" class="input" placeholder="Filter model" />
+    <input id="fBucket" class="input" placeholder="Filter bucket/date" />
+  </div>
+
+  <section id="tab-overview" class="card tabsec"><h3>Overview</h3>
+    <div class="k">Last updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'} · sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0}</div>
+    <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table>
+    <details><summary>Snapshot history (expanded on demand)</summary><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></details>
+  </section>
+
+  <section id="tab-cost" class="card tabsec hidden"><h3>Cost & Models</h3>
+    <table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table>
+    <details><summary>Per-model within attribution buckets</summary><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table></details>
+    <div class="card"><h4>Recommended Actions (top 3)</h4><ul><li>${recommendedActions[0]}</li><li>${recommendedActions[1]}</li><li>${recommendedActions[2]}</li></ul></div>
+  </section>
+
+  <section id="tab-agents" class="card tabsec hidden"><h3>Agents</h3>
+    <table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table>
+    <details><summary>Top token-consuming sessions</summary><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table></details>
+  </section>
+
+  <section id="tab-context" class="card tabsec hidden"><h3>Context Files</h3>
+    <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div><div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div><div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div><div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
+    <details open><summary>Context File Profiler</summary><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></details>
+    <details><summary>Top-10 Heaviest Context Files</summary><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></details>
+  </section>
+
+  <section id="tab-security" class="card tabsec hidden"><h3>Security</h3>
     <div class="badge">Critical: ${sec.critical} (${(sec.critical - psec.critical) >= 0 ? '+' : ''}${sec.critical - psec.critical})</div>
     <div class="badge">Warn: ${sec.warn} (${(sec.warn - psec.warn) >= 0 ? '+' : ''}${sec.warn - psec.warn})</div>
     <div class="badge">Info: ${sec.info} (${(sec.info - psec.info) >= 0 ? '+' : ''}${sec.info - psec.info})</div>
-  </div>
+    <div class="k">Attribution rules: cron=${attributionRules.cron || 'n/a'} · interactive=${attributionRules.interactive || 'n/a'} · system/other=${attributionRules['system/other'] || 'n/a'}</div>
+  </section>
 
-  <div class="card"><h3>Latest model breakdown</h3>
-    <table><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table>
-  </div>
-
-  <div class="card"><h3>All-agent metrics</h3>
-    <table><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table>
-  </div>
-
-  <div class="card"><h3>Usage Attribution (by bucket)</h3>
-    <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${bucketRows}</tbody></table>
-  </div>
-
-  <div class="card"><h3>Per-model within each attribution bucket</h3>
-    <table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table>
-  </div>
-
-  <div class="card"><h3>Attribution Rules</h3>
-    <div class="badge">cron: ${attributionRules.cron || 'n/a'}</div>
-    <div class="badge">interactive: ${attributionRules.interactive || 'n/a'}</div>
-    <div class="badge">system/other: ${attributionRules['system/other'] || 'n/a'}</div>
-    <div class="badge">limitations: ${attributionRules.limitations || 'n/a'}</div>
-  </div>
-
-  <div class="card"><h3>Top token-consuming sessions</h3>
-    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table>
-  </div>
-
-  <div class="card">
-    <h3>Context File Profiler</h3>
-    <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div>
-    <div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div>
-    <div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div>
-    <div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
-    <div class="badge">${contextProfiler.notes || ''}</div>
-    <table id="context-profiler-table">
-      <thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead>
-      <tbody>${profilerRows}</tbody>
-    </table>
-  </div>
-
-  <div class="card">
-    <h3>Top-10 Heaviest Context Files</h3>
-    <table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table>
-  </div>
-
-  <div class="card">
-    <h3>5-day AI Insights ${insights.partial ? '(partial window)' : ''}</h3>
-    <div class="badge">days used: ${(insights.last5Days || []).length}/5</div>
+  <section id="tab-insights" class="card tabsec hidden"><h3>Insights</h3>
+    <h4>5-day AI Insights ${insights.partial ? '(partial window)' : ''}</h4><div class="badge">days used: ${(insights.last5Days || []).length}/5</div>
     <ul>${insightBullets}</ul>
-    <div class="k">Latest rollups:</div>
+    <h4>Rollups & Exports</h4>
     <ul>${insightLinks}</ul>
-  </div>
-
-  <div class="card"><h3>Snapshot history</h3>
-    <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table>
-  </div>
+    <div class="k">Preserved exports and rollup links are available above.</div>
+  </section>
 </div>
 <script>
 (function(){
-  var table = document.getElementById('context-profiler-table');
-  if (!table) return;
-  var headers = table.querySelectorAll('thead th');
-  headers.forEach(function(h, idx){
-    if (idx === 0 || idx === 4) return;
-    h.style.cursor = 'pointer';
-    h.title = 'Click to sort';
-    h.addEventListener('click', function(){
-      var rows = Array.from(table.querySelectorAll('tbody tr'));
-      var dir = h.getAttribute('data-dir') === 'asc' ? 'desc' : 'asc';
-      headers.forEach(function(x){ x.removeAttribute('data-dir'); });
-      h.setAttribute('data-dir', dir);
-      rows.sort(function(a,b){
-        var av = Number((a.children[idx].textContent || '').replace(/,/g,'')) || 0;
-        var bv = Number((b.children[idx].textContent || '').replace(/,/g,'')) || 0;
-        return dir === 'asc' ? av - bv : bv - av;
+  function show(tab){document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));var el=document.getElementById('tab-'+tab);if(el)el.classList.remove('hidden');}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-tab'))));
+  show('overview');
+
+  function ftxt(v){return (v||'').toLowerCase()}
+  function apply(){
+    var q=ftxt(document.getElementById('q').value),a=ftxt(document.getElementById('fAgent').value),m=ftxt(document.getElementById('fModel').value),b=ftxt(document.getElementById('fBucket').value);
+    [['#sessionTable tbody tr',q,a,m,b],['#contextTable tbody tr',q,'','','']].forEach(function(set){
+      document.querySelectorAll(set[0]).forEach(function(r){
+        var txt=ftxt(r.innerText); var ok=true;
+        if(set[1] && !txt.includes(set[1])) ok=false;
+        if(set[2] && !ftxt(r.getAttribute('data-agent')).includes(set[2])) ok=false;
+        if(set[3] && !ftxt(r.getAttribute('data-model')).includes(set[3])) ok=false;
+        if(set[4] && !ftxt(r.getAttribute('data-bucket')).includes(set[4]) && !txt.includes(set[4])) ok=false;
+        r.style.display=ok?'':'none';
       });
-      var tbody = table.querySelector('tbody');
-      rows.forEach(function(r){ tbody.appendChild(r); });
     });
-  });
+  }
+  ['q','fAgent','fModel','fBucket'].forEach(id=>{var x=document.getElementById(id); if(x) x.addEventListener('input',apply)});
 })();
 </script>
 </body>

@@ -1,12 +1,24 @@
 {
-  "generatedAt": "2026-03-05T01:11:46.858Z",
+  "generatedAt": "2026-03-05T01:14:46.507Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 31,
-    "tokens": 12207,
-    "bytes": 49038
+    "files": 37,
+    "tokens": 18675,
+    "bytes": 80086
   },
   "topFiles": [
+    {
+      "file": "reports/usage-latest.json",
+      "bytes": 12920,
+      "lines": 92,
+      "tokens": 2577
+    },
+    {
+      "file": "reports/openclaw-status.txt",
+      "bytes": 10319,
+      "lines": 86,
+      "tokens": 1940
+    },
     {
       "file": "skills/self-improving/SKILL.md",
       "bytes": 6845,
@@ -24,6 +36,12 @@
       "bytes": 5152,
       "lines": 132,
       "tokens": 1288
+    },
+    {
+      "file": "openclaw-usage.js",
+      "bytes": 4387,
+      "lines": 122,
+      "tokens": 1095
     },
     {
       "file": "skills/self-improving/operations.md",
@@ -50,6 +68,12 @@
       "tokens": 556
     },
     {
+      "file": "reports/token-audit.json",
+      "bytes": 2015,
+      "lines": 101,
+      "tokens": 504
+    },
+    {
       "file": "skills/agentic-coding/memory-template.md",
       "bytes": 1840,
       "lines": 87,
@@ -66,6 +90,72 @@
       "bytes": 1529,
       "lines": 70,
       "tokens": 383
+    },
+    {
+      "file": "skills/self-improving/setup.md",
+      "bytes": 1526,
+      "lines": 88,
+      "tokens": 376
+    },
+    {
+      "file": "BOOTSTRAP.md",
+      "bytes": 1470,
+      "lines": 56,
+      "tokens": 363
+    },
+    {
+      "file": "skills/agentic-coding/protocol.md",
+      "bytes": 1369,
+      "lines": 66,
+      "tokens": 343
+    },
+    {
+      "file": "SOUL.md",
+      "bytes": 1190,
+      "lines": 50,
+      "tokens": 297
+    },
+    {
+      "file": "AGENTS.md",
+      "bytes": 1182,
+      "lines": 32,
+      "tokens": 295
+    },
+    {
+      "file": "PROCESS.md",
+      "bytes": 1095,
+      "lines": 36,
+      "tokens": 274
+    },
+    {
+      "file": "skills/self-improving/memory-template.md",
+      "bytes": 1014,
+      "lines": 61,
+      "tokens": 253
+    },
+    {
+      "file": "skills/self-improving/corrections.md",
+      "bytes": 1026,
+      "lines": 37,
+      "tokens": 252
+    },
+    {
+      "file": "TOOLS.md",
+      "bytes": 860,
+      "lines": 41,
+      "tokens": 213
+    },
+    {
+      "file": "skills/self-improving/reflections.md",
+      "bytes": 840,
+      "lines": 32,
+      "tokens": 207
+    },
+    {
+      "file": "TOKEN_AUDIT.md",
+      "bytes": 781,
+      "lines": 30,
+      "tokens": 196
     }
   ],
   "byFolder": [
@@ -76,10 +166,16 @@
       "tokens": 9119
     },
     {
+      "folder": "reports",
+      "files": 4,
+      "bytes": 25566,
+      "tokens": 5099
+    },
+    {
       "folder": ".",
-      "files": 9,
-      "bytes": 11916,
-      "tokens": 2972
+      "files": 11,
+      "bytes": 17398,
+      "tokens": 4341
     },
     {
       "folder": ".clawhub",

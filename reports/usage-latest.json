@@ -1,0 +1,92 @@
+{
+  "parsed": {
+    "capturedAt": "2026-03-05T01:14:43.786Z",
+    "overview": {},
+    "sessions": [
+      {
+        "key": "agent:builder:telegram:group:-1…",
+        "kind": "group",
+        "age": "1m ago",
+        "model": "gpt-5.3-codex",
+        "tokens": "16k/272k (6%) · 🗄️ 98% cached"
+      },
+      {
+        "key": "agent:main:main",
+        "kind": "direct",
+        "age": "22m ago",
+        "model": "gpt-5.3-codex",
+        "tokens": "unknown/272k (?%) · 🗄️ 100% cached"
+      },
+      {
+        "key": "agent:main:discord:channel:1477…",
+        "kind": "group",
+        "age": "3h ago",
+        "model": "gpt-5.3-codex",
+        "tokens": "158k/272k (58%) · 🗄️ 99% cached"
+      },
+      {
+        "key": "agent:builder:main",
+        "kind": "direct",
+        "age": "4h ago",
+        "model": "gpt-5.3-codex",
+        "tokens": "11k/400k (3%) · 🗄️ 14% cached"
+      },
+      {
+        "key": "telegram:slash:1773262118",
+        "kind": "direct",
+        "age": "5h ago",
+        "model": "gpt-5-mini",
+        "tokens": "unknown/400k (?%)"
+      },
+      {
+        "key": "agent:main:telegram:group:-1003…",
+        "kind": "group",
+        "age": "10h ago",
+        "model": "gpt-5.3-codex",
+        "tokens": "23k/272k (8%) · 🗄️ 16% cached"
+      },
+      {
+        "key": "agent:main:cron:ddcb38d2-6d24-4…",
+        "kind": "direct",
+        "age": "10h ago",
+        "model": "gpt-5.2",
+        "tokens": "14k/272k (5%) · 🗄️ 170% cached"
+      },
+      {
+        "key": "agent:main:cron:ddcb38d2-6d24-4…",
+        "kind": "direct",
+        "age": "10h ago",
+        "model": "gpt-5.2",
+        "tokens": "14k/272k (5%) · 🗄️ 170% cached"
+      },
+      {
+        "key": "agent:main:cron:ba9af08c-6dca-4…",
+        "kind": "direct",
+        "age": "10h ago",
+        "model": "gpt-5-mini",
+        "tokens": "11k/400k (3%)"
+      },
+      {
+        "key": "agent:main:cron:ba9af08c-6dca-4…",
+        "kind": "direct",
+        "age": "10h ago",
+        "model": "gpt-5-mini",
+        "tokens": "11k/400k (3%)"
+      }
+    ],
+    "securitySummary": "6 critical · 3 warn · 1 info",
+    "raw": "OpenClaw status\n\nOverview\n┌─────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────┐\n│ Item            │ Value                                                                                             │\n├─────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────┤\n│ Dashboard       │ http://127.0.0.1:18789/                                                                           │\n│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │\n│ Tailscale       │ off                                                                                               │\n│ Channel         │ stable (config)                                                                                   │\n│ Update          │ available · pnpm · npm update 2026.3.2                                                            │\n│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 23ms · auth token · 2bf5bd64c8d3 (172.  │\n│                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │\n│ Gateway service │ systemd not installed                                                                             │\n│ Node service    │ systemd not installed                                                                             │\n│ Agents          │ 2 · 2 bootstrap files present · sessions 30 · default main active 22m ago                         │\n│ Memory          │ 9 files · 13 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on   │\n│                 │ (42)                                                                                              │\n│ Probes          │ skipped (use --deep)                                                                              │\n│ Events          │ none                                                                                              │\n│ Heartbeat       │ 30m (main), disabled (builder)                                                                    │\n│ Sessions        │ 30 active · default gpt-5-mini (400k ctx) · 2 stores                                              │\n└─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘\n\nSecurity audit\nSummary: 6 critical · 3 warn · 1 info\n  CRITICAL DANGEROUS: Control UI device auth disabled\n    gateway.controlUi.dangerouslyDisableDeviceAuth=true disables device identity checks for the Control UI.\n    Fix: Disable it unless you are in a short-lived break-glass scenario.\n  CRITICAL Open groupPolicy with elevated tools enabled\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy With tools.elevate…\n    Fix: Set groupPolicy=\"allowlist\" and keep elevated allowlists extremely tight.\n  CRITICAL Open groupPolicy with runtime/filesystem tools exposed\n    Found groupPolicy=\"open\" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy Risky tool exposur…\n    Fix: For open groups, prefer tools.profile=\"messaging\" (or deny group:runtime/group:fs), set tools.fs.workspaceOnly=true, and use agents.defaults.sandbox.mode=\"all\" for exposed agents.\n  CRITICAL Telegram security warning\n    Telegram groups: groupPolicy=\"open\" allows any member in allowed groups to trigger (mention-gated). Set channels.telegram.groupPolicy=\"allowlist\" + channels.te…\n  CRITICAL Discord slash commands are unrestricted\n    commands.useAccessGroups=false disables sender allowlists for Discord slash commands unless a per-guild/channel users allowlist is configured; with no users al…\n    Fix: Set commands.useAccessGroups=true (recommended), or configure channels.discord.guilds.<id>.users (or channels.discord.guilds.<id>.channels.<channel>.users).\n  CRITICAL Discord security warning\n    Discord guilds: groupPolicy=\"open\" allows any channel not explicitly denied to trigger (mention-gated). Set channels.discord.groupPolicy=\"allowlist\" and config…\n… +3 more\nFull report: openclaw security audit\nDeep probe: openclaw security audit --deep\n\nChannels\n┌─────────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────┐\n│ Channel     │ Enabled │ State  │ Detail                                                                             │\n├─────────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────┤\n│ Telegram    │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows          │\n│             │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…             │\n│ WhatsApp    │ ON      │ WARN   │ missing file (~/.openclaw/credentials/whatsapp/default) · gateway: Not linked (no  │\n│             │         │        │ WhatsApp Web session).                                                             │\n│ Discord     │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                   │\n│ Google Chat │ ON      │ SETUP  │ not configured                                                                     │\n│ Slack       │ ON      │ SETUP  │ no tokens (need bot+app)                                                           │\n│ Nostr       │ ON      │ SETUP  │ not configured                                                                     │\n└─────────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────┘\n\nSessions\n┌─────────────────────────────────────────────┬────────┬─────────┬───────────────┬────────────────────────────────────┐\n│ Key                                         │ Kind   │ Age     │ Model         │ Tokens                             │\n├─────────────────────────────────────────────┼────────┼─────────┼───────────────┼────────────────────────────────────┤\n│ agent:builder:telegram:group:-1…            │ group  │ 1m ago  │ gpt-5.3-codex │ 16k/272k (6%) · 🗄️ 98% cached      │\n│ agent:main:main                             │ direct │ 22m ago │ gpt-5.3-codex │ unknown/272k (?%) · 🗄️ 100% cached │\n│ agent:main:discord:channel:1477…            │ group  │ 3h ago  │ gpt-5.3-codex │ 158k/272k (58%) · 🗄️ 99% cached    │\n│ agent:builder:main                          │ direct │ 4h ago  │ gpt-5.3-codex │ 11k/400k (3%) · 🗄️ 14% cached      │\n│ telegram:slash:1773262118                   │ direct │ 5h ago  │ gpt-5-mini    │ unknown/400k (?%)                  │\n│ agent:main:telegram:group:-1003…            │ group  │ 10h ago │ gpt-5.3-codex │ 23k/272k (8%) · 🗄️ 16% cached      │\n│ agent:main:cron:ddcb38d2-6d24-4…            │ direct │ 10h ago │ gpt-5.2       │ 14k/272k (5%) · 🗄️ 170% cached     │\n│ agent:main:cron:ddcb38d2-6d24-4…            │ direct │ 10h ago │ gpt-5.2       │ 14k/272k (5%) · 🗄️ 170% cached     │\n│ agent:main:cron:ba9af08c-6dca-4…            │ direct │ 10h ago │ gpt-5-mini    │ 11k/400k (3%)                      │\n│ agent:main:cron:ba9af08c-6dca-4…            │ direct │ 10h ago │ gpt-5-mini    │ 11k/400k (3%)                      │\n└─────────────────────────────────────────────┴────────┴─────────┴───────────────┴────────────────────────────────────┘\n\nFAQ: https://docs.openclaw.ai/faq\nTroubleshooting: https://docs.openclaw.ai/troubleshooting\n\nUpdate available (npm 2026.3.2). Run: openclaw update\n\nNext steps:\n  Need to share?      openclaw status --all\n  Need to debug live? openclaw logs --follow\n  Need to test channels? openclaw status --deep\n"
+  },
+  "summary": {
+    "capturedAt": "2026-03-05T01:14:43.786Z",
+    "securitySummary": "6 critical · 3 warn · 1 info",
+    "sessionCount": 10,
+    "knownTokenSessions": 8,
+    "estimatedUsedTokens": 258000,
+    "byModelEstimatedTokens": {
+      "gpt-5.3-codex": 208,
+      "gpt-5.2": 28,
+      "gpt-5-mini": 22
+    }
+  }
+}

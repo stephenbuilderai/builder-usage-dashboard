@@ -1,0 +1,85 @@
+OpenClaw status
+
+Overview
+┌─────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Item            │ Value                                                                                             │
+├─────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Dashboard       │ http://127.0.0.1:18789/                                                                           │
+│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │
+│ Tailscale       │ off                                                                                               │
+│ Channel         │ stable (config)                                                                                   │
+│ Update          │ available · pnpm · npm update 2026.3.2                                                            │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 23ms · auth token · 2bf5bd64c8d3 (172.  │
+│                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │
+│ Gateway service │ systemd not installed                                                                             │
+│ Node service    │ systemd not installed                                                                             │
+│ Agents          │ 2 · 2 bootstrap files present · sessions 30 · default main active 22m ago                         │
+│ Memory          │ 9 files · 13 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on   │
+│                 │ (42)                                                                                              │
+│ Probes          │ skipped (use --deep)                                                                              │
+│ Events          │ none                                                                                              │
+│ Heartbeat       │ 30m (main), disabled (builder)                                                                    │
+│ Sessions        │ 30 active · default gpt-5-mini (400k ctx) · 2 stores                                              │
+└─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+Security audit
+Summary: 6 critical · 3 warn · 1 info
+  CRITICAL DANGEROUS: Control UI device auth disabled
+    gateway.controlUi.dangerouslyDisableDeviceAuth=true disables device identity checks for the Control UI.
+    Fix: Disable it unless you are in a short-lived break-glass scenario.
+  CRITICAL Open groupPolicy with elevated tools enabled
+    Found groupPolicy="open" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy With tools.elevate…
+    Fix: Set groupPolicy="allowlist" and keep elevated allowlists extremely tight.
+  CRITICAL Open groupPolicy with runtime/filesystem tools exposed
+    Found groupPolicy="open" at: - channels.telegram.groupPolicy - channels.telegram.accounts.default.groupPolicy - channels.discord.groupPolicy Risky tool exposur…
+    Fix: For open groups, prefer tools.profile="messaging" (or deny group:runtime/group:fs), set tools.fs.workspaceOnly=true, and use agents.defaults.sandbox.mode="all" for exposed agents.
+  CRITICAL Telegram security warning
+    Telegram groups: groupPolicy="open" allows any member in allowed groups to trigger (mention-gated). Set channels.telegram.groupPolicy="allowlist" + channels.te…
+  CRITICAL Discord slash commands are unrestricted
+    commands.useAccessGroups=false disables sender allowlists for Discord slash commands unless a per-guild/channel users allowlist is configured; with no users al…
+    Fix: Set commands.useAccessGroups=true (recommended), or configure channels.discord.guilds.<id>.users (or channels.discord.guilds.<id>.channels.<channel>.users).
+  CRITICAL Discord security warning
+    Discord guilds: groupPolicy="open" allows any channel not explicitly denied to trigger (mention-gated). Set channels.discord.groupPolicy="allowlist" and config…
+… +3 more
+Full report: openclaw security audit
+Deep probe: openclaw security audit --deep
+
+Channels
+┌─────────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────┐
+│ Channel     │ Enabled │ State  │ Detail                                                                             │
+├─────────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────┤
+│ Telegram    │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows          │
+│             │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…             │
+│ WhatsApp    │ ON      │ WARN   │ missing file (~/.openclaw/credentials/whatsapp/default) · gateway: Not linked (no  │
+│             │         │        │ WhatsApp Web session).                                                             │
+│ Discord     │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                   │
+│ Google Chat │ ON      │ SETUP  │ not configured                                                                     │
+│ Slack       │ ON      │ SETUP  │ no tokens (need bot+app)                                                           │
+│ Nostr       │ ON      │ SETUP  │ not configured                                                                     │
+└─────────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────┘
+
+Sessions
+┌─────────────────────────────────────────────┬────────┬─────────┬───────────────┬────────────────────────────────────┐
+│ Key                                         │ Kind   │ Age     │ Model         │ Tokens                             │
+├─────────────────────────────────────────────┼────────┼─────────┼───────────────┼────────────────────────────────────┤
+│ agent:builder:telegram:group:-1…            │ group  │ 1m ago  │ gpt-5.3-codex │ 16k/272k (6%) · 🗄️ 98% cached      │
+│ agent:main:main                             │ direct │ 22m ago │ gpt-5.3-codex │ unknown/272k (?%) · 🗄️ 100% cached │
+│ agent:main:discord:channel:1477…            │ group  │ 3h ago  │ gpt-5.3-codex │ 158k/272k (58%) · 🗄️ 99% cached    │
+│ agent:builder:main                          │ direct │ 4h ago  │ gpt-5.3-codex │ 11k/400k (3%) · 🗄️ 14% cached      │
+│ telegram:slash:1773262118                   │ direct │ 5h ago  │ gpt-5-mini    │ unknown/400k (?%)                  │
+│ agent:main:telegram:group:-1003…            │ group  │ 10h ago │ gpt-5.3-codex │ 23k/272k (8%) · 🗄️ 16% cached      │
+│ agent:main:cron:ddcb38d2-6d24-4…            │ direct │ 10h ago │ gpt-5.2       │ 14k/272k (5%) · 🗄️ 170% cached     │
+│ agent:main:cron:ddcb38d2-6d24-4…            │ direct │ 10h ago │ gpt-5.2       │ 14k/272k (5%) · 🗄️ 170% cached     │
+│ agent:main:cron:ba9af08c-6dca-4…            │ direct │ 10h ago │ gpt-5-mini    │ 11k/400k (3%)                      │
+│ agent:main:cron:ba9af08c-6dca-4…            │ direct │ 10h ago │ gpt-5-mini    │ 11k/400k (3%)                      │
+└─────────────────────────────────────────────┴────────┴─────────┴───────────────┴────────────────────────────────────┘
+
+FAQ: https://docs.openclaw.ai/faq
+Troubleshooting: https://docs.openclaw.ai/troubleshooting
+
+Update available (npm 2026.3.2). Run: openclaw update
+
+Next steps:
+  Need to share?      openclaw status --all
+  Need to debug live? openclaw logs --follow
+  Need to test channels? openclaw status --deep

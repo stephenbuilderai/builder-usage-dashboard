@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-03-05T01:11:46.858Z",
+  "summary": {
+    "root": "/data/.openclaw/workspace/agents/builder",
+    "files": 31,
+    "tokens": 12207,
+    "bytes": 49038
+  },
+  "topFiles": [
+    {
+      "file": "skills/self-improving/SKILL.md",
+      "bytes": 6845,
+      "lines": 224,
+      "tokens": 1690
+    },
+    {
+      "file": "skills/agentic-coding/SKILL.md",
+      "bytes": 5332,
+      "lines": 151,
+      "tokens": 1333
+    },
+    {
+      "file": "token-audit.js",
+      "bytes": 5152,
+      "lines": 132,
+      "tokens": 1288
+    },
+    {
+      "file": "skills/self-improving/operations.md",
+      "bytes": 3435,
+      "lines": 145,
+      "tokens": 858
+    },
+    {
+      "file": "skills/self-improving/scaling.md",
+      "bytes": 2945,
+      "lines": 126,
+      "tokens": 733
+    },
+    {
+      "file": "skills/self-improving/learning.md",
+      "bytes": 2951,
+      "lines": 107,
+      "tokens": 730
+    },
+    {
+      "file": "skills/self-improving/boundaries.md",
+      "bytes": 2236,
+      "lines": 60,
+      "tokens": 556
+    },
+    {
+      "file": "skills/agentic-coding/memory-template.md",
+      "bytes": 1840,
+      "lines": 87,
+      "tokens": 460
+    },
+    {
+      "file": "skills/agentic-coding/setup.md",
+      "bytes": 1743,
+      "lines": 53,
+      "tokens": 436
+    },
+    {
+      "file": "skills/agentic-coding/prompt-contracts.md",
+      "bytes": 1529,
+      "lines": 70,
+      "tokens": 383
+    }
+  ],
+  "byFolder": [
+    {
+      "folder": "skills",
+      "files": 20,
+      "bytes": 36661,
+      "tokens": 9119
+    },
+    {
+      "folder": ".",
+      "files": 9,
+      "bytes": 11916,
+      "tokens": 2972
+    },
+    {
+      "folder": ".clawhub",
+      "files": 1,
+      "bytes": 391,
+      "tokens": 98
+    },
+    {
+      "folder": ".openclaw",
+      "files": 1,
+      "bytes": 70,
+      "tokens": 18
+    }
+  ],
+  "notes": [
+    "Token estimate uses a simple 4 chars/token heuristic.",
+    "Use this for relative comparison and pruning decisions, not billing exactness."
+  ]
+}

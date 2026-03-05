@@ -144,7 +144,7 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
   };
 }
 
-function renderHtml(history) {
+function renderHtml(history, buildId) {
   const historyJson = JSON.stringify(history);
   return `<!doctype html>
 <html>
@@ -217,7 +217,25 @@ function renderHtml(history) {
 </div>
 <script>
 const HISTORY = ${historyJson};
+const BUILD_ID = ${buildId};
 let currentPeriod = '24h';
+
+(async function cacheBustGuard(){
+  try {
+    const r = await fetch('version.json?ts=' + Date.now(), { cache: 'no-store' });
+    if (!r.ok) return;
+    const j = await r.json();
+    if (!j || !j.buildId) return;
+    const current = String(BUILD_ID);
+    const latest = String(j.buildId);
+    const url = new URL(location.href);
+    const v = url.searchParams.get('v');
+    if (latest !== current || v !== latest) {
+      url.searchParams.set('v', latest);
+      location.replace(url.toString());
+    }
+  } catch {}
+})();
 
 function periodFilter(rows, p){
   const now = Date.now();
@@ -359,7 +377,8 @@ function cmdCapture(root) {
   history.push(summary);
   history = history.slice(-200);
 
-  const dashboardHtml = renderHtml(history);
+  const buildId = Date.now();
+  const dashboardHtml = renderHtml(history, buildId);
   fs.writeFileSync(path.join(reportsDir, 'openclaw-status.txt'), raw);
   fs.writeFileSync(path.join(reportsDir, 'usage-latest.json'), JSON.stringify({ parsed, summary, sessionsRaw }, null, 2));
   fs.writeFileSync(snapshotsPath, JSON.stringify(history, null, 2));
@@ -368,6 +387,7 @@ function cmdCapture(root) {
   const docsDir = path.join(root, 'docs');
   fs.mkdirSync(docsDir, { recursive: true });
   fs.writeFileSync(path.join(docsDir, 'index.html'), dashboardHtml);
+  fs.writeFileSync(path.join(docsDir, 'version.json'), JSON.stringify({ buildId, capturedAt: summary.capturedAt }, null, 2));
 
   console.log('Captured OpenClaw usage snapshot.');
   console.log(`Sessions: ${summary.sessionCount}, estimated tokens: ${summary.estimatedUsedTokens.toLocaleString()}`);

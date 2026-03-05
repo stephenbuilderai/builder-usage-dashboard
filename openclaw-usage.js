@@ -69,6 +69,41 @@ function summarize(parsed) {
   };
 }
 
+function summarizeAllAgents(statusParsed, sessionsJsonText) {
+  const data = JSON.parse(sessionsJsonText);
+  const sessions = Array.isArray(data.sessions) ? data.sessions : [];
+
+  // Drop synthetic run-keys to avoid double counting parent + run rows.
+  const uniqueSessions = sessions.filter(s => !(s.key || '').includes(':run:'));
+
+  let known = 0;
+  let used = 0;
+  const byModel = {};
+  const byAgent = {};
+
+  for (const s of uniqueSessions) {
+    const tok = Number(s.totalTokens);
+    if (!Number.isFinite(tok)) continue;
+    known += 1;
+    used += tok;
+    const model = s.model || 'unknown';
+    byModel[model] = (byModel[model] || 0) + tok;
+    const agent = s.agentId || 'unknown';
+    byAgent[agent] = (byAgent[agent] || 0) + tok;
+  }
+
+  return {
+    capturedAt: statusParsed.capturedAt,
+    securitySummary: statusParsed.securitySummary,
+    allAgents: true,
+    sessionCount: uniqueSessions.length,
+    knownTokenSessions: known,
+    estimatedUsedTokens: Math.round(used),
+    byModelEstimatedTokens: Object.fromEntries(Object.entries(byModel).map(([k, v]) => [k, v / 1000])),
+    byAgentEstimatedTokens: Object.fromEntries(Object.entries(byAgent).map(([k, v]) => [k, v / 1000])),
+  };
+}
+
 function renderHtml(history) {
   const latest = history[history.length - 1] || null;
   const previous = history.length > 1 ? history[history.length - 2] : null;
@@ -266,7 +301,16 @@ function cmdCapture(root) {
 
   const raw = run('openclaw status');
   const parsed = parseStatus(raw);
-  const summary = summarize(parsed);
+
+  let summary;
+  let sessionsRaw = '';
+  try {
+    sessionsRaw = run('openclaw sessions --all-agents --json');
+    summary = summarizeAllAgents(parsed, sessionsRaw);
+  } catch {
+    // Fallback to legacy top-table parse if sessions JSON is unavailable.
+    summary = summarize(parsed);
+  }
 
   const snapshotsPath = path.join(reportsDir, 'usage-history.json');
   let history = [];
@@ -277,7 +321,7 @@ function cmdCapture(root) {
   history = history.slice(-50);
 
   fs.writeFileSync(path.join(reportsDir, 'openclaw-status.txt'), raw);
-  fs.writeFileSync(path.join(reportsDir, 'usage-latest.json'), JSON.stringify({ parsed, summary }, null, 2));
+  fs.writeFileSync(path.join(reportsDir, 'usage-latest.json'), JSON.stringify({ parsed, summary, sessionsRaw }, null, 2));
   fs.writeFileSync(snapshotsPath, JSON.stringify(history, null, 2));
   fs.writeFileSync(path.join(reportsDir, 'usage-dashboard.html'), renderHtml(history));
 

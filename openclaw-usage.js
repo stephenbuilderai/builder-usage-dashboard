@@ -41,9 +41,15 @@ function parseStatus(text) {
 }
 
 function tokenFromCell(cell) {
-  const m = cell.match(/([\d.]+)k\/(\d+)k/i);
+  const m = String(cell || '').match(/([\d.]+)k\/(\d+)k/i);
   if (!m) return null;
   return { usedK: Number(m[1]), ctxK: Number(m[2]) };
+}
+
+function parseSecurityCounts(summary) {
+  const s = String(summary || '');
+  const pick = (k) => Number((s.match(new RegExp(`(\\d+)\\s+${k}`, 'i')) || [])[1] || 0);
+  return { critical: pick('critical'), warn: pick('warn'), info: pick('info') };
 }
 
 function summarize(parsed) {
@@ -62,10 +68,18 @@ function summarize(parsed) {
   return {
     capturedAt: parsed.capturedAt,
     securitySummary: parsed.securitySummary,
+    securityCounts: parseSecurityCounts(parsed.securitySummary),
+    allAgents: false,
+    totalSessions: parsed.sessions.length,
     sessionCount: parsed.sessions.length,
     knownTokenSessions: known,
     estimatedUsedTokens: Math.round(usedK * 1000),
+    estimatedCostUsd: Math.round((usedK * 1000 / 1_000_000) * 8 * 100) / 100,
     byModelEstimatedTokens: byModel,
+    byAgentEstimatedTokens: {},
+    byAgentMeta: {},
+    topSessions: [],
+    dedupeApplied: false,
   };
 }
 
@@ -73,109 +87,65 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
   const data = JSON.parse(sessionsJsonText);
   const sessions = Array.isArray(data.sessions) ? data.sessions : [];
 
-  // Drop synthetic run-keys to avoid double counting parent + run rows.
   const uniqueSessions = sessions.filter(s => !(s.key || '').includes(':run:'));
 
   let known = 0;
   let used = 0;
   const byModel = {};
   const byAgent = {};
+  const byAgentMeta = {};
+  const tokenSessions = [];
 
   for (const s of uniqueSessions) {
     const tok = Number(s.totalTokens);
+    const updatedAt = Number(s.updatedAt);
+    const model = s.model || 'unknown';
+    const agent = s.agentId || 'unknown';
+
+    if (!byAgentMeta[agent]) byAgentMeta[agent] = { lastActiveAt: null, sessions: 0 };
+    byAgentMeta[agent].sessions += 1;
+    if (Number.isFinite(updatedAt)) {
+      if (!byAgentMeta[agent].lastActiveAt || updatedAt > byAgentMeta[agent].lastActiveAt) {
+        byAgentMeta[agent].lastActiveAt = updatedAt;
+      }
+    }
+
     if (!Number.isFinite(tok)) continue;
     known += 1;
     used += tok;
-    const model = s.model || 'unknown';
     byModel[model] = (byModel[model] || 0) + tok;
-    const agent = s.agentId || 'unknown';
     byAgent[agent] = (byAgent[agent] || 0) + tok;
+    tokenSessions.push({
+      agent,
+      key: s.key || 'unknown',
+      model,
+      tokens: tok,
+      updatedAt: Number.isFinite(updatedAt) ? updatedAt : null
+    });
   }
+
+  tokenSessions.sort((a, b) => b.tokens - a.tokens);
 
   return {
     capturedAt: statusParsed.capturedAt,
     securitySummary: statusParsed.securitySummary,
+    securityCounts: parseSecurityCounts(statusParsed.securitySummary),
     allAgents: true,
+    totalSessions: sessions.length,
     sessionCount: uniqueSessions.length,
     knownTokenSessions: known,
     estimatedUsedTokens: Math.round(used),
+    estimatedCostUsd: Math.round((used / 1_000_000) * 8 * 100) / 100,
     byModelEstimatedTokens: Object.fromEntries(Object.entries(byModel).map(([k, v]) => [k, v / 1000])),
     byAgentEstimatedTokens: Object.fromEntries(Object.entries(byAgent).map(([k, v]) => [k, v / 1000])),
+    byAgentMeta,
+    topSessions: tokenSessions.slice(0, 15),
+    dedupeApplied: true,
   };
 }
 
 function renderHtml(history) {
-  const latest = history[history.length - 1] || null;
-  const previous = history.length > 1 ? history[history.length - 2] : null;
-
-  const totalNow = latest ? latest.estimatedUsedTokens : 0;
-  const totalPrev = previous ? previous.estimatedUsedTokens : 0;
-  const delta = totalNow - totalPrev;
-  const deltaPct = totalPrev > 0 ? (delta / totalPrev) * 100 : 0;
-
-  const modelEntries = latest
-    ? Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1])
-    : [];
-
-  const byAgentEntries = latest
-    ? Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1])
-    : [];
-
-  const modelRows = modelEntries
-    .map(([model, usedK]) => {
-      const tokens = Math.round(usedK * 1000);
-      const percent = totalNow > 0 ? Math.round((tokens / totalNow) * 100) : 0;
-      return `<tr>
-        <td>${model}</td>
-        <td>${tokens.toLocaleString()}</td>
-        <td>
-          <div class="bar-wrap"><div class="bar" style="width:${percent}%"></div></div>
-          <span class="bar-label">${percent}%</span>
-        </td>
-      </tr>`;
-    })
-    .join('');
-
-  const byAgentRows = byAgentEntries
-    .map(([agentId, usedK]) => `<tr><td>${agentId}</td><td>${Math.round(usedK * 1000).toLocaleString()}</td></tr>`)
-    .join('');
-
-  const historyRows = history
-    .map((h, i) => {
-      const risk = h.securitySummary || '-';
-      return `<tr>
-        <td>${i + 1}</td>
-        <td>${new Date(h.capturedAt).toLocaleString()}</td>
-        <td>${h.sessionCount}</td>
-        <td>${h.estimatedUsedTokens.toLocaleString()}</td>
-        <td>${risk}</td>
-      </tr>`;
-    })
-    .join('');
-
-  const points = history.map((h, idx) => ({ x: idx, y: h.estimatedUsedTokens, label: new Date(h.capturedAt).toLocaleString() }));
-  const maxY = Math.max(...points.map((p) => p.y), 1);
-  const width = 900;
-  const height = 260;
-  const pad = 24;
-  const stepX = points.length > 1 ? (width - pad * 2) / (points.length - 1) : 0;
-
-  const polyline = points
-    .map((p, i) => {
-      const x = pad + i * stepX;
-      const y = height - pad - ((p.y / maxY) * (height - pad * 2));
-      return `${x},${y}`;
-    })
-    .join(' ');
-
-  const dots = points
-    .map((p, i) => {
-      const x = pad + i * stepX;
-      const y = height - pad - ((p.y / maxY) * (height - pad * 2));
-      return `<circle cx="${x}" cy="${y}" r="4"><title>${p.label}: ${p.y.toLocaleString()} tokens</title></circle>`;
-    })
-    .join('');
-
+  const historyJson = JSON.stringify(history);
   return `<!doctype html>
 <html>
 <head>
@@ -183,84 +153,186 @@ function renderHtml(history) {
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpenClaw Usage Dashboard</title>
   <style>
-    :root { --bg:#0b1020; --panel:#121a30; --panel-2:#18223f; --text:#e7ecff; --muted:#9caad6; --line:#2f3d67; --accent:#6ea8fe; --good:#3ecf8e; }
-    * { box-sizing: border-box; }
-    body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%); color:var(--text); min-height:100vh; padding:32px 18px; }
-    .container { max-width:1160px; margin:0 auto; }
-    h1 { margin:0 0 6px; font-size:1.9rem; }
-    .sub { color:var(--muted); margin-bottom:12px; }
-    .badge { display:inline-block; font-size:.75rem; color:#b8ffe0; border:1px solid #2f7255; background:#123d2c; padding:4px 10px; border-radius:999px; margin-bottom:12px; }
-    .muted { color:var(--muted); font-size:.84rem; }
-    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
-    .card { background:linear-gradient(180deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:0 6px 30px rgba(0,0,0,.25); }
-    .k { color:var(--muted); font-size:.82rem; }
-    .v { margin-top:6px; font-size:1.4rem; font-weight:700; }
-    .delta.up { color:var(--good); } .delta.down { color:#ff8181; }
-    .section { margin-top:14px; }
-    .section h2 { font-size:1.05rem; margin:0 0 10px; }
-    .chart-wrap { overflow:auto; }
-    .chart { width:100%; min-width:480px; background:rgba(13,19,36,.65); border:1px solid var(--line); border-radius:12px; padding:8px; }
-    .chart polyline { fill:none; stroke:var(--accent); stroke-width:3; }
-    .chart circle { fill:#fff; stroke:var(--accent); stroke-width:2; }
-    table { width:100%; border-collapse:collapse; }
-    th,td { padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:middle; }
-    th { color:var(--muted); font-weight:600; font-size:.86rem; }
-    .bar-wrap { display:inline-block; width:120px; height:8px; background:#22335f; border-radius:999px; margin-right:8px; overflow:hidden; }
-    .bar { height:100%; background:linear-gradient(90deg, #5f8cff, #79d0ff); }
-    .bar-label { color:var(--muted); font-size:.78rem; }
-    .pill { display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.03); color:var(--muted); font-size:.76rem; margin-right:6px; }
-    .help { cursor:help; text-decoration:underline dotted; text-underline-offset:2px; }
-    @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
+    :root { --bg:#0b1020; --panel:#121a30; --panel2:#18223f; --line:#2f3d67; --text:#e7ecff; --muted:#9caad6; --good:#3ecf8e; --warn:#f5c451; --danger:#ff7070; --accent:#6ea8fe; }
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%);color:var(--text);font-family:Inter,system-ui,sans-serif;padding:20px}
+    .container{max-width:1180px;margin:0 auto} .card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
+    .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px} .k{color:var(--muted);font-size:.78rem}.v{font-size:1.35rem;font-weight:700}
+    .badge{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.75rem;margin-right:6px}
+    .success{background:#123d2c;color:#b8ffe0;border-color:#2f7255}.warning{background:#453617;color:#ffd98b;border-color:#6d5422}.danger{background:#4a1f1f;color:#ffb8b8;border-color:#7d3434}
+    .toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:8px 0}.btn{background:#1d2b55;color:#dbe7ff;border:1px solid #35508f;border-radius:8px;padding:6px 10px;cursor:pointer}
+    .btn.active{background:#2d4f9f} table{width:100%;border-collapse:collapse;font-size:.92rem} th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left} th{color:var(--muted);font-size:.8rem}
+    .bar-wrap{width:120px;height:8px;background:#22335f;border-radius:999px;overflow:hidden;display:inline-block;vertical-align:middle;margin-right:6px}.bar{height:100%;background:linear-gradient(90deg,#5f8cff,#79d0ff)}
+    .help{cursor:help;text-decoration:underline dotted}
+    .chart{width:100%;height:220px;border:1px solid var(--line);border-radius:10px;background:rgba(0,0,0,.15)}
+    @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>OpenClaw Usage Dashboard</h1>
-    <div class="sub">Auto-generated from <code>openclaw status</code> + <code>openclaw sessions --all-agents --json</code>.</div>
-    <div class="badge">Live snapshot data • token values are estimated</div>
-    <div class="muted">Last updated: <span id="last-updated-absolute">${latest ? new Date(latest.capturedAt).toLocaleString('en-GB', { timeZoneName: 'short' }) : 'n/a'}</span> (<span id="last-updated-relative">n/a</span>)</div>
-
-    <div class="grid">
-      <div class="card"><div class="k">Snapshots</div><div class="v">${history.length}</div></div>
-      <div class="card"><div class="k">Latest Estimated Tokens</div><div class="v">${totalNow.toLocaleString()}</div></div>
-      <div class="card"><div class="k">Delta vs Previous</div><div class="v ${delta >= 0 ? 'delta up' : 'delta down'}">${delta >= 0 ? '+' : ''}${delta.toLocaleString()}</div><div class="k">${totalPrev > 0 ? `${deltaPct >= 0 ? '+' : ''}${deltaPct.toFixed(1)}%` : 'n/a'}</div></div>
-      <div class="card"><div class="k">Latest Sessions</div><div class="v">${latest ? latest.sessionCount : 0}</div></div>
-    </div>
-
-    <div class="card section">
-      <h2>Usage Trend</h2>
-      <div class="chart-wrap"><svg class="chart" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Usage trend chart"><polyline points="${polyline}" />${dots}</svg></div>
-    </div>
-
-    <div class="card section">
-      <h2>Latest Model Breakdown <span class="help" title="Primary configured model may differ from observed session models due to fallbacks, cron jobs, per-agent overrides, and historical sessions.">ⓘ</span></h2>
-      <table><thead><tr><th>Model</th><th>Estimated Tokens</th><th>Share</th></tr></thead><tbody>${modelRows || '<tr><td colspan="3">No model data yet.</td></tr>'}</tbody></table>
-    </div>
-
-    <div class="card section">
-      <h2>All-Agent Metrics</h2>
-      <div class="pill">allAgents: ${latest?.allAgents === true ? 'true' : 'false'}</div>
-      <table><thead><tr><th>Agent</th><th>Estimated Tokens</th></tr></thead><tbody>${byAgentRows || '<tr><td colspan="2">No agent data yet.</td></tr>'}</tbody></table>
-    </div>
-
-    <div class="card section">
-      <h2>Snapshot History</h2>
-      <div class="pill">Security: ${latest?.securitySummary || 'n/a'}</div>
-      <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated Tokens</th><th>Security Summary</th></tr></thead><tbody>${historyRows || '<tr><td colspan="5">No history yet.</td></tr>'}</tbody></table>
-    </div>
+<div class="container">
+  <h1>OpenClaw Usage Dashboard</h1>
+  <div class="toolbar">
+    <span class="badge success">Live snapshot data • token & cost values are estimates</span>
+    <span id="freshness" class="badge">freshness</span>
+    <span id="sample" class="badge">sample</span>
   </div>
-  <script>
-    (function(){
-      const ts = ${latest ? JSON.stringify(latest.capturedAt) : 'null'};
-      if (!ts) return;
-      const then = new Date(ts).getTime();
-      const now = Date.now();
-      const sec = Math.max(0, Math.floor((now - then)/1000));
-      const rel = sec < 60 ? sec + 's ago' : sec < 3600 ? Math.floor(sec/60) + 'm ago' : sec < 86400 ? Math.floor(sec/3600) + 'h ago' : Math.floor(sec/86400) + 'd ago';
-      const out = document.getElementById('last-updated-relative');
-      if (out) out.textContent = rel;
-    })();
-  </script>
+  <div class="toolbar">
+    <strong>Period:</strong>
+    <button class="btn active" data-period="24h">24h</button>
+    <button class="btn" data-period="7d">7d</button>
+    <button class="btn" data-period="30d">30d</button>
+    <button class="btn" data-period="all">all</button>
+    <button id="export-json" class="btn">Export JSON</button>
+    <button id="export-csv" class="btn">Export CSV</button>
+  </div>
+  <div id="staleWarn"></div>
+  <div class="grid card" id="kpis"></div>
+
+  <div class="card">
+    <h3>Total tokens trend</h3>
+    <svg id="chart-total" class="chart" viewBox="0 0 900 220" preserveAspectRatio="none"></svg>
+  </div>
+
+  <div class="card">
+    <h3>Per-model trend</h3>
+    <svg id="chart-model" class="chart" viewBox="0 0 900 220" preserveAspectRatio="none"></svg>
+    <div class="k">Primary configured model may differ from observed session models due to fallbacks, cron jobs, and per-agent overrides.</div>
+  </div>
+
+  <div class="card">
+    <h3>Security panel</h3>
+    <div id="security-panel"></div>
+    <div class="k" style="margin-top:8px">Quick remediation: <code>openclaw security audit</code> · <code>openclaw security audit --deep</code> · docs: https://docs.openclaw.ai/troubleshooting</div>
+  </div>
+
+  <div class="card">
+    <h3>All-agent metrics</h3>
+    <div id="agent-meta" class="k" style="margin-bottom:8px"></div>
+    <table><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody id="agent-table"></tbody></table>
+  </div>
+
+  <div class="card">
+    <h3>Top token-consuming sessions</h3>
+    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th></tr></thead><tbody id="top-sessions"></tbody></table>
+  </div>
+</div>
+<script>
+const HISTORY = ${historyJson};
+let currentPeriod = '24h';
+
+function periodFilter(rows, p){
+  const now = Date.now();
+  const m = { '24h': 24*3600e3, '7d': 7*24*3600e3, '30d': 30*24*3600e3 };
+  if (p === 'all') return rows;
+  const win = m[p] || m['24h'];
+  return rows.filter(r => (now - new Date(r.capturedAt).getTime()) <= win);
+}
+
+function ago(ts){
+  const sec = Math.max(0, Math.floor((Date.now() - new Date(ts).getTime())/1000));
+  if (sec < 60) return sec + 's ago';
+  if (sec < 3600) return Math.floor(sec/60) + 'm ago';
+  if (sec < 86400) return Math.floor(sec/3600) + 'h ago';
+  return Math.floor(sec/86400) + 'd ago';
+}
+
+function svgLine(el, points, color){
+  if (!points.length) { el.innerHTML = ''; return; }
+  const w=900,h=220,p=20,maxY=Math.max(...points.map(x=>x.y),1);
+  const step = points.length>1 ? (w-p*2)/(points.length-1) : 0;
+  const poly = points.map((pt,i)=>\`\${p+i*step},\${h-p-(pt.y/maxY)*(h-p*2)}\`).join(' ');
+  const dots = points.map((pt,i)=>\`<circle cx="\${p+i*step}" cy="\${h-p-(pt.y/maxY)*(h-p*2)}" r="3" fill="#fff"><title>\${pt.label}: \${Math.round(pt.y).toLocaleString()}</title></circle>\`).join('');
+  el.innerHTML = \`<polyline points="\${poly}" fill="none" stroke="\${color}" stroke-width="3"/>\${dots}\`;
+}
+
+function render(){
+  const hist = periodFilter(HISTORY, currentPeriod);
+  const latest = hist[hist.length-1] || HISTORY[HISTORY.length-1];
+  const prev = hist.length>1 ? hist[hist.length-2] : null;
+  const total = latest?.estimatedUsedTokens || 0;
+  const prevTotal = prev?.estimatedUsedTokens || 0;
+  const delta = total - prevTotal;
+
+  const dt = latest ? new Date(latest.capturedAt) : null;
+  const staleMs = dt ? (Date.now()-dt.getTime()) : Infinity;
+  const freshNode = document.getElementById('freshness');
+  freshNode.className = 'badge ' + (staleMs < 2*3600e3 ? 'success' : staleMs < 12*3600e3 ? 'warning' : 'danger');
+  freshNode.textContent = !dt ? 'capture failed/no data' : staleMs < 2*3600e3 ? 'healthy data freshness' : staleMs < 12*3600e3 ? 'stale data' : 'stale >12h';
+
+  const staleWarn = document.getElementById('staleWarn');
+  staleWarn.innerHTML = staleMs > 12*3600e3 ? \`<div class="card danger">Warning: last snapshot is stale (\${ago(latest.capturedAt)}). Run capture to refresh.</div>\` : '';
+
+  document.getElementById('sample').textContent = \`sample size: \${latest?.knownTokenSessions||0}/\${latest?.totalSessions||latest?.sessionCount||0} sessions\`;
+
+  document.getElementById('kpis').innerHTML = \`
+    <div><div class="k">Last updated</div><div class="v">\${dt ? dt.toLocaleString('en-GB',{timeZoneName:'short'}) : 'n/a'}</div><div class="k">\${latest ? ago(latest.capturedAt) : ''}</div></div>
+    <div><div class="k">Estimated tokens</div><div class="v">\${Math.round(total).toLocaleString()}</div><div class="k">vs previous snapshot <span class="help" title="Delta compares current selected-period latest snapshot with the immediate previous snapshot in that same period.">ⓘ</span></div></div>
+    <div><div class="k">Delta (vs previous snapshot)</div><div class="v" style="color:\${delta>=0?'#3ecf8e':'#ff8181'}">\${delta>=0?'+':''}\${Math.round(delta).toLocaleString()}</div></div>
+    <div><div class="k">Estimated cost (rough)</div><div class="v">$\${(latest?.estimatedCostUsd||0).toFixed(2)}</div><div class="k">rough estimate only</div></div>
+  \`;
+
+  svgLine(document.getElementById('chart-total'), hist.map(h => ({ y:h.estimatedUsedTokens||0, label:new Date(h.capturedAt).toLocaleString()})), '#6ea8fe');
+
+  const modelChart = document.getElementById('chart-model');
+  const models = Array.from(new Set(hist.flatMap(h => Object.keys(h.byModelEstimatedTokens||{}))));
+  const colors = ['#6ea8fe','#f5c451','#3ecf8e','#ff8db4','#b89cff'];
+  const w=900,h=220,p=20;
+  const maxY=Math.max(...hist.flatMap(hh => models.map(m => (hh.byModelEstimatedTokens?.[m]||0)*1000)),1);
+  const step = hist.length>1 ? (w-p*2)/(hist.length-1):0;
+  let lines='';
+  models.forEach((m,idx)=>{
+    const poly = hist.map((hh,i)=>\`\${p+i*step},\${h-p-(((hh.byModelEstimatedTokens?.[m]||0)*1000)/maxY)*(h-p*2)}\`).join(' ');
+    lines += \`<polyline points="\${poly}" fill="none" stroke="\${colors[idx%colors.length]}" stroke-width="2"><title>\${m}</title></polyline>\`;
+  });
+  modelChart.innerHTML = lines;
+
+  const sec = latest?.securityCounts || {critical:0,warn:0,info:0};
+  const psec = prev?.securityCounts || {critical:0,warn:0,info:0};
+  document.getElementById('security-panel').innerHTML = \`
+    <span class="badge danger">Critical: \${sec.critical} (\${(sec.critical-psec.critical)>=0?'+':''}\${sec.critical-psec.critical})</span>
+    <span class="badge warning">Warn: \${sec.warn} (\${(sec.warn-psec.warn)>=0?'+':''}\${sec.warn-psec.warn})</span>
+    <span class="badge">Info: \${sec.info} (\${(sec.info-psec.info)>=0?'+':''}\${sec.info-psec.info})</span>
+    <span class="badge">new since last snapshot where parseable</span>
+  \`;
+
+  const agents = Object.entries(latest?.byAgentEstimatedTokens || {}).sort((a,b)=>b[1]-a[1]);
+  const prevAgents = Object.fromEntries(Object.entries(prev?.byAgentEstimatedTokens || {}));
+  const totalAgentTokens = agents.reduce((a,[,k])=>a+k,0) || 1;
+  const meta = latest?.byAgentMeta || {};
+  document.getElementById('agent-meta').textContent = \`allAgents=\${latest?.allAgents===true} · dedupe(:run:)=\${latest?.dedupeApplied===true}\`;
+  document.getElementById('agent-table').innerHTML = agents.map(([agent, tokK])=>{
+    const t = Math.round(tokK*1000); const pct=Math.round((tokK/totalAgentTokens)*100);
+    const prevTok = Number(prevAgents[agent]||0); const d = tokK-prevTok;
+    const trend = d===0?'→':d>0?'↑':'↓';
+    const last = meta[agent]?.lastActiveAt ? new Date(meta[agent].lastActiveAt).toLocaleString('en-GB',{timeZoneName:'short'}) : 'n/a';
+    return \`<tr><td>\${agent}</td><td>\${t.toLocaleString()}</td><td><span class='bar-wrap'><span class='bar' style='width:\${pct}%'></span></span>\${pct}%</td><td>\${trend} \${Math.round(d*1000).toLocaleString()}</td><td>\${last}</td></tr>\`;
+  }).join('') || '<tr><td colspan="5">No data</td></tr>';
+
+  const top = (latest?.topSessions || []);
+  document.getElementById('top-sessions').innerHTML = top.map(s => \`<tr><td>\${s.agent}</td><td title='\${s.key}'>\${s.key.length>52?s.key.slice(0,52)+'…':s.key}</td><td>\${s.model}</td><td>\${Math.round(s.tokens).toLocaleString()}</td></tr>\`).join('') || '<tr><td colspan="4">No sessions</td></tr>';
+}
+
+document.querySelectorAll('[data-period]').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('[data-period]').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active');
+  currentPeriod = b.getAttribute('data-period');
+  render();
+}));
+
+document.getElementById('export-json').addEventListener('click',()=>{
+  const blob = new Blob([JSON.stringify(HISTORY,null,2)],{type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='usage-history.json'; a.click(); URL.revokeObjectURL(a.href);
+});
+
+document.getElementById('export-csv').addEventListener('click',()=>{
+  const rows = [['capturedAt','estimatedUsedTokens','estimatedCostUsd','sessionCount','knownTokenSessions','securitySummary']]
+    .concat(HISTORY.map(h=>[h.capturedAt,h.estimatedUsedTokens,h.estimatedCostUsd,h.sessionCount,h.knownTokenSessions,JSON.stringify(h.securitySummary||'')]));
+  const csv = rows.map(r=>r.map(v=>\`"\${String(v??'').replace(/"/g,'""')}"\`).join(',')).join('\n');
+  const blob = new Blob([csv],{type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download='usage-history.csv'; a.click(); URL.revokeObjectURL(a.href);
+});
+
+render();
+</script>
 </body>
 </html>`;
 }
@@ -278,27 +350,21 @@ function cmdCapture(root) {
     sessionsRaw = run('openclaw sessions --all-agents --json');
     summary = summarizeAllAgents(parsed, sessionsRaw);
   } catch {
-    // Fallback to legacy top-table parse if sessions JSON is unavailable.
     summary = summarize(parsed);
   }
 
   const snapshotsPath = path.join(reportsDir, 'usage-history.json');
   let history = [];
-  if (fs.existsSync(snapshotsPath)) {
-    history = JSON.parse(fs.readFileSync(snapshotsPath, 'utf8'));
-  }
+  if (fs.existsSync(snapshotsPath)) history = JSON.parse(fs.readFileSync(snapshotsPath, 'utf8'));
   history.push(summary);
-  history = history.slice(-50);
+  history = history.slice(-200);
 
   const dashboardHtml = renderHtml(history);
-  const reportsDashboardPath = path.join(reportsDir, 'usage-dashboard.html');
-
   fs.writeFileSync(path.join(reportsDir, 'openclaw-status.txt'), raw);
   fs.writeFileSync(path.join(reportsDir, 'usage-latest.json'), JSON.stringify({ parsed, summary, sessionsRaw }, null, 2));
   fs.writeFileSync(snapshotsPath, JSON.stringify(history, null, 2));
-  fs.writeFileSync(reportsDashboardPath, dashboardHtml);
+  fs.writeFileSync(path.join(reportsDir, 'usage-dashboard.html'), dashboardHtml);
 
-  // Keep GitHub Pages source in sync every capture.
   const docsDir = path.join(root, 'docs');
   fs.mkdirSync(docsDir, { recursive: true });
   fs.writeFileSync(path.join(docsDir, 'index.html'), dashboardHtml);

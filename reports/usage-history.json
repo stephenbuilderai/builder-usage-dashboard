@@ -10,5 +10,17 @@
       "gpt-5.2": 28,
       "gpt-5-mini": 22
     }
+  },
+  {
+    "capturedAt": "2026-03-05T08:17:25.118Z",
+    "securitySummary": "6 critical · 3 warn · 1 info",
+    "sessionCount": 10,
+    "knownTokenSessions": 10,
+    "estimatedUsedTokens": 131700,
+    "byModelEstimatedTokens": {
+      "gpt-5.3-codex": 25.7,
+      "gpt-5-mini": 52,
+      "gpt-5.2": 54
+    }
   }
 ]

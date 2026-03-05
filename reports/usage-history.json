@@ -39,5 +39,22 @@
       "main": 544.111,
       "builder": 47.13
     }
+  },
+  {
+    "capturedAt": "2026-03-05T14:32:05.633Z",
+    "securitySummary": "6 critical · 3 warn · 1 info",
+    "allAgents": true,
+    "sessionCount": 21,
+    "knownTokenSessions": 21,
+    "estimatedUsedTokens": 604541,
+    "byModelEstimatedTokens": {
+      "gpt-5.3-codex": 480.347,
+      "gpt-5-mini": 51.878,
+      "gpt-5.2": 72.316
+    },
+    "byAgentEstimatedTokens": {
+      "main": 557.411,
+      "builder": 47.13
+    }
   }
 ]

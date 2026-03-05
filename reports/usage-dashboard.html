@@ -5,107 +5,60 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>OpenClaw Usage Dashboard</title>
   <style>
-    :root {
-      --bg: #0b1020;
-      --panel: #121a30;
-      --panel-2: #18223f;
-      --text: #e7ecff;
-      --muted: #9caad6;
-      --line: #2f3d67;
-      --accent: #6ea8fe;
-      --good: #3ecf8e;
-      --warn: #f5c451;
-    }
+    :root { --bg:#0b1020; --panel:#121a30; --panel-2:#18223f; --text:#e7ecff; --muted:#9caad6; --line:#2f3d67; --accent:#6ea8fe; --good:#3ecf8e; }
     * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      background: radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%);
-      color: var(--text);
-      min-height: 100vh;
-      padding: 32px 18px;
-    }
-    .container { max-width: 1160px; margin: 0 auto; }
-    h1 { margin: 0 0 6px; font-size: 1.9rem; }
-    .sub { color: var(--muted); margin-bottom: 22px; }
-    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 14px; }
-    .card {
-      background: linear-gradient(180deg, var(--panel-2), var(--panel));
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px;
-      box-shadow: 0 6px 30px rgba(0,0,0,.25);
-    }
-    .k { color: var(--muted); font-size: .82rem; }
-    .v { margin-top: 6px; font-size: 1.4rem; font-weight: 700; }
-    .delta.up { color: var(--good); }
-    .delta.down { color: #ff8181; }
-    .section { margin-top: 14px; }
-    .section h2 { font-size: 1.05rem; margin: 0 0 10px; }
-    .chart-wrap { overflow: auto; }
-    .chart {
-      width: 100%; min-width: 480px; background: rgba(13, 19, 36, .65);
-      border: 1px solid var(--line); border-radius: 12px; padding: 8px;
-    }
-    .chart polyline { fill: none; stroke: var(--accent); stroke-width: 3; }
-    .chart circle { fill: #fff; stroke: var(--accent); stroke-width: 2; }
-    table { width: 100%; border-collapse: collapse; }
-    th, td { padding: 10px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: middle; }
-    th { color: var(--muted); font-weight: 600; font-size: .86rem; }
-    .bar-wrap { display: inline-block; width: 120px; height: 8px; background: #22335f; border-radius: 999px; margin-right: 8px; overflow: hidden; }
-    .bar { height: 100%; background: linear-gradient(90deg, #5f8cff, #79d0ff); }
-    .bar-label { color: var(--muted); font-size: .78rem; }
-    .pill {
-      display: inline-block; padding: 4px 8px; border-radius: 999px;
-      border: 1px solid var(--line); background: rgba(255,255,255,.03); color: var(--muted); font-size: .76rem;
-    }
-    @media (max-width: 900px) {
-      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    }
+    body { margin:0; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%); color:var(--text); min-height:100vh; padding:32px 18px; }
+    .container { max-width:1160px; margin:0 auto; }
+    h1 { margin:0 0 6px; font-size:1.9rem; }
+    .sub { color:var(--muted); margin-bottom:12px; }
+    .badge { display:inline-block; font-size:.75rem; color:#b8ffe0; border:1px solid #2f7255; background:#123d2c; padding:4px 10px; border-radius:999px; margin-bottom:12px; }
+    .muted { color:var(--muted); font-size:.84rem; }
+    .grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:14px; }
+    .card { background:linear-gradient(180deg, var(--panel-2), var(--panel)); border:1px solid var(--line); border-radius:14px; padding:14px; box-shadow:0 6px 30px rgba(0,0,0,.25); }
+    .k { color:var(--muted); font-size:.82rem; }
+    .v { margin-top:6px; font-size:1.4rem; font-weight:700; }
+    .delta.up { color:var(--good); } .delta.down { color:#ff8181; }
+    .section { margin-top:14px; }
+    .section h2 { font-size:1.05rem; margin:0 0 10px; }
+    .chart-wrap { overflow:auto; }
+    .chart { width:100%; min-width:480px; background:rgba(13,19,36,.65); border:1px solid var(--line); border-radius:12px; padding:8px; }
+    .chart polyline { fill:none; stroke:var(--accent); stroke-width:3; }
+    .chart circle { fill:#fff; stroke:var(--accent); stroke-width:2; }
+    table { width:100%; border-collapse:collapse; }
+    th,td { padding:10px 8px; border-bottom:1px solid var(--line); text-align:left; vertical-align:middle; }
+    th { color:var(--muted); font-weight:600; font-size:.86rem; }
+    .bar-wrap { display:inline-block; width:120px; height:8px; background:#22335f; border-radius:999px; margin-right:8px; overflow:hidden; }
+    .bar { height:100%; background:linear-gradient(90deg, #5f8cff, #79d0ff); }
+    .bar-label { color:var(--muted); font-size:.78rem; }
+    .pill { display:inline-block; padding:4px 8px; border-radius:999px; border:1px solid var(--line); background:rgba(255,255,255,.03); color:var(--muted); font-size:.76rem; margin-right:6px; }
+    .help { cursor:help; text-decoration:underline dotted; text-underline-offset:2px; }
+    @media (max-width:900px){ .grid{ grid-template-columns:repeat(2,minmax(0,1fr)); } }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>OpenClaw Usage Dashboard</h1>
-    <div class="sub">Auto-generated from <code>openclaw status</code> snapshots.</div>
+    <div class="sub">Auto-generated from <code>openclaw status</code> + <code>openclaw sessions --all-agents --json</code>.</div>
+    <div class="badge">Live snapshot data • token values are estimated</div>
+    <div class="muted">Last updated: <span id="last-updated-absolute">05/03/2026, 15:32:05 CET</span> (<span id="last-updated-relative">n/a</span>)</div>
 
     <div class="grid">
-      <div class="card">
-        <div class="k">Snapshots</div>
-        <div class="v">3</div>
-      </div>
-      <div class="card">
-        <div class="k">Latest Estimated Tokens</div>
-        <div class="v">591,241</div>
-      </div>
-      <div class="card">
-        <div class="k">Delta vs Previous</div>
-        <div class="v delta up">+459,541</div>
-        <div class="k">+348.9%</div>
-      </div>
-      <div class="card">
-        <div class="k">Latest Sessions</div>
-        <div class="v">21</div>
-      </div>
+      <div class="card"><div class="k">Snapshots</div><div class="v">4</div></div>
+      <div class="card"><div class="k">Latest Estimated Tokens</div><div class="v">604,541</div></div>
+      <div class="card"><div class="k">Delta vs Previous</div><div class="v delta up">+13,300</div><div class="k">+2.2%</div></div>
+      <div class="card"><div class="k">Latest Sessions</div><div class="v">21</div></div>
     </div>
 
     <div class="card section">
       <h2>Usage Trend</h2>
-      <div class="chart-wrap">
-        <svg class="chart" viewBox="0 0 900 260" preserveAspectRatio="none" aria-label="Usage trend chart">
-          <polyline points="24,143.48950089726526 450,188.77661731848772 876,24" />
-          <circle cx="24" cy="143.48950089726526" r="4"><title>3/5/2026, 2:14:43 AM: 258,000 tokens</title></circle><circle cx="450" cy="188.77661731848772" r="4"><title>3/5/2026, 9:17:25 AM: 131,700 tokens</title></circle><circle cx="876" cy="24" r="4"><title>3/5/2026, 3:24:26 PM: 591,241 tokens</title></circle>
-        </svg>
-      </div>
+      <div class="chart-wrap"><svg class="chart" viewBox="0 0 900 260" preserveAspectRatio="none" aria-label="Usage trend chart"><polyline points="24,145.5247468740747 308,189.81553939269628 592,28.664034366569012 876,24" /><circle cx="24" cy="145.5247468740747" r="4"><title>3/5/2026, 2:14:43 AM: 258,000 tokens</title></circle><circle cx="308" cy="189.81553939269628" r="4"><title>3/5/2026, 9:17:25 AM: 131,700 tokens</title></circle><circle cx="592" cy="28.664034366569012" r="4"><title>3/5/2026, 3:24:26 PM: 591,241 tokens</title></circle><circle cx="876" cy="24" r="4"><title>3/5/2026, 3:32:05 PM: 604,541 tokens</title></circle></svg></div>
     </div>
 
     <div class="card section">
-      <h2>Latest Model Breakdown</h2>
-      <table>
-        <thead><tr><th>Model</th><th>Estimated Tokens</th><th>Share</th></tr></thead>
-        <tbody><tr>
+      <h2>Latest Model Breakdown <span class="help" title="Primary configured model may differ from observed session models due to fallbacks, cron jobs, per-agent overrides, and historical sessions.">ⓘ</span></h2>
+      <table><thead><tr><th>Model</th><th>Estimated Tokens</th><th>Share</th></tr></thead><tbody><tr>
         <td>gpt-5.3-codex</td>
-        <td>467,047</td>
+        <td>480,347</td>
         <td>
           <div class="bar-wrap"><div class="bar" style="width:79%"></div></div>
           <span class="bar-label">79%</span>
@@ -124,16 +77,19 @@
           <div class="bar-wrap"><div class="bar" style="width:9%"></div></div>
           <span class="bar-label">9%</span>
         </td>
-      </tr></tbody>
-      </table>
+      </tr></tbody></table>
+    </div>
+
+    <div class="card section">
+      <h2>All-Agent Metrics</h2>
+      <div class="pill">allAgents: true</div>
+      <table><thead><tr><th>Agent</th><th>Estimated Tokens</th></tr></thead><tbody><tr><td>main</td><td>557,411</td></tr><tr><td>builder</td><td>47,130</td></tr></tbody></table>
     </div>
 
     <div class="card section">
       <h2>Snapshot History</h2>
       <div class="pill">Security: 6 critical · 3 warn · 1 info</div>
-      <table>
-        <thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated Tokens</th><th>Security Summary</th></tr></thead>
-        <tbody><tr>
+      <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated Tokens</th><th>Security Summary</th></tr></thead><tbody><tr>
         <td>1</td>
         <td>3/5/2026, 2:14:43 AM</td>
         <td>10</td>
@@ -151,9 +107,26 @@
         <td>21</td>
         <td>591,241</td>
         <td>6 critical · 3 warn · 1 info</td>
-      </tr></tbody>
-      </table>
+      </tr><tr>
+        <td>4</td>
+        <td>3/5/2026, 3:32:05 PM</td>
+        <td>21</td>
+        <td>604,541</td>
+        <td>6 critical · 3 warn · 1 info</td>
+      </tr></tbody></table>
     </div>
   </div>
+  <script>
+    (function(){
+      const ts = "2026-03-05T14:32:05.633Z";
+      if (!ts) return;
+      const then = new Date(ts).getTime();
+      const now = Date.now();
+      const sec = Math.max(0, Math.floor((now - then)/1000));
+      const rel = sec < 60 ? sec + 's ago' : sec < 3600 ? Math.floor(sec/60) + 'm ago' : sec < 86400 ? Math.floor(sec/3600) + 'h ago' : Math.floor(sec/86400) + 'd ago';
+      const out = document.getElementById('last-updated-relative');
+      if (out) out.textContent = rel;
+    })();
+  </script>
 </body>
 </html>

@@ -109,12 +109,20 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
   const byAgent = {};
   const byAgentMeta = {};
   const tokenSessions = [];
+  const byBucketEstimatedTokens = { cron: 0, interactive: 0, 'system/other': 0 };
+  const byBucketByModel = { cron: {}, interactive: {}, 'system/other': {} };
 
   for (const s of uniqueSessions) {
     const tok = Number(s.totalTokens);
     const updatedAt = Number(s.updatedAt);
     const model = s.model || 'unknown';
     const agent = s.agentId || 'unknown';
+    const key = String(s.key || '');
+    const kind = String(s.kind || '');
+
+    let bucket = 'system/other';
+    if (key.includes(':cron:')) bucket = 'cron';
+    else if (key.includes(':telegram:') || key.includes(':discord:') || kind === 'group' || kind === 'direct' || key.includes(':main')) bucket = 'interactive';
 
     if (!byAgentMeta[agent]) byAgentMeta[agent] = { lastActiveAt: null, sessions: 0 };
     byAgentMeta[agent].sessions += 1;
@@ -129,7 +137,9 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
     used += tok;
     byModel[model] = (byModel[model] || 0) + tok;
     byAgent[agent] = (byAgent[agent] || 0) + tok;
-    tokenSessions.push({ agent, key: s.key || '', model, tokens: tok, updatedAt: Number.isFinite(updatedAt) ? updatedAt : null });
+    byBucketEstimatedTokens[bucket] = (byBucketEstimatedTokens[bucket] || 0) + tok;
+    byBucketByModel[bucket][model] = (byBucketByModel[bucket][model] || 0) + tok;
+    tokenSessions.push({ agent, key: s.key || '', model, tokens: tok, updatedAt: Number.isFinite(updatedAt) ? updatedAt : null, bucket });
   }
 
   tokenSessions.sort((a, b) => b.tokens - a.tokens);
@@ -147,6 +157,19 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
     byModelEstimatedTokens: Object.fromEntries(Object.entries(byModel).map(([k, v]) => [k, v / 1000])),
     byAgentEstimatedTokens: Object.fromEntries(Object.entries(byAgent).map(([k, v]) => [k, v / 1000])),
     byAgentMeta,
+    byBucketEstimatedTokens: Object.fromEntries(Object.entries(byBucketEstimatedTokens).map(([k, v]) => [k, v / 1000])),
+    byBucketByModel: Object.fromEntries(
+      Object.entries(byBucketByModel).map(([bucket, models]) => [
+        bucket,
+        Object.fromEntries(Object.entries(models).map(([m, v]) => [m, v / 1000]))
+      ])
+    ),
+    attributionRules: {
+      cron: 'session key contains :cron:',
+      interactive: 'telegram/discord/group/direct/main session patterns',
+      'system/other': 'fallback bucket when no other rule matches',
+      limitations: 'Pattern-based heuristics; may misclassify custom keys or future formats.'
+    },
     topSessions: tokenSessions.slice(0, 15),
     dedupeApplied: true,
   };
@@ -167,6 +190,9 @@ function renderHtml(history, buildId) {
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const topSessions = latest.topSessions || [];
   const contextProfiler = latest.contextProfiler || { fileCount: 0, totalBytes: 0, totalLines: 0, totalEstimatedTokens: 0, files: [], top10: [] };
+  const bucketEntries = Object.entries(latest.byBucketEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
+  const bucketModel = latest.byBucketByModel || {};
+  const attributionRules = latest.attributionRules || {};
 
   const totalAgentK = agentEntries.reduce((s, [, k]) => s + Number(k || 0), 0) || 1;
 
@@ -189,8 +215,19 @@ function renderHtml(history, buildId) {
   const topRows = topSessions.map(s => {
     const key = String(s.key || '');
     const short = key.length > 64 ? key.slice(0, 64) + '…' : key;
-    return `<tr><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td></tr>`;
-  }).join('') || '<tr><td colspan="4">No sessions</td></tr>';
+    return `<tr><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td><td>${s.bucket || 'n/a'}</td></tr>`;
+  }).join('') || '<tr><td colspan="5">No sessions</td></tr>';
+
+  const bucketRows = bucketEntries.map(([bucket, valK]) => {
+    const tokens = Math.round(Number(valK || 0) * 1000);
+    const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
+    return `<tr><td>${bucket}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
+  }).join('') || '<tr><td colspan="3">No attribution data</td></tr>';
+
+  const bucketModelRows = Object.entries(bucketModel).map(([bucket, models]) => {
+    const modelLine = Object.entries(models || {}).sort((a,b)=>b[1]-a[1]).map(([m,k]) => `${m}: ${Math.round(Number(k||0)*1000).toLocaleString()}`).join(' · ');
+    return `<tr><td>${bucket}</td><td>${modelLine || 'n/a'}</td></tr>`;
+  }).join('') || '<tr><td colspan="2">No bucket/model data</td></tr>';
 
   const profilerRows = (contextProfiler.files || []).map(f => `<tr><td title="${f.path}">${f.path}</td><td data-sort="bytes">${Number(f.bytes || 0).toLocaleString()}</td><td data-sort="lines">${Number(f.lineCount || 0).toLocaleString()}</td><td data-sort="tokens">${Number(f.estimatedTokens || 0).toLocaleString()}</td><td data-sort="modified">${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
 
@@ -241,8 +278,23 @@ function renderHtml(history, buildId) {
     <table><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table>
   </div>
 
+  <div class="card"><h3>Usage Attribution (by bucket)</h3>
+    <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${bucketRows}</tbody></table>
+  </div>
+
+  <div class="card"><h3>Per-model within each attribution bucket</h3>
+    <table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table>
+  </div>
+
+  <div class="card"><h3>Attribution Rules</h3>
+    <div class="badge">cron: ${attributionRules.cron || 'n/a'}</div>
+    <div class="badge">interactive: ${attributionRules.interactive || 'n/a'}</div>
+    <div class="badge">system/other: ${attributionRules['system/other'] || 'n/a'}</div>
+    <div class="badge">limitations: ${attributionRules.limitations || 'n/a'}</div>
+  </div>
+
   <div class="card"><h3>Top token-consuming sessions</h3>
-    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th></tr></thead><tbody>${topRows}</tbody></table>
+    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table>
   </div>
 
   <div class="card">

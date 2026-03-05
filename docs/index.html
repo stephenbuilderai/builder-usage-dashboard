@@ -18,12 +18,12 @@
 <div class="container">
   <h1>OpenClaw Usage Dashboard</h1>
   <div class="badge">Live snapshot data • token & cost values are estimates</div>
-  <div class="badge">build: 1772738638169</div>
+  <div class="badge">build: 1772741393231</div>
 
   <div class="grid card">
-    <div><div class="k">Last updated</div><div class="v">05/03/2026, 20:23:56</div></div>
-    <div><div class="k">Estimated tokens</div><div class="v">667,353</div></div>
-    <div><div class="k">Delta vs previous</div><div class="v">+8,722</div></div>
+    <div><div class="k">Last updated</div><div class="v">05/03/2026, 21:09:51</div></div>
+    <div><div class="k">Estimated tokens</div><div class="v">685,257</div></div>
+    <div><div class="k">Delta vs previous</div><div class="v">+17,904</div></div>
     <div><div class="k">Sample size</div><div class="v">21/31</div></div>
   </div>
 
@@ -34,15 +34,30 @@
   </div>
 
   <div class="card"><h3>Latest model breakdown</h3>
-    <table><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody><tr><td>gpt-5.3-codex</td><td>543,589</td><td>81%</td></tr><tr><td>gpt-5.2</td><td>70,989</td><td>11%</td></tr><tr><td>gpt-5-mini</td><td>52,775</td><td>8%</td></tr></tbody></table>
+    <table><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody><tr><td>gpt-5.3-codex</td><td>561,493</td><td>82%</td></tr><tr><td>gpt-5.2</td><td>70,989</td><td>10%</td></tr><tr><td>gpt-5-mini</td><td>52,775</td><td>8%</td></tr></tbody></table>
   </div>
 
   <div class="card"><h3>All-agent metrics</h3>
-    <table><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody><tr><td>main</td><td>582,479</td><td>87%</td><td>↑</td><td>05/03/2026, 20:22:56</td></tr><tr><td>builder</td><td>84,874</td><td>13%</td><td>→</td><td>05/03/2026, 20:22:21</td></tr></tbody></table>
+    <table><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody><tr><td>main</td><td>591,793</td><td>86%</td><td>↑</td><td>05/03/2026, 21:09:50</td></tr><tr><td>builder</td><td>93,464</td><td>14%</td><td>↑</td><td>05/03/2026, 21:08:24</td></tr></tbody></table>
+  </div>
+
+  <div class="card"><h3>Usage Attribution (by bucket)</h3>
+    <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody><tr><td>interactive</td><td>576,146</td><td>84%</td></tr><tr><td>cron</td><td>109,111</td><td>16%</td></tr><tr><td>system/other</td><td>0</td><td>0%</td></tr></tbody></table>
+  </div>
+
+  <div class="card"><h3>Per-model within each attribution bucket</h3>
+    <table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody><tr><td>cron</td><td>gpt-5.2: 70,989 · gpt-5-mini: 38,122</td></tr><tr><td>interactive</td><td>gpt-5.3-codex: 561,493 · gpt-5-mini: 14,653</td></tr><tr><td>system/other</td><td>n/a</td></tr></tbody></table>
+  </div>
+
+  <div class="card"><h3>Attribution Rules</h3>
+    <div class="badge">cron: session key contains :cron:</div>
+    <div class="badge">interactive: telegram/discord/group/direct/main session patterns</div>
+    <div class="badge">system/other: fallback bucket when no other rule matches</div>
+    <div class="badge">limitations: Pattern-based heuristics; may misclassify custom keys or future formats.</div>
   </div>
 
   <div class="card"><h3>Top token-consuming sessions</h3>
-    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th></tr></thead><tbody><tr><td>main</td><td title="agent:main:discord:channel:1477069238991720579">agent:main:discord:channel:1477069238991720579</td><td>gpt-5.3-codex</td><td>157,834</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:3">agent:main:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>145,772</td></tr><tr><td>main</td><td title="agent:main:main">agent:main:main</td><td>gpt-5.3-codex</td><td>75,255</td></tr><tr><td>builder</td><td title="agent:builder:telegram:group:-1003842752959:topic:3">agent:builder:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>74,105</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:203">agent:main:telegram:group:-1003842752959:topic:203</td><td>gpt-5.3-codex</td><td>27,389</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959">agent:main:telegram:group:-1003842752959</td><td>gpt-5.3-codex</td><td>23,074</td></tr><tr><td>main</td><td title="agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec">agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec</td><td>gpt-5.2</td><td>15,393</td></tr><tr><td>main</td><td title="agent:main:discord:channel:1460618635105145074">agent:main:discord:channel:1460618635105145074</td><td>gpt-5.3-codex</td><td>15,100</td></tr><tr><td>main</td><td title="agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad">agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad</td><td>gpt-5.2</td><td>14,975</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:2">agent:main:telegram:group:-1003842752959:topic:2</td><td>gpt-5-mini</td><td>14,653</td></tr><tr><td>main</td><td title="agent:main:discord:channel:1460363718759288947">agent:main:discord:channel:1460363718759288947</td><td>gpt-5.3-codex</td><td>14,291</td></tr><tr><td>main</td><td title="agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3">agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3</td><td>gpt-5.2</td><td>14,122</td></tr><tr><td>main</td><td title="agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9">agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9</td><td>gpt-5-mini</td><td>13,799</td></tr><tr><td>main</td><td title="agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525">agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525</td><td>gpt-5.2</td><td>13,484</td></tr><tr><td>main</td><td title="agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f">agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f</td><td>gpt-5.2</td><td>13,015</td></tr></tbody></table>
+    <table><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody><tr><td>main</td><td title="agent:main:discord:channel:1477069238991720579">agent:main:discord:channel:1477069238991720579</td><td>gpt-5.3-codex</td><td>157,834</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:3">agent:main:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>155,281</td><td>interactive</td></tr><tr><td>builder</td><td title="agent:builder:telegram:group:-1003842752959:topic:3">agent:builder:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>82,695</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:main">agent:main:main</td><td>gpt-5.3-codex</td><td>75,060</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:203">agent:main:telegram:group:-1003842752959:topic:203</td><td>gpt-5.3-codex</td><td>27,389</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959">agent:main:telegram:group:-1003842752959</td><td>gpt-5.3-codex</td><td>23,074</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec">agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec</td><td>gpt-5.2</td><td>15,393</td><td>cron</td></tr><tr><td>main</td><td title="agent:main:discord:channel:1460618635105145074">agent:main:discord:channel:1460618635105145074</td><td>gpt-5.3-codex</td><td>15,100</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad">agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad</td><td>gpt-5.2</td><td>14,975</td><td>cron</td></tr><tr><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:2">agent:main:telegram:group:-1003842752959:topic:2</td><td>gpt-5-mini</td><td>14,653</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:discord:channel:1460363718759288947">agent:main:discord:channel:1460363718759288947</td><td>gpt-5.3-codex</td><td>14,291</td><td>interactive</td></tr><tr><td>main</td><td title="agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3">agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3</td><td>gpt-5.2</td><td>14,122</td><td>cron</td></tr><tr><td>main</td><td title="agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9">agent:main:cron:bd120469-dc1c-46d4-b6bf-85f515c73ec9</td><td>gpt-5-mini</td><td>13,799</td><td>cron</td></tr><tr><td>main</td><td title="agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525">agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525</td><td>gpt-5.2</td><td>13,484</td><td>cron</td></tr><tr><td>main</td><td title="agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f">agent:main:cron:ddcb38d2-6d24-47a0-8645-5da4c095b05f</td><td>gpt-5.2</td><td>13,015</td><td>cron</td></tr></tbody></table>
   </div>
 
   <div class="card">
@@ -64,7 +79,7 @@
   </div>
 
   <div class="card"><h3>Snapshot history</h3>
-    <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody><tr><td>1</td><td>05/03/2026, 02:14:43</td><td>10</td><td>258,000</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>2</td><td>05/03/2026, 09:17:25</td><td>10</td><td>131,700</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>3</td><td>05/03/2026, 15:24:26</td><td>21</td><td>591,241</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>4</td><td>05/03/2026, 15:32:05</td><td>21</td><td>604,541</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>5</td><td>05/03/2026, 17:16:39</td><td>21</td><td>630,127</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>6</td><td>05/03/2026, 17:48:53</td><td>21</td><td>645,566</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>7</td><td>05/03/2026, 18:00:08</td><td>21</td><td>662,628</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>8</td><td>05/03/2026, 19:25:23</td><td>21</td><td>631,264</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>9</td><td>05/03/2026, 20:00:27</td><td>21</td><td>658,631</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>10</td><td>05/03/2026, 20:23:56</td><td>21</td><td>667,353</td><td>6 critical · 3 warn · 1 info</td></tr></tbody></table>
+    <table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody><tr><td>1</td><td>05/03/2026, 02:14:43</td><td>10</td><td>258,000</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>2</td><td>05/03/2026, 09:17:25</td><td>10</td><td>131,700</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>3</td><td>05/03/2026, 15:24:26</td><td>21</td><td>591,241</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>4</td><td>05/03/2026, 15:32:05</td><td>21</td><td>604,541</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>5</td><td>05/03/2026, 17:16:39</td><td>21</td><td>630,127</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>6</td><td>05/03/2026, 17:48:53</td><td>21</td><td>645,566</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>7</td><td>05/03/2026, 18:00:08</td><td>21</td><td>662,628</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>8</td><td>05/03/2026, 19:25:23</td><td>21</td><td>631,264</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>9</td><td>05/03/2026, 20:00:27</td><td>21</td><td>658,631</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>10</td><td>05/03/2026, 20:23:56</td><td>21</td><td>667,353</td><td>6 critical · 3 warn · 1 info</td></tr><tr><td>11</td><td>05/03/2026, 21:09:51</td><td>21</td><td>685,257</td><td>6 critical · 3 warn · 1 info</td></tr></tbody></table>
   </div>
 </div>
 <script>

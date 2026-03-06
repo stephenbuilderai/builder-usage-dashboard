@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-06T23:18:55.074Z",
+  "generatedAt": "2026-03-06T23:19:30.588Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 46,
-    "tokens": 58368,
-    "bytes": 238881
+    "files": 48,
+    "tokens": 63662,
+    "bytes": 260080
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 93133,
-      "lines": 3285,
-      "tokens": 23272
+      "bytes": 109514,
+      "lines": 3848,
+      "tokens": 27365
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 48312,
-      "lines": 548,
-      "tokens": 11435
+      "bytes": 51323,
+      "lines": 571,
+      "tokens": 12185
     },
     {
       "file": "openclaw-usage.js",
@@ -27,9 +27,9 @@
     },
     {
       "file": "reports/openclaw-status.txt",
-      "bytes": 10563,
-      "lines": 88,
-      "tokens": 2000
+      "bytes": 10666,
+      "lines": 87,
+      "tokens": 2024
     },
     {
       "file": "skills/self-improving/SKILL.md",
@@ -51,9 +51,9 @@
     },
     {
       "file": "reports/token-audit.json",
-      "bytes": 3814,
-      "lines": 197,
-      "tokens": 954
+      "bytes": 3954,
+      "lines": 203,
+      "tokens": 989
     },
     {
       "file": "skills/self-improving/operations.md",
@@ -141,15 +141,15 @@
     },
     {
       "file": "docs/reports/daily-rollups/summary-5d.md",
-      "bytes": 1051,
+      "bytes": 1053,
       "lines": 22,
-      "tokens": 261
+      "tokens": 262
     },
     {
       "file": "reports/daily-rollups/summary-5d.md",
-      "bytes": 1051,
+      "bytes": 1053,
       "lines": 22,
-      "tokens": 261
+      "tokens": 262
     },
     {
       "file": "skills/self-improving/memory-template.md",
@@ -161,9 +161,9 @@
   "byFolder": [
     {
       "folder": "reports",
-      "files": 6,
-      "bytes": 157652,
-      "tokens": 38117
+      "files": 7,
+      "bytes": 178069,
+      "tokens": 43215
     },
     {
       "folder": ".",
@@ -179,9 +179,9 @@
     },
     {
       "folder": "docs",
-      "files": 4,
-      "bytes": 2183,
-      "tokens": 545
+      "files": 5,
+      "bytes": 2965,
+      "tokens": 741
     },
     {
       "folder": ".clawhub",

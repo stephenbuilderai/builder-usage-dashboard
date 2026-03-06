@@ -294,6 +294,13 @@ function renderHtml(history, buildId) {
   const totalAgentK = agentEntries.reduce((s, [, k]) => s + Number(k || 0), 0) || 1;
   const topBurner = topSessions[0] || {};
   const anomaly = Math.abs(prevTotal) > 0 && Math.abs((delta / prevTotal) * 100) >= 15;
+  const historyTail = history.slice(-12).map(h => Number(h.estimatedUsedTokens || 0));
+  const sparkMax = Math.max(...historyTail, 1);
+  const sparkPoints = historyTail.map((v, i) => {
+    const x = historyTail.length <= 1 ? 0 : (i / (historyTail.length - 1)) * 100;
+    const y = 100 - ((v / sparkMax) * 100);
+    return `${x},${y}`;
+  }).join(' ');
 
   const recommendedActions = [];
   if ((contextProfiler.totalEstimatedTokens || 0) > 15000) recommendedActions.push('Trim high-size context markdown files (top-10 card) to reduce prompt load.');
@@ -347,27 +354,55 @@ function renderHtml(history, buildId) {
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenClaw Usage Dashboard</title>
 <style>
-:root{--bg:#0b1020;--panel:#121a30;--panel2:#18223f;--line:#2f3d67;--text:#e7ecff;--muted:#9caad6;--accent:#6ea8fe}
-*{box-sizing:border-box} body{margin:0;background:radial-gradient(circle at 20% 0%, #1c2b56 0%, var(--bg) 35%);color:var(--text);font-family:Inter,system-ui,sans-serif;padding:14px;line-height:1.35}
-.container{max-width:1200px;margin:0 auto}.card{background:linear-gradient(180deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px}
-.k{color:var(--muted);font-size:.78rem}.v{font-size:1.35rem;font-weight:700}.badge{display:inline-block;padding:4px 9px;border-radius:999px;border:1px solid var(--line);font-size:.75rem;margin:4px 6px 0 0}
-.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.tabs{display:flex;flex-wrap:wrap;gap:8px}.tabbtn{padding:7px 11px;border:1px solid var(--line);border-radius:999px;background:#192447;color:#dce7ff;font-size:.85rem}
-table{width:100%;border-collapse:collapse} th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left} th{color:var(--muted);font-size:.8rem}
-summary{cursor:pointer;color:#c6d6ff}.hidden{display:none}.bar{display:inline-block;width:120px;height:8px;background:#233560;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}.bar>span{display:block;height:100%;background:linear-gradient(90deg,#5f8cff,#79d0ff)}
-.filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}.input{width:100%;padding:8px;border-radius:8px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
+:root{--bg:#070b16;--bg2:#0f1630;--panel:#111a31cc;--panel2:#1a284acc;--line:#2f426fcc;--text:#edf2ff;--muted:#9fb1dc;--accent:#74a8ff;--accent2:#79e3ff;--ok:#88e7b8;--bad:#ff8080}
+*{box-sizing:border-box}
+body{margin:0;color:var(--text);font-family:Inter,system-ui,sans-serif;padding:16px;line-height:1.4;background:radial-gradient(circle at 15% 0%, #243d7d 0%, var(--bg2) 30%, var(--bg) 60%);min-height:100vh}
+body:before{content:"";position:fixed;inset:-20% -10%;pointer-events:none;background:conic-gradient(from 0deg at 50% 50%,rgba(116,168,255,.08),rgba(121,227,255,.06),rgba(145,115,255,.08),rgba(116,168,255,.08));filter:blur(70px);animation:spin 26s linear infinite;z-index:-1}
+@keyframes spin{to{transform:rotate(360deg)}}
+.container{max-width:1240px;margin:0 auto}
+.card{background:linear-gradient(170deg,var(--panel2),var(--panel));backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.hero{display:flex;align-items:end;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.h-title{font-size:1.6rem;font-weight:800;letter-spacing:.2px}
+.h-sub{color:var(--muted);font-size:.85rem;margin-top:4px}
+.k{color:var(--muted);font-size:.78rem}.v{font-size:1.45rem;font-weight:800}
+.badge{display:inline-block;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:#0f1730c7;font-size:.75rem;margin:4px 6px 0 0}
+.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.strip .card{margin-top:0}
+.tabs{display:flex;flex-wrap:wrap;gap:8px}
+.tabbtn{padding:8px 12px;border:1px solid #385493;border-radius:999px;background:linear-gradient(180deg,#1b2b52,#141f3d);color:#e4eeff;font-size:.84rem;cursor:pointer;transition:all .18s ease}
+.tabbtn:hover{transform:translateY(-1px);border-color:#6d96ff;box-shadow:0 0 0 3px rgba(116,168,255,.14)}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left}
+th{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+tr:hover td{background:rgba(255,255,255,.02)}
+summary{cursor:pointer;color:#cfe0ff}
+.hidden{display:none}
+.bar{display:inline-block;width:120px;height:8px;background:#233560;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
+.input{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
+.spark{height:70px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
+.spark svg{width:100%;height:100%}
+.spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(121,227,255,.4))}
 @media(max-width:900px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.filter{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>OpenClaw Executive Dashboard</h1>
-  <div class="badge">Live snapshot data • token/cost are estimates</div><div class="badge">build: ${buildId}</div>
+  <div class="card hero">
+    <div>
+      <div class="h-title">OpenClaw Executive Dashboard</div>
+      <div class="h-sub">Operational token intelligence • premium live view</div>
+      <div class="badge">Live snapshot data • token/cost are estimates</div><div class="badge">build: ${buildId}</div>
+    </div>
+    <div class="k">Last updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div>
+  </div>
 
-  <div class="card strip">
-    <div><div class="k">Estimated cost today</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
-    <div><div class="k">Estimated tokens today</div><div class="v">${total.toLocaleString()}</div></div>
-    <div><div class="k">Top burner</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,38)}</div></div>
-    <div><div class="k">Anomaly / regression flag</div><div class="v" style="color:${anomaly ? '#ff8080' : '#88e7b8'}">${anomaly ? 'ALERT' : 'normal'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs prev</div></div>
+  <div class="strip" style="margin-top:12px">
+    <div class="card"><div class="k">Estimated cost today</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
+    <div class="card"><div class="k">Estimated tokens today</div><div class="v">${total.toLocaleString()}</div></div>
+    <div class="card"><div class="k">Top burner</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,38)}</div></div>
+    <div class="card"><div class="k">Anomaly / regression flag</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'ALERT' : 'normal'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs prev</div></div>
   </div>
 
   <div class="card tabs">
@@ -387,7 +422,13 @@ summary{cursor:pointer;color:#c6d6ff}.hidden{display:none}.bar{display:inline-bl
   </div>
 
   <section id="tab-overview" class="card tabsec"><h3>Overview</h3>
-    <div class="k">Last updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'} · sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0}</div>
+    <div class="k">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
+    <div class="spark" title="Recent token trend (last 12 snapshots)">
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
+        <polyline points="${sparkPoints || '0,80 100,80'}"></polyline>
+      </svg>
+    </div>
     <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table>
     <details><summary>Snapshot history (expanded on demand)</summary><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></details>
   </section>

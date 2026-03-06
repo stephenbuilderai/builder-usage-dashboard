@@ -384,7 +384,24 @@ summary{cursor:pointer;color:#cfe0ff}
 .spark{height:70px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
 .spark svg{width:100%;height:100%}
 .spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(121,227,255,.4))}
-@media(max-width:900px){.strip{grid-template-columns:repeat(2,minmax(0,1fr))}.filter{grid-template-columns:1fr 1fr}}
+/* mobile friendliness */
+.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+.table-wrap table{min-width:640px}
+@media(max-width:900px){
+  body{padding:12px}
+  .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .filter{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .h-title{font-size:1.2rem}
+  .h-sub{font-size:.78rem}
+  .strip{grid-template-columns:1fr}
+  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tabbtn{width:100%;text-align:center;padding:10px 8px}
+  .filter{grid-template-columns:1fr}
+  .card{padding:12px}
+  .v{font-size:1.2rem}
+}
 </style>
 </head>
 <body>
@@ -429,25 +446,25 @@ summary{cursor:pointer;color:#cfe0ff}
         <polyline points="${sparkPoints || '0,80 100,80'}"></polyline>
       </svg>
     </div>
-    <table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table>
-    <details><summary>Snapshot history (expanded on demand)</summary><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></details>
+    <div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table></div>
+    <details><summary>Snapshot history (expanded on demand)</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></div></details>
   </section>
 
   <section id="tab-cost" class="card tabsec hidden"><h3>Cost & Models</h3>
-    <table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table>
-    <details><summary>Per-model within attribution buckets</summary><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table></details>
+    <div class="table-wrap"><table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table></div>
+    <details><summary>Per-model within attribution buckets</summary><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table></div></details>
     <div class="card"><h4>Recommended Actions (top 3)</h4><ul><li>${recommendedActions[0]}</li><li>${recommendedActions[1]}</li><li>${recommendedActions[2]}</li></ul></div>
   </section>
 
   <section id="tab-agents" class="card tabsec hidden"><h3>Agents</h3>
-    <table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table>
-    <details><summary>Top token-consuming sessions</summary><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table></details>
+    <div class="table-wrap"><table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table></div>
+    <details><summary>Top token-consuming sessions</summary><div class="table-wrap"><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table></div></details>
   </section>
 
   <section id="tab-context" class="card tabsec hidden"><h3>Context Files</h3>
     <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div><div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div><div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div><div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
-    <details open><summary>Context File Profiler</summary><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></details>
-    <details><summary>Top-10 Heaviest Context Files</summary><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></details>
+    <details open><summary>Context File Profiler</summary><div class="table-wrap"><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></div></details>
+    <details><summary>Top-10 Heaviest Context Files</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></div></details>
   </section>
 
   <section id="tab-security" class="card tabsec hidden"><h3>Security</h3>

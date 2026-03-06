@@ -13,7 +13,7 @@ Overview
 │                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 41 · default main active 1m ago                         │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 43 · default main active just now                       │
 │ Memory          │ 12 files · 17 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │
 │                 │ (76)                                                                                              │
 │ Probes          │ skipped (use --deep)                                                                              │
@@ -22,7 +22,7 @@ Overview
 │                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth- │
 │                 │ strategist), disabled (trading-commander), disabled (trading-execution-risk), disabled (trading-  │
 │                 │ review-research)                                                                                  │
-│ Sessions        │ 41 active · default gpt-5.2 (272k ctx) · 11 stores                                                │
+│ Sessions        │ 43 active · default gpt-5.2 (272k ctx) · 11 stores                                                │
 └─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 Security audit
@@ -62,20 +62,20 @@ Channels
 └─────────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌─────────────────────────────────────────────────┬────────┬─────────┬───────────────┬────────────────────────────────┐
-│ Key                                             │ Kind   │ Age     │ Model         │ Tokens                         │
-├─────────────────────────────────────────────────┼────────┼─────────┼───────────────┼────────────────────────────────┤
-│ agent:main:telegram:direct:1773…                │ direct │ 1m ago  │ gpt-5.3-codex │ 20k/272k (7%) · 🗄️ 97% cached  │
-│ agent:main:main                                 │ direct │ 1m ago  │ gpt-5.3-codex │ 16k/272k (6%) · 🗄️ 23% cached  │
-│ agent:main:telegram:group:-1003…                │ group  │ 1m ago  │ gpt-5.3-codex │ 48k/272k (18%) · 🗄️ 99% cached │
-│ agent:main:telegram:group:-1003…                │ group  │ 7m ago  │ gpt-5.2       │ unknown/272k (?%)              │
-│ agent:main:telegram:group:-1003…                │ group  │ 6h ago  │ gpt-5.3-codex │ 19k/272k (7%) · 🗄️ 96% cached  │
-│ agent:main:cron:904f2d88-581a-4…                │ direct │ 8h ago  │ gpt-5.2       │ 15k/272k (6%) · 🗄️ 107% cached │
-│ agent:main:cron:904f2d88-581a-4…                │ direct │ 8h ago  │ gpt-5.2       │ 15k/272k (6%) · 🗄️ 107% cached │
-│ agent:main:cron:ddcb38d2-6d24-4…                │ direct │ 8h ago  │ gpt-5.2       │ 15k/272k (5%) · 🗄️ 91% cached  │
-│ agent:main:cron:ddcb38d2-6d24-4…                │ direct │ 8h ago  │ gpt-5.2       │ 15k/272k (5%) · 🗄️ 91% cached  │
-│ agent:main:cron:ba9af08c-6dca-4…                │ direct │ 8h ago  │ gpt-5-mini    │ 13k/400k (3%)                  │
-└─────────────────────────────────────────────────┴────────┴─────────┴───────────────┴────────────────────────────────┘
+┌────────────────────────────────────────────────┬────────┬──────────┬───────────────┬────────────────────────────────┐
+│ Key                                            │ Kind   │ Age      │ Model         │ Tokens                         │
+├────────────────────────────────────────────────┼────────┼──────────┼───────────────┼────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ just now │ gpt-5-mini    │ unknown/400k (?%)              │
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ just now │ gpt-5-mini    │ unknown/400k (?%)              │
+│ agent:main:main                                │ direct │ 16m ago  │ gpt-5.3-codex │ 16k/272k (6%) · 🗄️ 36% cached  │
+│ agent:main:telegram:group:-1003…               │ group  │ 18m ago  │ gpt-5.3-codex │ 57k/272k (21%) · 🗄️ 96% cached │
+│ agent:main:telegram:direct:1773…               │ direct │ 30m ago  │ gpt-5.3-codex │ 20k/272k (7%) · 🗄️ 97% cached  │
+│ agent:main:telegram:group:-1003…               │ group  │ 36m ago  │ gpt-5.2       │ unknown/272k (?%)              │
+│ agent:main:telegram:group:-1003…               │ group  │ 6h ago   │ gpt-5.3-codex │ 19k/272k (7%) · 🗄️ 96% cached  │
+│ agent:main:cron:904f2d88-581a-4…               │ direct │ 8h ago   │ gpt-5.2       │ 15k/272k (6%) · 🗄️ 107% cached │
+│ agent:main:cron:904f2d88-581a-4…               │ direct │ 8h ago   │ gpt-5.2       │ 15k/272k (6%) · 🗄️ 107% cached │
+│ agent:main:cron:ddcb38d2-6d24-4…               │ direct │ 8h ago   │ gpt-5.2       │ 15k/272k (5%) · 🗄️ 91% cached  │
+└────────────────────────────────────────────────┴────────┴──────────┴───────────────┴────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting

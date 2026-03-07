@@ -7,6 +7,55 @@ function run(cmd) {
   return cp.execSync(cmd, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
+function safeJsonParse(s) {
+  try { return JSON.parse(s); } catch { return null; }
+}
+
+function capturePlanUsage(root) {
+  const outPath = path.join(root, 'reports', 'plan-usage.json');
+  try {
+    if (fs.existsSync(outPath)) {
+      const prev = safeJsonParse(fs.readFileSync(outPath, 'utf8'));
+      const ageMs = prev?.capturedAt ? (Date.now() - new Date(prev.capturedAt).getTime()) : Infinity;
+      // Refresh at most every 6 hours to keep overhead/cost low.
+      if (Number.isFinite(ageMs) && ageMs < 6 * 60 * 60 * 1000) return prev;
+    }
+
+    const raw = run('openclaw agent --agent main --message "Run session_status and return only compact JSON: {dayLeftPercent,dayLeftText,weekLeftPercent,weekLeftText,model}. No prose." --json --timeout 90');
+    const jsonStart = raw.indexOf('{');
+    if (jsonStart < 0) throw new Error('No JSON in openclaw agent output');
+    const wrapper = safeJsonParse(raw.slice(jsonStart));
+    const textPayload = wrapper?.result?.payloads?.[0]?.text || '';
+    const parsed = safeJsonParse(String(textPayload).trim());
+    if (!parsed || typeof parsed !== 'object') throw new Error('Invalid session_status payload');
+
+    const result = {
+      capturedAt: new Date().toISOString(),
+      source: 'openclaw-agent-session_status',
+      dayLeftPercent: parsed.dayLeftPercent ?? null,
+      dayLeftText: parsed.dayLeftText ?? null,
+      weekLeftPercent: parsed.weekLeftPercent ?? null,
+      weekLeftText: parsed.weekLeftText ?? null,
+      model: parsed.model || null,
+    };
+    fs.writeFileSync(outPath, JSON.stringify(result, null, 2));
+    return result;
+  } catch (err) {
+    const fallback = {
+      capturedAt: new Date().toISOString(),
+      source: 'fallback',
+      error: String(err?.message || err),
+      dayLeftPercent: null,
+      dayLeftText: null,
+      weekLeftPercent: null,
+      weekLeftText: null,
+      model: null,
+    };
+    try { fs.writeFileSync(outPath, JSON.stringify(fallback, null, 2)); } catch {}
+    return fallback;
+  }
+}
+
 function parseStatus(text) {
   const out = { capturedAt: new Date().toISOString(), securitySummary: '', raw: text, overview: {} };
   const sec = text.match(/Security audit\nSummary:\s*(.+)/);
@@ -304,6 +353,7 @@ function renderHtml(history, buildId) {
 
   const sec = latest.securityCounts || parseSecurityCounts(latest.securitySummary || '');
   const statusOverview = latest.statusOverview || {};
+  const planUsage = latest.planUsage || {};
   const psec = prev.securityCounts || parseSecurityCounts(prev.securitySummary || '');
   const modelEntries = Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
@@ -470,6 +520,9 @@ summary{cursor:pointer;color:#cfe0ff}
       <tr><td>Heartbeat</td><td>${statusOverview.Heartbeat || 'n/a'}</td></tr>
       <tr><td>Gateway</td><td>${statusOverview.Gateway || 'n/a'}</td></tr>
       <tr><td>Update</td><td>${statusOverview.Update || 'n/a'}</td></tr>
+      <tr><td>Codex left today</td><td>${planUsage.dayLeftPercent ?? 'n/a'}${planUsage.dayLeftPercent != null ? '%' : ''}${planUsage.dayLeftText ? ` · ${planUsage.dayLeftText}` : ''}</td></tr>
+      <tr><td>Codex left this week</td><td>${planUsage.weekLeftPercent ?? 'n/a'}${planUsage.weekLeftPercent != null ? '%' : ''}${planUsage.weekLeftText ? ` · ${planUsage.weekLeftText}` : ''}</td></tr>
+      <tr><td>Plan snapshot model</td><td>${planUsage.model || 'n/a'}</td></tr>
     </tbody></table></div>
     <div class="k" style="margin-top:8px">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
     <div class="spark" title="Recent token trend (last 12 snapshots)">
@@ -550,6 +603,7 @@ function cmdCapture(root) {
   const sessionsRaw = run('openclaw sessions --all-agents --json');
   const summary = summarizeAllAgents(parsed, sessionsRaw);
   summary.contextProfiler = buildContextProfiler(root);
+  summary.planUsage = capturePlanUsage(root);
 
   const snapshotsPath = path.join(reportsDir, 'usage-history.json');
   let history = [];

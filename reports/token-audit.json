@@ -1,21 +1,21 @@
 {
-  "generatedAt": "2026-03-07T13:20:46.575Z",
+  "generatedAt": "2026-03-07T13:50:33.769Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 47,
-    "tokens": 314740,
-    "bytes": 1264920
+    "files": 52,
+    "tokens": 323572,
+    "bytes": 1300254
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 1096608,
-      "lines": 37734,
-      "tokens": 274019
+      "bytes": 1113067,
+      "lines": 38299,
+      "tokens": 278132
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 65973,
+      "bytes": 65972,
       "lines": 573,
       "tokens": 15845
     },
@@ -24,6 +24,12 @@
       "bytes": 30687,
       "lines": 576,
       "tokens": 7666
+    },
+    {
+      "file": "skills/model-usage/scripts/model_usage.py",
+      "bytes": 10764,
+      "lines": 321,
+      "tokens": 2691
     },
     {
       "file": "reports/openclaw-status.txt",
@@ -62,6 +68,12 @@
       "tokens": 858
     },
     {
+      "file": "skills/session-logs/SKILL.md",
+      "bytes": 3429,
+      "lines": 116,
+      "tokens": 857
+    },
+    {
       "file": "skills/self-improving/scaling.md",
       "bytes": 2945,
       "lines": 126,
@@ -78,6 +90,12 @@
       "bytes": 2415,
       "lines": 63,
       "tokens": 597
+    },
+    {
+      "file": "skills/model-usage/SKILL.md",
+      "bytes": 2253,
+      "lines": 70,
+      "tokens": 563
     },
     {
       "file": "skills/self-improving/boundaries.md",
@@ -116,6 +134,12 @@
       "tokens": 348
     },
     {
+      "file": "skills/model-usage/scripts/test_model_usage.py",
+      "bytes": 1310,
+      "lines": 41,
+      "tokens": 328
+    },
+    {
       "file": "SOUL.md",
       "bytes": 1190,
       "lines": 50,
@@ -128,54 +152,30 @@
       "tokens": 295
     },
     {
-      "file": "PROCESS.md",
-      "bytes": 1095,
-      "lines": 36,
-      "tokens": 274
-    },
-    {
-      "file": "skills/self-improving/memory.md",
-      "bytes": 1077,
-      "lines": 37,
-      "tokens": 269
-    },
-    {
-      "file": "docs/reports/daily-rollups/summary-5d.md",
-      "bytes": 1053,
-      "lines": 22,
-      "tokens": 262
-    },
-    {
-      "file": "reports/daily-rollups/summary-5d.md",
-      "bytes": 1053,
-      "lines": 22,
-      "tokens": 262
-    },
-    {
-      "file": "skills/self-improving/memory-template.md",
-      "bytes": 1014,
-      "lines": 61,
-      "tokens": 253
+      "file": "skills/model-usage/references/codexbar-cli.md",
+      "bytes": 1120,
+      "lines": 34,
+      "tokens": 280
     }
   ],
   "byFolder": [
     {
       "folder": "reports",
       "files": 8,
-      "bytes": 1180637,
-      "tokens": 293733
+      "bytes": 1197095,
+      "tokens": 297846
+    },
+    {
+      "folder": "skills",
+      "files": 25,
+      "bytes": 55251,
+      "tokens": 13760
     },
     {
       "folder": ".",
       "files": 11,
       "bytes": 43698,
       "tokens": 10912
-    },
-    {
-      "folder": "skills",
-      "files": 20,
-      "bytes": 36375,
-      "tokens": 9041
     },
     {
       "folder": "docs",

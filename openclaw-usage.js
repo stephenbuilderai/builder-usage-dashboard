@@ -432,6 +432,9 @@ function renderHtml(history, buildId) {
   --bg-soft:#0b1222;
   --panel:#0f172bcc;
   --panel-strong:#111d35ee;
+  --surface-1:#0d162b;
+  --surface-2:#121f3a;
+  --surface-3:#16274a;
   --line:#2a3b66;
   --line-soft:#1c2b4f;
   --text:#f4f7ff;
@@ -465,6 +468,9 @@ body{
   box-shadow:0 10px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.03);
   backdrop-filter: blur(8px);
 }
+.surface-1{background:linear-gradient(165deg,var(--surface-1),#0f1a31)}
+.surface-2{background:linear-gradient(165deg,var(--surface-2),#101d37)}
+.surface-3{background:linear-gradient(165deg,var(--surface-3),#132448)}
 .hero{
   display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
   border:1px solid var(--line);
@@ -481,17 +487,24 @@ body{
 .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .strip .card{margin-top:0;border-color:var(--line)}
 .strip .card .k{font-size:.76rem}
-.kpi-primary{grid-column:span 2;border:1px solid #4a6fb0 !important;background:linear-gradient(165deg,#14254a,#101a33)}
-.kpi-primary .v{font-size:2rem}
+.kpi-primary{grid-column:span 2;border:1px solid #5e86cd !important;background:linear-gradient(160deg,#1d3768,#13264a);box-shadow:0 14px 34px rgba(13,25,52,.45), 0 0 0 1px rgba(126,174,255,.12) inset}
+.kpi-primary .v{font-size:2rem;text-shadow:0 0 18px rgba(122,183,255,.22)}
+.kpi-primary:before{content:'';display:block;height:3px;border-radius:999px;background:linear-gradient(90deg,#79b2ff,#63f1df);margin:-4px 0 10px}
 .tabs{
   display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:10px;z-index:10;
   background:linear-gradient(180deg,rgba(10,16,31,.92),rgba(10,16,31,.72));
   border:1px solid var(--line);border-radius:14px;padding:8px;
 }
 .tabbtn{
-  padding:9px 13px;border:1px solid #324d82;border-radius:999px;
-  background:linear-gradient(180deg,#1a2b52,#131f3b);color:#e7efff;
+  padding:9px 13px;border:1px solid #2d4474;border-radius:999px;
+  background:linear-gradient(180deg,#13213f,#101a32);color:#9fb3dd;
   font-size:.84rem;font-weight:600;cursor:pointer;transition:all .18s ease
+}
+.tabbtn.active{
+  color:#eef5ff;
+  border-color:#77adff;
+  background:linear-gradient(180deg,#234279,#1a315e);
+  box-shadow:0 0 0 3px rgba(111,168,255,.20), 0 6px 16px rgba(42,92,190,.25);
 }
 .tabbtn:hover{transform:translateY(-1px);border-color:#78a9ff;box-shadow:0 0 0 3px rgba(111,168,255,.14)}
 .table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line-soft)}
@@ -514,6 +527,8 @@ summary{cursor:pointer;color:#d3e2ff}
 .spark{height:120px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
 .spark svg{width:100%;height:100%}
 .spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(99,241,223,.35))}
+.subpanel{margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line-soft);background:linear-gradient(170deg,#101b33,#0c162b)}
+.subpanel h4{margin:0 0 8px;font-size:.86rem;color:#d8e7ff;letter-spacing:.02em}
 @media(max-width:980px){
   body{padding:12px}
   .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -535,7 +550,7 @@ summary{cursor:pointer;color:#d3e2ff}
 </head>
 <body>
 <div class="container">
-  <div class="card hero">
+  <div class="card hero surface-1">
     <div>
       <div class="h-title">OpenClaw Command Dashboard</div>
       <div class="h-sub">Usage, risk, and execution telemetry in one control surface</div>
@@ -553,7 +568,7 @@ summary{cursor:pointer;color:#d3e2ff}
   </div>
 
   <div class="zone-title">Navigation</div>
-  <div class="card tabs">
+  <div class="card tabs surface-2">
     <button class="tabbtn" data-tab="overview">Overview</button>
     <button class="tabbtn" data-tab="cost">Cost & Model Mix</button>
     <button class="tabbtn" data-tab="agents">Agent Load</button>
@@ -563,7 +578,7 @@ summary{cursor:pointer;color:#d3e2ff}
   </div>
 
   <div class="zone-title">Filters</div>
-  <div class="card filter">
+  <div class="card filter surface-3">
     <input id="q" class="input" placeholder="Search (session key, file, text…)" />
     <input id="fAgent" class="input" placeholder="Agent" />
     <input id="fModel" class="input" placeholder="Model" />
@@ -571,56 +586,67 @@ summary{cursor:pointer;color:#d3e2ff}
   </div>
   <div id="filterChips" class="filter-chips"></div>
 
-  <section id="tab-overview" class="card tabsec"><h3>Overview</h3>
-    <div class="k">/status snapshot</div>
-    <div class="table-wrap"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
-      <tr><td>Agents</td><td>${statusOverview.Agents || 'n/a'}</td></tr>
-      <tr><td>Sessions</td><td>${statusOverview.Sessions || 'n/a'}</td></tr>
-      <tr><td>Memory</td><td>${statusOverview.Memory || 'n/a'}</td></tr>
-      <tr><td>Heartbeat</td><td>${statusOverview.Heartbeat || 'n/a'}</td></tr>
-      <tr><td>Gateway</td><td>${statusOverview.Gateway || 'n/a'}</td></tr>
-      <tr><td>Update</td><td>${statusOverview.Update || 'n/a'}</td></tr>
-      <tr><td>Codex left today</td><td>${planUsage.dayLeftPercent ?? 'n/a'}${planUsage.dayLeftPercent != null ? '%' : ''}${planUsage.dayLeftText ? ` · ${planUsage.dayLeftText}` : ''}</td></tr>
-      <tr><td>Codex left this week</td><td>${planUsage.weekLeftPercent ?? 'n/a'}${planUsage.weekLeftPercent != null ? '%' : ''}${planUsage.weekLeftText ? ` · ${planUsage.weekLeftText}` : ''}</td></tr>
-      <tr><td>Plan snapshot model</td><td>${planUsage.model || 'n/a'}</td></tr>
-    </tbody></table></div>
-    <div class="k" style="margin-top:8px">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
-    <div class="k" style="margin-top:8px">Token trend (last 12 snapshots)</div>
-    <div class="spark" title="Recent token trend (last 12 snapshots)">
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
-        <polyline points="${sparkPoints || '0,80 100,80'}"></polyline>
-      </svg>
+  <section id="tab-overview" class="card tabsec surface-1"><h3>Overview</h3>
+    <div class="subpanel">
+      <h4>System snapshot</h4>
+      <div class="table-wrap"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+        <tr><td>Agents</td><td>${statusOverview.Agents || 'n/a'}</td></tr>
+        <tr><td>Sessions</td><td>${statusOverview.Sessions || 'n/a'}</td></tr>
+        <tr><td>Memory</td><td>${statusOverview.Memory || 'n/a'}</td></tr>
+        <tr><td>Heartbeat</td><td>${statusOverview.Heartbeat || 'n/a'}</td></tr>
+        <tr><td>Gateway</td><td>${statusOverview.Gateway || 'n/a'}</td></tr>
+        <tr><td>Update</td><td>${statusOverview.Update || 'n/a'}</td></tr>
+        <tr><td>Codex left today</td><td>${planUsage.dayLeftPercent ?? 'n/a'}${planUsage.dayLeftPercent != null ? '%' : ''}${planUsage.dayLeftText ? ` · ${planUsage.dayLeftText}` : ''}</td></tr>
+        <tr><td>Codex left this week</td><td>${planUsage.weekLeftPercent ?? 'n/a'}${planUsage.weekLeftPercent != null ? '%' : ''}${planUsage.weekLeftText ? ` · ${planUsage.weekLeftText}` : ''}</td></tr>
+        <tr><td>Plan snapshot model</td><td>${planUsage.model || 'n/a'}</td></tr>
+      </tbody></table></div>
     </div>
-    <div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table></div>
+
+    <div class="subpanel">
+      <h4>Trend pulse</h4>
+      <div class="k">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
+      <div class="k" style="margin-top:8px">Token trend (last 12 snapshots)</div>
+      <div class="spark" title="Recent token trend (last 12 snapshots)">
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
+          <polyline points="${sparkPoints || '0,80 100,80'}"></polyline>
+        </svg>
+      </div>
+    </div>
+
+    <div class="subpanel">
+      <h4>Token attribution</h4>
+      <div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table></div>
+    </div>
+
     <details><summary>Snapshot history (expanded on demand)</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></div></details>
   </section>
 
-  <section id="tab-cost" class="card tabsec hidden"><h3>Cost & Models</h3>
+  <section id="tab-cost" class="card tabsec hidden surface-2"><h3>Cost & Models</h3>
     <div class="table-wrap"><table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table></div>
     <details><summary>Per-model within attribution buckets</summary><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table></div></details>
     <div class="card"><h4>Recommended Actions (top 3)</h4><ul><li>${recommendedActions[0]}</li><li>${recommendedActions[1]}</li><li>${recommendedActions[2]}</li></ul></div>
   </section>
 
-  <section id="tab-agents" class="card tabsec hidden"><h3>Agents</h3>
+  <section id="tab-agents" class="card tabsec hidden surface-2"><h3>Agents</h3>
     <div class="table-wrap"><table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table></div>
     <details><summary>Top token-consuming sessions</summary><div class="table-wrap"><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table></div></details>
   </section>
 
-  <section id="tab-context" class="card tabsec hidden"><h3>Context Files</h3>
+  <section id="tab-context" class="card tabsec hidden surface-2"><h3>Context Files</h3>
     <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div><div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div><div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div><div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
     <details open><summary>Context File Profiler</summary><div class="table-wrap"><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></div></details>
     <details><summary>Top-10 Heaviest Context Files</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></div></details>
   </section>
 
-  <section id="tab-security" class="card tabsec hidden"><h3>Security</h3>
+  <section id="tab-security" class="card tabsec hidden surface-2"><h3>Security</h3>
     <div class="badge">Critical: ${sec.critical} (${(sec.critical - psec.critical) >= 0 ? '+' : ''}${sec.critical - psec.critical})</div>
     <div class="badge">Warn: ${sec.warn} (${(sec.warn - psec.warn) >= 0 ? '+' : ''}${sec.warn - psec.warn})</div>
     <div class="badge">Info: ${sec.info} (${(sec.info - psec.info) >= 0 ? '+' : ''}${sec.info - psec.info})</div>
     <div class="k">Attribution rules: cron=${attributionRules.cron || 'n/a'} · interactive=${attributionRules.interactive || 'n/a'} · system/other=${attributionRules['system/other'] || 'n/a'}</div>
   </section>
 
-  <section id="tab-insights" class="card tabsec hidden"><h3>Insights</h3>
+  <section id="tab-insights" class="card tabsec hidden surface-2"><h3>Insights</h3>
     <h4>5-day AI Insights ${insights.partial ? '(partial window)' : ''}</h4><div class="badge">days used: ${(insights.last5Days || []).length}/5</div>
     <ul>${insightBullets}</ul>
     <h4>Rollups & Exports</h4>
@@ -630,7 +656,15 @@ summary{cursor:pointer;color:#d3e2ff}
 </div>
 <script>
 (function(){
-  function show(tab){document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));var el=document.getElementById('tab-'+tab);if(el)el.classList.remove('hidden');}
+  function show(tab){
+    document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));
+    var el=document.getElementById('tab-'+tab);
+    if(el)el.classList.remove('hidden');
+    document.querySelectorAll('.tabbtn').forEach(function(btn){
+      if(btn.getAttribute('data-tab')===tab) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
   document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-tab'))));
   show('overview');
 

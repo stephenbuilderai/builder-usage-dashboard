@@ -1,29 +1,29 @@
 {
-  "generatedAt": "2026-03-07T15:20:46.211Z",
+  "generatedAt": "2026-03-07T15:50:33.357Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 52,
-    "tokens": 350478,
-    "bytes": 1408012
+    "files": 54,
+    "tokens": 364814,
+    "bytes": 1465452
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 1213856,
-      "lines": 41725,
-      "tokens": 303308
+      "bytes": 1266735,
+      "lines": 43489,
+      "tokens": 316509
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 71308,
-      "lines": 606,
-      "tokens": 17172
+      "bytes": 71027,
+      "lines": 615,
+      "tokens": 17100
     },
     {
       "file": "openclaw-usage.js",
-      "bytes": 32195,
-      "lines": 608,
-      "tokens": 8036
+      "bytes": 35267,
+      "lines": 708,
+      "tokens": 8804
     },
     {
       "file": "skills/model-usage/scripts/model_usage.py",
@@ -33,7 +33,7 @@
     },
     {
       "file": "reports/openclaw-status.txt",
-      "bytes": 10672,
+      "bytes": 10678,
       "lines": 87,
       "tokens": 2024
     },
@@ -116,6 +116,12 @@
       "tokens": 414
     },
     {
+      "file": "docs/design-overhaul-plan.md",
+      "bytes": 1527,
+      "lines": 42,
+      "tokens": 380
+    },
+    {
       "file": "skills/self-improving/setup.md",
       "bytes": 1526,
       "lines": 88,
@@ -150,20 +156,14 @@
       "bytes": 1182,
       "lines": 32,
       "tokens": 295
-    },
-    {
-      "file": "skills/model-usage/references/codexbar-cli.md",
-      "bytes": 1120,
-      "lines": 34,
-      "tokens": 280
     }
   ],
   "byFolder": [
     {
       "folder": "reports",
-      "files": 8,
-      "bytes": 1303298,
-      "tokens": 324370
+      "files": 9,
+      "bytes": 1356138,
+      "tokens": 337558
     },
     {
       "folder": "skills",
@@ -174,14 +174,14 @@
     {
       "folder": ".",
       "files": 11,
-      "bytes": 45206,
-      "tokens": 11282
+      "bytes": 48278,
+      "tokens": 12050
     },
     {
       "folder": "docs",
-      "files": 6,
-      "bytes": 3796,
-      "tokens": 950
+      "files": 7,
+      "bytes": 5324,
+      "tokens": 1330
     },
     {
       "folder": ".clawhub",

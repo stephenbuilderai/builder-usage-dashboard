@@ -9,7 +9,7 @@ Overview
 │ Tailscale       │ off                                                                                               │
 │ Channel         │ stable (config)                                                                                   │
 │ Update          │ pnpm · npm latest 2026.3.2                                                                        │
-│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 30ms · auth token · 2bf5bd64c8d3 (172.  │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 22ms · auth token · 2bf5bd64c8d3 (172.  │
 │                 │ 23.0.3) app unknown linux 6.8.0-94-generic                                                        │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
@@ -71,8 +71,8 @@ Sessions
 │ agent:main:cron:5c628ca9-0626-4…             │ direct │ 3m ago   │ gpt-5-mini    │ 21k/400k (5%) · 🗄️ 1191% cached  │
 │ agent:main:cron:5c628ca9-0626-4…             │ direct │ 3m ago   │ gpt-5-mini    │ 21k/400k (5%) · 🗄️ 1191% cached  │
 │ agent:main:main                              │ direct │ 8m ago   │ gpt-5-mini    │ 18k/400k (4%) · 🗄️ 99% cached    │
-│ agent:main:cron:b249c27c-969d-4…             │ direct │ 9m ago   │ gpt-5-mini    │ 23k/400k (6%) · 🗄️ 1311% cached  │
-│ agent:main:cron:b249c27c-969d-4…             │ direct │ 9m ago   │ gpt-5-mini    │ 23k/400k (6%) · 🗄️ 1311% cached  │
+│ agent:main:cron:b249c27c-969d-4…             │ direct │ 10m ago  │ gpt-5-mini    │ 23k/400k (6%) · 🗄️ 1311% cached  │
+│ agent:main:cron:b249c27c-969d-4…             │ direct │ 10m ago  │ gpt-5-mini    │ 23k/400k (6%) · 🗄️ 1311% cached  │
 │ agent:main:cron:d0a0360c-9cd8-4…             │ direct │ 11m ago  │ gpt-5.3-codex │ 27k/272k (10%) · 🗄️ 1058% cached │
 │ agent:main:cron:d0a0360c-9cd8-4…             │ direct │ 11m ago  │ gpt-5.3-codex │ 27k/272k (10%) · 🗄️ 1058% cached │
 └──────────────────────────────────────────────┴────────┴──────────┴───────────────┴──────────────────────────────────┘

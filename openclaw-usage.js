@@ -8,9 +8,30 @@ function run(cmd) {
 }
 
 function parseStatus(text) {
-  const out = { capturedAt: new Date().toISOString(), securitySummary: '', raw: text };
+  const out = { capturedAt: new Date().toISOString(), securitySummary: '', raw: text, overview: {} };
   const sec = text.match(/Security audit\nSummary:\s*(.+)/);
   if (sec) out.securitySummary = sec[1].trim();
+
+  // Parse the unicode table under "Overview" from `openclaw status`
+  const lines = String(text || '').split(/\r?\n/);
+  let inOverview = false;
+  for (const line of lines) {
+    if (line.trim() === 'Overview') {
+      inOverview = true;
+      continue;
+    }
+    if (inOverview && line.trim() === 'Security audit') break;
+    if (!inOverview) continue;
+    if (!line.includes('│')) continue;
+    // table row format: │ Item │ Value │
+    const parts = line.split('│').map(s => s.trim()).filter(Boolean);
+    if (parts.length < 2) continue;
+    const key = parts[0];
+    const value = parts.slice(1).join(' | ');
+    if (!key || key === 'Item' || /^[-─┌┬┐├┼┤└┴┘]+$/.test(key)) continue;
+    out.overview[key] = value;
+  }
+
   return out;
 }
 
@@ -147,6 +168,7 @@ function summarizeAllAgents(statusParsed, sessionsJsonText) {
   return {
     capturedAt: statusParsed.capturedAt,
     securitySummary: statusParsed.securitySummary,
+    statusOverview: statusParsed.overview || {},
     securityCounts: parseSecurityCounts(statusParsed.securitySummary),
     allAgents: true,
     totalSessions: sessions.length,
@@ -281,6 +303,7 @@ function renderHtml(history, buildId) {
   const dt = latest.capturedAt ? new Date(latest.capturedAt) : null;
 
   const sec = latest.securityCounts || parseSecurityCounts(latest.securitySummary || '');
+  const statusOverview = latest.statusOverview || {};
   const psec = prev.securityCounts || parseSecurityCounts(prev.securitySummary || '');
   const modelEntries = Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
@@ -439,7 +462,16 @@ summary{cursor:pointer;color:#cfe0ff}
   </div>
 
   <section id="tab-overview" class="card tabsec"><h3>Overview</h3>
-    <div class="k">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
+    <div class="k">/status snapshot</div>
+    <div class="table-wrap"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
+      <tr><td>Agents</td><td>${statusOverview.Agents || 'n/a'}</td></tr>
+      <tr><td>Sessions</td><td>${statusOverview.Sessions || 'n/a'}</td></tr>
+      <tr><td>Memory</td><td>${statusOverview.Memory || 'n/a'}</td></tr>
+      <tr><td>Heartbeat</td><td>${statusOverview.Heartbeat || 'n/a'}</td></tr>
+      <tr><td>Gateway</td><td>${statusOverview.Gateway || 'n/a'}</td></tr>
+      <tr><td>Update</td><td>${statusOverview.Update || 'n/a'}</td></tr>
+    </tbody></table></div>
+    <div class="k" style="margin-top:8px">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
     <div class="spark" title="Recent token trend (last 12 snapshots)">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>

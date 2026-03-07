@@ -343,18 +343,20 @@ function ensureDailyRollups(root, history) {
   };
 }
 
+
 function renderHtml(history, buildId) {
   const latest = history[history.length - 1] || {};
   const prev = history[history.length - 2] || {};
   const total = Number(latest.estimatedUsedTokens || 0);
   const prevTotal = Number(prev.estimatedUsedTokens || 0);
   const delta = total - prevTotal;
+  const deltaPct = prevTotal > 0 ? (delta / prevTotal) * 100 : 0;
   const dt = latest.capturedAt ? new Date(latest.capturedAt) : null;
 
   const sec = latest.securityCounts || parseSecurityCounts(latest.securitySummary || '');
+  const psec = prev.securityCounts || parseSecurityCounts(prev.securitySummary || '');
   const statusOverview = latest.statusOverview || {};
   const planUsage = latest.planUsage || {};
-  const psec = prev.securityCounts || parseSecurityCounts(prev.securitySummary || '');
   const modelEntries = Object.entries(latest.byModelEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const agentEntries = Object.entries(latest.byAgentEstimatedTokens || {}).sort((a, b) => b[1] - a[1]);
   const topSessions = latest.topSessions || [];
@@ -364,9 +366,12 @@ function renderHtml(history, buildId) {
   const bucketModel = latest.byBucketByModel || {};
   const attributionRules = latest.attributionRules || {};
 
-  const totalAgentK = agentEntries.reduce((s, [, k]) => s + Number(k || 0), 0) || 1;
-  const topBurner = topSessions[0] || {};
-  const anomaly = Math.abs(prevTotal) > 0 && Math.abs((delta / prevTotal) * 100) >= 15;
+  const recommendedActions = [];
+  if ((contextProfiler.totalEstimatedTokens || 0) > 15000) recommendedActions.push({prio:'P1',title:'Trim context footprint',body:'Top context files are inflating token load. Move archival notes out of hot context.'});
+  if ((bucketEntries.find(([k]) => k === 'cron')?.[1] || 0) * 1000 > total * 0.25) recommendedActions.push({prio:'P1',title:'Reduce cron load',body:'Cron bucket exceeds 25% of burn. Merge repetitive schedules and lower frequency.'});
+  if (sec.critical > 0) recommendedActions.push({prio:'P0',title:'Resolve critical findings',body:'Run deep audit and close all critical findings before optimization work.'});
+  while (recommendedActions.length < 3) recommendedActions.push({prio:'P2',title:'Monitor trend variance',body:'Alert on >15% day-over-day token movement and inspect root cause.'});
+
   const historyTail = history.slice(-12).map(h => Number(h.estimatedUsedTokens || 0));
   const sparkMax = Math.max(...historyTail, 1);
   const sparkPoints = historyTail.map((v, i) => {
@@ -375,329 +380,186 @@ function renderHtml(history, buildId) {
     return `${x},${y}`;
   }).join(' ');
 
-  const recommendedActions = [];
-  if ((contextProfiler.totalEstimatedTokens || 0) > 15000) recommendedActions.push('Trim high-size context markdown files (top-10 card) to reduce prompt load.');
-  if ((bucketEntries.find(([k]) => k === 'cron')?.[1] || 0) * 1000 > total * 0.25) recommendedActions.push('Cron bucket is heavy — reduce redundant scheduled runs or lower frequency.');
-  if (sec.critical > 0) recommendedActions.push('Address security critical findings first (`openclaw security audit --deep`).');
-  while (recommendedActions.length < 3) recommendedActions.push('Monitor daily rollups and act on >15% day-over-day token spikes.');
+  const modelOptions = modelEntries.map(([m]) => `<option value="${m}"></option>`).join('');
+  const agentOptions = agentEntries.map(([a]) => `<option value="${a}"></option>`).join('');
+  const bucketOptions = bucketEntries.map(([b]) => `<option value="${b}"></option>`).join('');
 
-  const modelRows = modelEntries.map(([m, k]) => {
-    const tokens = Math.round(Number(k) * 1000);
-    const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
-    return `<tr data-model="${m.toLowerCase()}"><td>${m}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
-  }).join('') || '<tr><td colspan="3">No model data</td></tr>';
+  const metricCards = [
+    {label:'Token Burn (est)', value: total.toLocaleString(), trend:`${delta>=0?'+':''}${delta.toLocaleString()} (${deltaPct.toFixed(1)}%)`},
+    {label:'Estimated Cost', value: `$${Number(latest.estimatedCostUsd||0).toFixed(2)}`, trend:'Heuristic based'},
+    {label:'Known Token Sessions', value: `${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0}`, trend:'Coverage ratio'},
+    {label:'Context Weight', value: `${Number(contextProfiler.totalEstimatedTokens||0).toLocaleString()} tok`, trend:`${Number(contextProfiler.fileCount||0).toLocaleString()} files`},
+  ].map(m => `<article class="MetricCard card-l2"><div class="label">${m.label}</div><div class="value">${m.value}</div><div class="hint">${m.trend}</div></article>`).join('');
 
-  const agentRows = agentEntries.map(([a, k]) => {
-    const tokens = Math.round(Number(k) * 1000);
-    const pct = Math.round((Number(k) / totalAgentK) * 100);
-    const prevK = Number((prev.byAgentEstimatedTokens || {})[a] || 0);
-    const trend = Number(k) === prevK ? '→' : Number(k) > prevK ? '↑' : '↓';
-    const meta = (latest.byAgentMeta || {})[a] || {};
-    const last = meta.lastActiveAt ? new Date(meta.lastActiveAt).toLocaleString('en-GB') : 'n/a';
-    return `<tr data-agent="${a.toLowerCase()}"><td>${a}</td><td>${tokens.toLocaleString()}</td><td><span class="bar"><span style="width:${pct}%"></span></span>${pct}%</td><td>${trend}</td><td>${last}</td></tr>`;
-  }).join('') || '<tr><td colspan="5">No agent data</td></tr>';
+  const overviewRows = [
+    ['Agents', statusOverview.Agents || 'n/a'],
+    ['Sessions', statusOverview.Sessions || 'n/a'],
+    ['Memory', statusOverview.Memory || 'n/a'],
+    ['Heartbeat', statusOverview.Heartbeat || 'n/a'],
+    ['Gateway', statusOverview.Gateway || 'n/a'],
+    ['Update', statusOverview.Update || 'n/a'],
+    ['Codex day left', `${planUsage.dayLeftPercent ?? 'n/a'}${planUsage.dayLeftPercent != null ? '%' : ''}${planUsage.dayLeftText ? ` · ${planUsage.dayLeftText}` : ''}`],
+    ['Codex week left', `${planUsage.weekLeftPercent ?? 'n/a'}${planUsage.weekLeftPercent != null ? '%' : ''}${planUsage.weekLeftText ? ` · ${planUsage.weekLeftText}` : ''}`],
+    ['Plan snapshot model', planUsage.model || 'n/a'],
+  ].map(([k,v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');
 
-  const topRows = topSessions.map(s => {
-    const key = String(s.key || '');
-    const short = key.length > 64 ? key.slice(0, 64) + '…' : key;
-    return `<tr data-agent="${(s.agent || '').toLowerCase()}" data-model="${(s.model || '').toLowerCase()}" data-bucket="${(s.bucket || '').toLowerCase()}"><td>${s.agent || ''}</td><td title="${key.replace(/"/g, '&quot;')}">${short}</td><td>${s.model || ''}</td><td>${Math.round(Number(s.tokens || 0)).toLocaleString()}</td><td>${s.bucket || 'n/a'}</td></tr>`;
-  }).join('') || '<tr><td colspan="5">No sessions</td></tr>';
-
-  const bucketRows = bucketEntries.map(([bucket, valK]) => {
+  const bucketVisual = bucketEntries.map(([k, valK]) => {
     const tokens = Math.round(Number(valK || 0) * 1000);
     const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
-    return `<tr data-bucket="${bucket.toLowerCase()}"><td>${bucket}</td><td>${tokens.toLocaleString()}</td><td>${pct}%</td></tr>`;
-  }).join('') || '<tr><td colspan="3">No attribution data</td></tr>';
+    return `<div class="ranked-row" data-bucket="${k.toLowerCase()}"><div><strong>${k}</strong><span>${tokens.toLocaleString()} tokens</span></div><div class="progress"><span style="width:${pct}%"></span></div><em>${pct}%</em></div>`;
+  }).join('') || '<div class="muted">No attribution data.</div>';
+
+  const modelCards = modelEntries.map(([m,k], i) => {
+    const tokens = Math.round(Number(k) * 1000);
+    const pct = total > 0 ? Math.round((tokens / total) * 100) : 0;
+    return `<article class="InsightCard card-l2" data-model="${m.toLowerCase()}"><div class="rank">#${i+1}</div><h4>${m}</h4><div class="value-sm">${tokens.toLocaleString()} tok</div><div class="progress"><span style="width:${pct}%"></span></div><p>${pct}% of estimated burn</p></article>`;
+  }).join('') || '<div class="muted">No model data.</div>';
 
   const bucketModelRows = Object.entries(bucketModel).map(([bucket, models]) => {
     const modelLine = Object.entries(models || {}).sort((a,b)=>b[1]-a[1]).map(([m,k]) => `${m}: ${Math.round(Number(k||0)*1000).toLocaleString()}`).join(' · ');
     return `<tr><td>${bucket}</td><td>${modelLine || 'n/a'}</td></tr>`;
   }).join('') || '<tr><td colspan="2">No bucket/model data</td></tr>';
 
-  const profilerRows = (contextProfiler.files || []).map(f => `<tr data-path="${f.path.toLowerCase()}"><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.lineCount || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td><td>${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`).join('') || '<tr><td colspan="5">No context files found</td></tr>';
-  const top10Rows = (contextProfiler.top10 || []).map((f, i) => `<tr><td>${i + 1}</td><td title="${f.path}">${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td></tr>`).join('') || '<tr><td colspan="4">No files</td></tr>';
+  const agentRows = agentEntries.map(([a, k], i) => {
+    const tokens = Math.round(Number(k) * 1000);
+    const totalAgentK = agentEntries.reduce((s, [, val]) => s + Number(val || 0), 0) || 1;
+    const pct = Math.round((Number(k) / totalAgentK) * 100);
+    const prevK = Number((prev.byAgentEstimatedTokens || {})[a] || 0);
+    const trend = Number(k) === prevK ? 'flat' : Number(k) > prevK ? 'up' : 'down';
+    const trendGlyph = trend === 'up' ? '↑' : trend === 'down' ? '↓' : '→';
+    const meta = (latest.byAgentMeta || {})[a] || {};
+    const last = meta.lastActiveAt ? new Date(meta.lastActiveAt).toLocaleString('en-GB') : 'n/a';
+    const sessions = topSessions.filter(s => s.agent === a).slice(0, 4);
+    const details = sessions.map(s => `<li><code>${(s.key||'').slice(0,78)}</code><span>${Math.round(Number(s.tokens||0)).toLocaleString()} tok · ${s.model||'unknown'}</span></li>`).join('') || '<li class="muted">No session drilldown for this snapshot.</li>';
+    return `<tr class="data-row" data-agent="${a.toLowerCase()}" data-sort-tokens="${tokens}" data-sort-sessions="${meta.sessions || 0}">
+      <td><button class="row-toggle" data-expand="agent-${i}">${a}</button></td>
+      <td>${tokens.toLocaleString()}</td>
+      <td><div class="progress"><span style="width:${pct}%"></span></div><span>${pct}%</span></td>
+      <td><span class="status-dot ${trend}"></span>${trendGlyph}</td>
+      <td>${last}</td>
+    </tr>
+    <tr id="agent-${i}" class="expand-row"><td colspan="5"><div class="expand-inner"><ul>${details}</ul></div></td></tr>`;
+  }).join('') || '<tr><td colspan="5">No agent data</td></tr>';
+
+  const profilerRows = (contextProfiler.files || []).map(f => {
+    const category = f.path.includes('memory/') ? 'memory' : f.path.includes('agents/') ? 'agents' : 'workspace';
+    return `<tr data-path="${f.path.toLowerCase()}" data-filecat="${category}" data-sort-bytes="${Number(f.bytes||0)}"><td>${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.lineCount || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td><td>${new Date(f.lastModified).toLocaleString('en-GB')}</td></tr>`;
+  }).join('') || '<tr><td colspan="5">No context files found</td></tr>';
+
+  const top10Rows = (contextProfiler.top10 || []).map((f, i) => `<tr><td>${i + 1}</td><td>${f.path}</td><td>${Number(f.bytes || 0).toLocaleString()}</td><td>${Number(f.estimatedTokens || 0).toLocaleString()}</td></tr>`).join('') || '<tr><td colspan="4">No files</td></tr>';
 
   const insightBullets = (insights.bullets || []).map(b => `<li>${b}</li>`).join('') || '<li>No insight bullets generated.</li>';
   const insightLinks = (insights.rollupLinks || []).map(l => `<li><a href="${l}" target="_blank" rel="noreferrer">${l}</a></li>`).join('') || '<li>No rollup links.</li>';
+
   const historyRows = history.slice(-20).map((h, i) => `<tr><td>${i + 1}</td><td>${new Date(h.capturedAt).toLocaleString('en-GB')}</td><td>${h.sessionCount || 0}</td><td>${Math.round(Number(h.estimatedUsedTokens || 0)).toLocaleString()}</td><td>${h.securitySummary || '-'}</td></tr>`).join('');
+
+  const findings = [
+    {sev:'critical',cat:'Policy',src:'security audit',target:'Gateway',conf:'high',rec:'Run deep audit and patch immediately',count:sec.critical},
+    {sev:'warn',cat:'Runtime',src:'usage heuristics',target:'Cron load',conf:'medium',rec:'Lower redundant schedule frequency',count:sec.warn},
+    {sev:'info',cat:'Attribution',src:'classifier',target:'Session buckets',conf:'medium',rec:'Review custom key patterns',count:sec.info},
+    {sev:'resolved',cat:'Delta',src:'snapshot diff',target:'Critical Δ',conf:'high',rec:`Change vs prev: ${(sec.critical-psec.critical)>=0?'+':''}${sec.critical-psec.critical}`,count:Math.max(0,(psec.critical||0)-(sec.critical||0))},
+  ].map(f=>`<article class="finding ${f.sev}"><header><span class="StatusBadge ${f.sev}">${f.sev.toUpperCase()}</span><h4>${f.cat}</h4></header><dl><div><dt>Source</dt><dd>${f.src}</dd></div><div><dt>Affected</dt><dd>${f.target}</dd></div><div><dt>Confidence</dt><dd>${f.conf}</dd></div><div><dt>Count</dt><dd>${f.count}</dd></div></dl><p>${f.rec}</p></article>`).join('');
 
   return `<!doctype html>
 <html>
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>OpenClaw Usage Dashboard</title>
+<title>OpenClaw Command Dashboard</title>
 <style>
-:root{
-  --bg:#060913;
-  --bg-soft:#0b1222;
-  --panel:#0f172bcc;
-  --panel-strong:#111d35ee;
-  --surface-1:#0d162b;
-  --surface-2:#121f3a;
-  --surface-3:#16274a;
-  --line:#2a3b66;
-  --line-soft:#1c2b4f;
-  --text:#f4f7ff;
-  --muted:#9eb1d9;
-  --accent:#6fa8ff;
-  --accent-2:#63f1df;
-  --ok:#7de0a8;
-  --warn:#f7cc76;
-  --bad:#ff8f9d;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  padding:18px;
-  line-height:1.45;
-  background:
-    radial-gradient(1000px 500px at 10% -5%, rgba(111,168,255,.22), transparent 60%),
-    radial-gradient(800px 400px at 95% 0%, rgba(99,241,223,.16), transparent 60%),
-    linear-gradient(160deg,var(--bg-soft) 0%,var(--bg) 60%);
-  min-height:100vh;
-}
-.container{max-width:1280px;margin:0 auto}
-.card{
-  background:linear-gradient(165deg,var(--panel-strong),var(--panel));
-  border:1px solid var(--line-soft);
-  border-radius:18px;
-  padding:16px;
-  margin-top:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.03);
-  backdrop-filter: blur(8px);
-}
-.surface-1{background:linear-gradient(165deg,var(--surface-1),#0f1a31)}
-.surface-2{background:linear-gradient(165deg,var(--surface-2),#101d37)}
-.surface-3{background:linear-gradient(165deg,var(--surface-3),#132448)}
-.hero{
-  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  border:1px solid var(--line);
-}
-.h-title{font-size:1.75rem;font-weight:900;letter-spacing:.2px}
-.h-sub{color:var(--muted);font-size:.9rem;margin-top:4px}
-.k{color:var(--muted);font-size:.8rem}
-.v{font-size:1.6rem;font-weight:900;letter-spacing:.2px}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
-  background:linear-gradient(180deg,#0f1c37,#0d1730);font-size:.75rem;margin:5px 6px 0 0;color:#dce8ff
-}
-.zone-title{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:4px 0 8px}
-.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.strip .card{margin-top:0;border-color:var(--line)}
-.strip .card .k{font-size:.76rem}
-.kpi-primary{grid-column:span 2;border:1px solid #5e86cd !important;background:linear-gradient(160deg,#1d3768,#13264a);box-shadow:0 14px 34px rgba(13,25,52,.45), 0 0 0 1px rgba(126,174,255,.12) inset}
-.kpi-primary .v{font-size:2rem;text-shadow:0 0 18px rgba(122,183,255,.22)}
-.kpi-primary:before{content:'';display:block;height:3px;border-radius:999px;background:linear-gradient(90deg,#79b2ff,#63f1df);margin:-4px 0 10px}
-.tabs{
-  display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:10px;z-index:10;
-  background:linear-gradient(180deg,rgba(10,16,31,.92),rgba(10,16,31,.72));
-  border:1px solid var(--line);border-radius:14px;padding:8px;
-}
-.tabbtn{
-  padding:9px 13px;border:1px solid #2d4474;border-radius:999px;
-  background:linear-gradient(180deg,#13213f,#101a32);color:#9fb3dd;
-  font-size:.84rem;font-weight:600;cursor:pointer;transition:all .18s ease
-}
-.tabbtn.active{
-  color:#eef5ff;
-  border-color:#77adff;
-  background:linear-gradient(180deg,#234279,#1a315e);
-  box-shadow:0 0 0 3px rgba(111,168,255,.20), 0 6px 16px rgba(42,92,190,.25);
-}
-.tabbtn:hover{transform:translateY(-1px);border-color:#78a9ff;box-shadow:0 0 0 3px rgba(111,168,255,.14)}
-.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line-soft)}
-.table-wrap table{min-width:680px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid var(--line-soft);text-align:left}
-th{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;background:rgba(6,12,24,.55)}
-tr:hover td{background:rgba(255,255,255,.02)}
-#agentTable tbody td:nth-child(2),#modelTable tbody td:nth-child(2),#bucketTable tbody td:nth-child(2){font-weight:800;color:#eef4ff}
-#agentTable tbody td:nth-child(5){color:var(--muted);font-size:.84rem}
-summary{cursor:pointer;color:#d3e2ff}
-.hidden{display:none}
-.bar{display:inline-block;width:130px;height:8px;background:#22365f;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-.filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
-.input{width:100%;padding:10px;border-radius:11px;border:1px solid var(--line);background:#0c1730;color:var(--text)}
-.input.active{border-color:#6fa8ff;box-shadow:0 0 0 2px rgba(111,168,255,.18)}
-.filter-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:.72rem;color:#dce8ff;background:#102043}
-.spark{height:120px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
-.spark svg{width:100%;height:100%}
-.spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(99,241,223,.35))}
-.subpanel{margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line-soft);background:linear-gradient(170deg,#101b33,#0c162b)}
-.subpanel h4{margin:0 0 8px;font-size:.86rem;color:#d8e7ff;letter-spacing:.02em}
-@media(max-width:980px){
-  body{padding:12px}
-  .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .kpi-primary{grid-column:span 2}
-  .filter{grid-template-columns:1fr 1fr}
-}
-@media(max-width:640px){
-  .h-title{font-size:1.25rem}
-  .h-sub{font-size:.78rem}
-  .strip{grid-template-columns:1fr}
-  .kpi-primary{grid-column:span 1}
-  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:static}
-  .tabbtn{width:100%;text-align:center;padding:10px 8px}
-  .filter{grid-template-columns:1fr}
-  .card{padding:12px}
-  .v{font-size:1.25rem}
-}
+:root{--bg-0:#06080f;--bg-1:#0c111b;--bg-2:#111827;--surface-1:#111a2a;--surface-2:#162235;--surface-3:#1b2b42;--line:#2a3750;--line-strong:#3a4e72;--text:#edf2ff;--text-muted:#9aaccc;--text-soft:#7f91b2;--brand:#7aa2ff;--brand-soft:#4d7fe8;--accent:#4ddac6;--ok:#32c77b;--warn:#f4b955;--bad:#ef5b6f;--info:#5aa9ff;--radius:14px;--radius-lg:18px;--shadow-1:0 12px 28px rgba(0,0,0,.28);--shadow-2:0 20px 52px rgba(0,0,0,.42)}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);background:radial-gradient(900px 420px at 12% -5%, rgba(86,124,213,.22), transparent 60%),linear-gradient(165deg,var(--bg-1),var(--bg-0));}
+.app{max-width:1440px;margin:0 auto;padding:16px;display:grid;grid-template-columns:260px 1fr;gap:14px;min-height:100vh}.sidebar,.main{min-width:0}
+.card-l1,.card-l2,.card-l3{border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(165deg,var(--surface-1),#0f1828);box-shadow:var(--shadow-1)}.card-l2{background:linear-gradient(165deg,var(--surface-2),#121f30)}.card-l3{background:linear-gradient(165deg,var(--surface-3),#152236)}
+.header{padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:flex-end}.title h1{margin:0;font-size:1.35rem;letter-spacing:.01em}.title p{margin:4px 0 0;color:var(--text-muted);font-size:.85rem}
+.meta{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}.pill{padding:6px 10px;border:1px solid var(--line-strong);background:#122033;border-radius:999px;color:#dce7ff;font-size:.74rem}
+.live{display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:.8rem}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 6px rgba(50,199,123,.15)}
+.nav{padding:10px}.PremiumTabs{display:flex;flex-direction:column;gap:6px}
+.tabbtn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 12px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--text-muted);cursor:pointer;transition:.18s}.tabbtn:hover{background:#18273d;border-color:var(--line);color:var(--text)}.tabbtn.active{background:linear-gradient(160deg,#243b62,#1a2e4e);border-color:#6288d9;color:#eff5ff;box-shadow:0 0 0 2px rgba(107,144,230,.2)}
+.content{display:grid;gap:12px}.HeroStatusCard{padding:16px;border:1px solid #3b5684;background:linear-gradient(160deg,#1e3154,#172741);display:flex;justify-content:space-between;gap:12px}.HeroStatusCard .state{font-size:1.5rem;font-weight:800}.HeroStatusCard .sub{color:var(--text-muted);font-size:.82rem}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.MetricCard{padding:12px;border-radius:var(--radius)}.MetricCard .label{font-size:.76rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:.07em}.MetricCard .value{font-size:1.25rem;font-weight:800;margin-top:6px}.MetricCard .hint{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+.FilterToolbar{padding:12px}.filter-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px}.input,select,button{font:inherit}.input{width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#0d1726;color:var(--text);transition:.18s}.input:hover{border-color:#49648f}.input:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px rgba(122,162,255,.2)}.btn{padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#132136;color:#dce7ff;cursor:pointer}.btn:hover{background:#1a2a41}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{font-size:.74rem;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#13233a}
+.tabsec{animation:fadeSlide .18s ease}.hidden{display:none!important}@keyframes fadeSlide{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+.SectionHeader{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.SectionHeader h3{margin:0;font-size:1rem}.SectionHeader p{margin:0;color:var(--text-muted);font-size:.8rem}
+.DataPanel{padding:12px}.split{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table-wrap table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:9px 10px;border-bottom:1px solid #22314a;text-align:left} thead th{position:sticky;top:0;background:#101a29;z-index:1;color:var(--text-muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}tbody tr:hover td{background:#16253a}
+.progress{position:relative;height:8px;background:#22334d;border-radius:999px;overflow:hidden;min-width:120px;display:inline-block;vertical-align:middle;margin-right:8px}.progress>span{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--brand),var(--accent));}
+.ranked-row{display:grid;grid-template-columns:1.6fr 1fr 48px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #24344f}.ranked-row strong{display:block}.ranked-row span{color:var(--text-muted);font-size:.78rem}.ranked-row em{font-style:normal;font-size:.8rem;color:#dbe7ff;text-align:right}
+.cards-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.InsightCard{padding:12px;border-radius:12px;transition:.2s}.InsightCard:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}.InsightCard .rank{font-size:.72rem;color:var(--text-soft)}.InsightCard h4{margin:4px 0}.InsightCard .value-sm{font-weight:700}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.status-dot.up{background:var(--bad)}.status-dot.down{background:var(--ok)}.status-dot.flat{background:var(--info)}
+.row-toggle{background:none;border:none;color:#e7efff;padding:0;cursor:pointer;font:inherit;font-weight:600}
+.expand-row{display:none}.expand-row.open{display:table-row}.expand-inner{padding:8px 0}.expand-inner ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}.expand-inner li{display:flex;justify-content:space-between;gap:10px;padding:8px;border:1px solid #2a3954;border-radius:10px;background:#121f33}.expand-inner code{color:#c9daff;font-size:.74rem}
+.status-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.StatusBadge{font-size:.7rem;padding:3px 7px;border-radius:999px;border:1px solid}.critical{color:#ffd9df;border-color:#8d3342;background:#3b1920}.warn{color:#ffe8bf;border-color:#8e6430;background:#322615}.info{color:#d9ebff;border-color:#325c8f;background:#15263d}.resolved{color:#d0ffea;border-color:#2f7a63;background:#123228}
+.findings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.finding{padding:12px;border-radius:12px;border:1px solid var(--line);background:#121f33}.finding header{display:flex;align-items:center;gap:8px}.finding h4{margin:0}.finding dl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.finding dt{font-size:.72rem;color:var(--text-soft)}.finding dd{margin:0;font-size:.82rem}
+.legend{color:var(--text-muted);font-size:.78rem}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.muted{color:var(--text-muted)}
+@media (max-width:1100px){.app{grid-template-columns:1fr}.sidebar{order:2}.split,.grid4,.cards-3,.status-strip,.findings{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.split,.grid4,.cards-3,.status-strip,.findings{grid-template-columns:1fr}.filter-grid{grid-template-columns:1fr}.HeroStatusCard{flex-direction:column}.app{padding:10px}}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="card hero surface-1">
-    <div>
-      <div class="h-title">OpenClaw Command Dashboard</div>
-      <div class="h-sub">Usage, risk, and execution telemetry in one control surface</div>
-      <div class="badge">Live snapshots • estimated token/cost analytics</div><div class="badge">build ${buildId}</div>
-    </div>
-    <div class="k">Updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div>
-  </div>
-
-  <div class="zone-title">Performance Snapshot</div>
-  <div class="strip" style="margin-top:6px">
-    <div class="card kpi-primary"><div class="k">Primary signal</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'Attention' : 'Stable'}</div><div class="k">Anomaly check · Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs previous snapshot</div></div>
-    <div class="card"><div class="k">Token burn (today, est.)</div><div class="v">${total.toLocaleString()}</div></div>
-    <div class="card"><div class="k">Cost (today, est.)</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
-    <div class="card"><div class="k">Top consumer</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,42)}</div></div>
-  </div>
-
-  <div class="zone-title">Navigation</div>
-  <div class="card tabs surface-2">
-    <button class="tabbtn" data-tab="overview">Overview</button>
-    <button class="tabbtn" data-tab="cost">Cost & Model Mix</button>
-    <button class="tabbtn" data-tab="agents">Agent Load</button>
-    <button class="tabbtn" data-tab="context">Context Footprint</button>
-    <button class="tabbtn" data-tab="security">Security</button>
-    <button class="tabbtn" data-tab="insights">5-Day Insights</button>
-  </div>
-
-  <div class="zone-title">Filters</div>
-  <div class="card filter surface-3">
-    <input id="q" class="input" placeholder="Search (session key, file, text…)" />
-    <input id="fAgent" class="input" placeholder="Agent" />
-    <input id="fModel" class="input" placeholder="Model" />
-    <input id="fBucket" class="input" placeholder="Bucket/date" />
-  </div>
-  <div id="filterChips" class="filter-chips"></div>
-
-  <section id="tab-overview" class="card tabsec surface-1"><h3>Overview</h3>
-    <div class="subpanel">
-      <h4>System snapshot</h4>
-      <div class="table-wrap"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
-        <tr><td>Agents</td><td>${statusOverview.Agents || 'n/a'}</td></tr>
-        <tr><td>Sessions</td><td>${statusOverview.Sessions || 'n/a'}</td></tr>
-        <tr><td>Memory</td><td>${statusOverview.Memory || 'n/a'}</td></tr>
-        <tr><td>Heartbeat</td><td>${statusOverview.Heartbeat || 'n/a'}</td></tr>
-        <tr><td>Gateway</td><td>${statusOverview.Gateway || 'n/a'}</td></tr>
-        <tr><td>Update</td><td>${statusOverview.Update || 'n/a'}</td></tr>
-        <tr><td>Codex left today</td><td>${planUsage.dayLeftPercent ?? 'n/a'}${planUsage.dayLeftPercent != null ? '%' : ''}${planUsage.dayLeftText ? ` · ${planUsage.dayLeftText}` : ''}</td></tr>
-        <tr><td>Codex left this week</td><td>${planUsage.weekLeftPercent ?? 'n/a'}${planUsage.weekLeftPercent != null ? '%' : ''}${planUsage.weekLeftText ? ` · ${planUsage.weekLeftText}` : ''}</td></tr>
-        <tr><td>Plan snapshot model</td><td>${planUsage.model || 'n/a'}</td></tr>
-      </tbody></table></div>
-    </div>
-
-    <div class="subpanel">
-      <h4>Trend pulse</h4>
-      <div class="k">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
-      <div class="k" style="margin-top:8px">Token trend (last 12 snapshots)</div>
-      <div class="spark" title="Recent token trend (last 12 snapshots)">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
-          <polyline points="${sparkPoints || '0,80 100,80'}"></polyline>
-        </svg>
+<div class="app">
+  <aside class="sidebar">
+    <div class="card-l1 nav">
+      <div class="PremiumTabs">
+        <button class="tabbtn active" data-tab="overview"><span>Overview</span><small>Health</small></button>
+        <button class="tabbtn" data-tab="cost"><span>Cost & Model Mix</span><small>Analytics</small></button>
+        <button class="tabbtn" data-tab="agents"><span>Agent Load</span><small>Operations</small></button>
+        <button class="tabbtn" data-tab="context"><span>Context Footprint</span><small>Optimization</small></button>
+        <button class="tabbtn" data-tab="security"><span>Security</span><small>Posture</small></button>
+        <button class="tabbtn" data-tab="insights"><span>5-Day Insights</span><small>Narrative</small></button>
       </div>
     </div>
+  </aside>
 
-    <div class="subpanel">
-      <h4>Token attribution</h4>
-      <div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable">${bucketRows}</tbody></table></div>
-    </div>
+  <main class="main content">
+    <header class="card-l1 header">
+      <div class="title"><h1>OpenClaw Command Dashboard</h1><p>Operational telemetry for usage, cost, risk, and execution quality.</p></div>
+      <div class="meta"><span class="pill">Live snapshot</span><span class="pill mono">build ${buildId}</span><div class="live"><span class="dot"></span>Updated ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div></div>
+    </header>
 
-    <details><summary>Snapshot history (expanded on demand)</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></div></details>
-  </section>
+    <section class="HeroStatusCard card-l2"><div><div class="label">Primary signal</div><div class="state" style="color:${Math.abs(deltaPct)>=15?'var(--bad)':'var(--ok)'}">${Math.abs(deltaPct)>=15?'Attention Required':'System Stable'}</div><div class="sub">5-second health read · burn delta ${delta>=0?'+':''}${delta.toLocaleString()} (${deltaPct.toFixed(1)}%)</div></div><div class="legend">Critical ${sec.critical} · Warn ${sec.warn} · Info ${sec.info}</div></section>
+    <section class="grid4">${metricCards}</section>
 
-  <section id="tab-cost" class="card tabsec hidden surface-2"><h3>Cost & Models</h3>
-    <div class="table-wrap"><table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody>${modelRows}</tbody></table></div>
-    <details><summary>Per-model within attribution buckets</summary><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody>${bucketModelRows}</tbody></table></div></details>
-    <div class="card"><h4>Recommended Actions (top 3)</h4><ul><li>${recommendedActions[0]}</li><li>${recommendedActions[1]}</li><li>${recommendedActions[2]}</li></ul></div>
-  </section>
+    <section class="FilterToolbar card-l2"><div class="filter-grid"><input id="q" class="input" placeholder="Search sessions, files, incidents…" /><input id="fAgent" class="input" list="agentList" placeholder="Agent" /><input id="fModel" class="input" list="modelList" placeholder="Model" /><input id="fBucket" class="input" list="bucketList" placeholder="Bucket or date" /><button id="clearFilters" class="btn">Reset</button></div><datalist id="agentList">${agentOptions}</datalist><datalist id="modelList">${modelOptions}</datalist><datalist id="bucketList">${bucketOptions}</datalist><div id="filterChips" class="chips"></div></section>
 
-  <section id="tab-agents" class="card tabsec hidden surface-2"><h3>Agents</h3>
-    <div class="table-wrap"><table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody>${agentRows}</tbody></table></div>
-    <details><summary>Top token-consuming sessions</summary><div class="table-wrap"><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody>${topRows}</tbody></table></div></details>
-  </section>
+    <section id="tab-overview" class="tabsec">
+      <div class="split"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>System Summary</h3><p>Structured runtime posture</p></div><div class="table-wrap"><table><thead><tr><th>Signal</th><th>Value</th></tr></thead><tbody>${overviewRows}</tbody></table></div></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Trend Visualization</h3><p>Last 12 snapshots</p></div><svg viewBox="0 0 100 100" style="height:150px;width:100%"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7aa2ff"/><stop offset="100%" stop-color="#4ddac6"/></linearGradient></defs><polyline points="${sparkPoints || '0,80 100,80'}" fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round"/></svg><p class="legend">Micro-trend context for burn velocity and stability.</p></article></div>
+      <article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Bucket Share Breakdown</h3><p>Ranked load contribution</p></div>${bucketVisual}</article>
+      <details class="DataPanel card-l2" style="margin-top:10px"><summary>Snapshot History</summary><div class="table-wrap" style="margin-top:8px"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Tokens</th><th>Security</th></tr></thead><tbody>${historyRows}</tbody></table></div></details>
+    </section>
 
-  <section id="tab-context" class="card tabsec hidden surface-2"><h3>Context Files</h3>
-    <div class="badge">files: ${Number(contextProfiler.fileCount || 0).toLocaleString()}</div><div class="badge">bytes: ${Number(contextProfiler.totalBytes || 0).toLocaleString()}</div><div class="badge">lines: ${Number(contextProfiler.totalLines || 0).toLocaleString()}</div><div class="badge">estimated tokens: ${Number(contextProfiler.totalEstimatedTokens || 0).toLocaleString()}</div>
-    <details open><summary>Context File Profiler</summary><div class="table-wrap"><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></div></details>
-    <details><summary>Top-10 Heaviest Context Files</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></div></details>
-  </section>
+    <section id="tab-cost" class="tabsec hidden"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Ranked Model Cards</h3><p>Comparative token contribution</p></div><div class="cards-3">${modelCards}</div></article><div class="split" style="margin-top:10px"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Token Distribution by Bucket</h3><p>Model composition per bucket</p></div><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Model mix</th></tr></thead><tbody>${bucketModelRows}</tbody></table></div></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Actionable Priorities</h3><p>Execution queue</p></div>${recommendedActions.map(a=>`<article class="InsightCard card-l3"><div class="pill">${a.prio}</div><h4>${a.title}</h4><p class="muted">${a.body}</p></article>`).join('')}</article></div></section>
 
-  <section id="tab-security" class="card tabsec hidden surface-2"><h3>Security</h3>
-    <div class="badge">Critical: ${sec.critical} (${(sec.critical - psec.critical) >= 0 ? '+' : ''}${sec.critical - psec.critical})</div>
-    <div class="badge">Warn: ${sec.warn} (${(sec.warn - psec.warn) >= 0 ? '+' : ''}${sec.warn - psec.warn})</div>
-    <div class="badge">Info: ${sec.info} (${(sec.info - psec.info) >= 0 ? '+' : ''}${sec.info - psec.info})</div>
-    <div class="k">Attribution rules: cron=${attributionRules.cron || 'n/a'} · interactive=${attributionRules.interactive || 'n/a'} · system/other=${attributionRules['system/other'] || 'n/a'}</div>
-  </section>
+    <section id="tab-agents" class="tabsec hidden"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Ranked Agent Load</h3><p>Sortable with drilldown</p></div><div class="table-wrap"><table id="agentTable"><thead><tr><th data-sort="text">Agent</th><th data-sort="num">Tokens</th><th>Share</th><th>Trend</th><th data-sort="text">Last active</th></tr></thead><tbody>${agentRows}</tbody></table></div></article></section>
 
-  <section id="tab-insights" class="card tabsec hidden surface-2"><h3>Insights</h3>
-    <h4>5-day AI Insights ${insights.partial ? '(partial window)' : ''}</h4><div class="badge">days used: ${(insights.last5Days || []).length}/5</div>
-    <ul>${insightBullets}</ul>
-    <h4>Rollups & Exports</h4>
-    <ul>${insightLinks}</ul>
-    <div class="k">Preserved exports and rollup links are available above.</div>
-  </section>
+    <section id="tab-context" class="tabsec hidden"><section class="grid4"><article class="MetricCard card-l2"><div class="label">Total files</div><div class="value">${Number(contextProfiler.fileCount||0).toLocaleString()}</div></article><article class="MetricCard card-l2"><div class="label">Total bytes</div><div class="value">${Number(contextProfiler.totalBytes||0).toLocaleString()}</div></article><article class="MetricCard card-l2"><div class="label">Token weight</div><div class="value">${Number(contextProfiler.totalEstimatedTokens||0).toLocaleString()}</div></article><article class="MetricCard card-l2"><div class="label">Largest offender</div><div class="value" style="font-size:.9rem">${contextProfiler.top10?.[0]?.path || 'n/a'}</div></article></section><details open class="DataPanel card-l2" style="margin-top:10px"><summary>Grouped file categories</summary><p class="legend">memory/*, agents/*, workspace root</p></details><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Context File Table</h3><p>Sticky header + fast scan density</p></div><div class="table-wrap"><table id="contextTable"><thead><tr><th data-sort="text">Path</th><th data-sort="num">Bytes</th><th data-sort="num">Lines</th><th data-sort="num">Est tokens</th><th data-sort="text">Last modified</th></tr></thead><tbody>${profilerRows}</tbody></table></div></article><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Top Heavy Files</h3><p>Optimization candidates</p></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est tokens</th></tr></thead><tbody>${top10Rows}</tbody></table></div></article></section>
+
+    <section id="tab-security" class="tabsec hidden"><section class="status-strip"><article class="MetricCard card-l2"><div class="label">Critical</div><div class="value" style="color:var(--bad)">${sec.critical}</div></article><article class="MetricCard card-l2"><div class="label">Warn</div><div class="value" style="color:var(--warn)">${sec.warn}</div></article><article class="MetricCard card-l2"><div class="label">Info</div><div class="value" style="color:var(--info)">${sec.info}</div></article><article class="MetricCard card-l2"><div class="label">Resolved</div><div class="value" style="color:var(--ok)">${Math.max(0,(psec.critical||0)-(sec.critical||0))}</div></article></section><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Incident Findings</h3><p>Severity, confidence, recommendations</p></div><div class="findings">${findings}</div><p class="legend" style="margin-top:10px">Rules: cron=${attributionRules.cron || 'n/a'} · interactive=${attributionRules.interactive || 'n/a'} · system/other=${attributionRules['system/other'] || 'n/a'}</p></article></section>
+
+    <section id="tab-insights" class="tabsec hidden"><div class="split"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Daily Trend Narrative</h3><p>${insights.partial ? 'Partial 5-day window' : 'Full 5-day window'}</p></div><ul>${insightBullets}</ul></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Top Movers & Shifts</h3><p>Anomaly notes</p></div><p class="muted">Biggest shifts are extracted from rollup deltas and highlighted in trend bullets.</p></article></div><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Exports</h3><p>Download artifacts</p></div><ul>${insightLinks}</ul><p class="legend">Summary markdown: <a href="reports/daily-rollups/summary-5d.md" target="_blank" rel="noreferrer">reports/daily-rollups/summary-5d.md</a></p></article></section>
+  </main>
 </div>
 <script>
 (function(){
-  function show(tab){
-    document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));
-    var el=document.getElementById('tab-'+tab);
-    if(el)el.classList.remove('hidden');
-    document.querySelectorAll('.tabbtn').forEach(function(btn){
-      if(btn.getAttribute('data-tab')===tab) btn.classList.add('active');
-      else btn.classList.remove('active');
-    });
+  function show(tab){document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));const el=document.getElementById('tab-'+tab); if(el) el.classList.remove('hidden');document.querySelectorAll('.tabbtn').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===tab));}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.tab)));show('overview');
+  function txt(v){return (v||'').toLowerCase()}
+  function applyFilters(){
+    const q=document.getElementById('q').value.trim();const a=document.getElementById('fAgent').value.trim();const m=document.getElementById('fModel').value.trim();const b=document.getElementById('fBucket').value.trim();
+    const filters=[['Search',q],['Agent',a],['Model',m],['Bucket/Date',b]].filter(x=>x[1]);document.getElementById('filterChips').innerHTML=filters.map(function(f){return '<span class="chip">'+f[0]+': '+f[1]+'</span>';}).join('');
+    document.querySelectorAll('#agentTable tbody tr.data-row').forEach(r=>{const ok = (!q || txt(r.innerText).includes(txt(q))) && (!a || txt(r.dataset.agent).includes(txt(a)));const target=document.getElementById(r.querySelector('[data-expand]').dataset.expand);r.style.display = ok ? '' : 'none';if(target) target.style.display = ok && target.classList.contains('open') ? '' : 'none';});
+    document.querySelectorAll('#contextTable tbody tr').forEach(r=>{const ok = (!q || txt(r.innerText).includes(txt(q))) && (!b || txt(r.dataset.filecat||'').includes(txt(b)) || txt(r.innerText).includes(txt(b)));r.style.display = ok ? '' : 'none';});
+    document.querySelectorAll('[data-model]').forEach(c=>c.style.display = (!m || txt(c.dataset.model).includes(txt(m))) ? '' : 'none');
+    document.querySelectorAll('[data-bucket]').forEach(c=>c.style.display = (!b || txt(c.dataset.bucket).includes(txt(b))) ? '' : 'none');
   }
-  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-tab'))));
-  show('overview');
-
-  function ftxt(v){return (v||'').toLowerCase()}
-  function apply(){
-    var qEl=document.getElementById('q'), aEl=document.getElementById('fAgent'), mEl=document.getElementById('fModel'), bEl=document.getElementById('fBucket');
-    var q=ftxt(qEl.value),a=ftxt(aEl.value),m=ftxt(mEl.value),b=ftxt(bEl.value);
-
-    [qEl,aEl,mEl,bEl].forEach(function(el){
-      if(!el) return;
-      if((el.value||'').trim()) el.classList.add('active'); else el.classList.remove('active');
-    });
-
-    var chips=[];
-    if(q) chips.push('Search: '+qEl.value.trim());
-    if(a) chips.push('Agent: '+aEl.value.trim());
-    if(m) chips.push('Model: '+mEl.value.trim());
-    if(b) chips.push('Bucket/date: '+bEl.value.trim());
-    var chipWrap=document.getElementById('filterChips');
-    if(chipWrap) chipWrap.innerHTML = chips.map(function(c){ return '<span class="chip">'+c.replace(/</g,'&lt;')+'</span>'; }).join('');
-
-    [['#sessionTable tbody tr',q,a,m,b],['#contextTable tbody tr',q,'','','']].forEach(function(set){
-      document.querySelectorAll(set[0]).forEach(function(r){
-        var txt=ftxt(r.innerText); var ok=true;
-        if(set[1] && !txt.includes(set[1])) ok=false;
-        if(set[2] && !ftxt(r.getAttribute('data-agent')).includes(set[2])) ok=false;
-        if(set[3] && !ftxt(r.getAttribute('data-model')).includes(set[3])) ok=false;
-        if(set[4] && !ftxt(r.getAttribute('data-bucket')).includes(set[4]) && !txt.includes(set[4])) ok=false;
-        r.style.display=ok?'':'none';
-      });
-    });
-  }
-  ['q','fAgent','fModel','fBucket'].forEach(id=>{var x=document.getElementById(id); if(x) x.addEventListener('input',apply)});
+  ['q','fAgent','fModel','fBucket'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilters));
+  document.getElementById('clearFilters').addEventListener('click',()=>{['q','fAgent','fModel','fBucket'].forEach(id=>document.getElementById(id).value='');applyFilters();});
+  document.querySelectorAll('.row-toggle').forEach(btn=>btn.addEventListener('click',()=>{const target=document.getElementById(btn.dataset.expand); if(!target) return;target.classList.toggle('open');target.style.display = target.classList.contains('open') ? '' : 'none';}));
+  function makeSortable(table){if(!table) return;table.querySelectorAll('thead th[data-sort]').forEach((th,col)=>{let asc=true;th.addEventListener('click',()=>{const rows=[...table.querySelectorAll('tbody tr.data-row')];rows.sort((ra,rb)=>{const va=ra.children[col].innerText.trim(); const vb=rb.children[col].innerText.trim();if(th.dataset.sort==='num') return asc ? (parseFloat(va.replace(/[^\d.-]/g,''))||0)-(parseFloat(vb.replace(/[^\d.-]/g,''))||0) : (parseFloat(vb.replace(/[^\d.-]/g,''))||0)-(parseFloat(va.replace(/[^\d.-]/g,''))||0);return asc ? va.localeCompare(vb) : vb.localeCompare(va);});const tb=table.querySelector('tbody');rows.forEach(r=>{tb.appendChild(r); const exp=document.getElementById(r.querySelector('[data-expand]')?.dataset.expand||''); if(exp) tb.appendChild(exp);});asc=!asc;});});}
+  makeSortable(document.getElementById('agentTable'));
 })();
 </script>
 </body>

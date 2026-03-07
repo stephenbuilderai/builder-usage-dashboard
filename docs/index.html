@@ -2,279 +2,158 @@
 <html>
 <head>
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>OpenClaw Usage Dashboard</title>
+<title>OpenClaw Command Dashboard</title>
 <style>
-:root{
-  --bg:#060913;
-  --bg-soft:#0b1222;
-  --panel:#0f172bcc;
-  --panel-strong:#111d35ee;
-  --surface-1:#0d162b;
-  --surface-2:#121f3a;
-  --surface-3:#16274a;
-  --line:#2a3b66;
-  --line-soft:#1c2b4f;
-  --text:#f4f7ff;
-  --muted:#9eb1d9;
-  --accent:#6fa8ff;
-  --accent-2:#63f1df;
-  --ok:#7de0a8;
-  --warn:#f7cc76;
-  --bad:#ff8f9d;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  color:var(--text);
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  padding:18px;
-  line-height:1.45;
-  background:
-    radial-gradient(1000px 500px at 10% -5%, rgba(111,168,255,.22), transparent 60%),
-    radial-gradient(800px 400px at 95% 0%, rgba(99,241,223,.16), transparent 60%),
-    linear-gradient(160deg,var(--bg-soft) 0%,var(--bg) 60%);
-  min-height:100vh;
-}
-.container{max-width:1280px;margin:0 auto}
-.card{
-  background:linear-gradient(165deg,var(--panel-strong),var(--panel));
-  border:1px solid var(--line-soft);
-  border-radius:18px;
-  padding:16px;
-  margin-top:12px;
-  box-shadow:0 10px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.03);
-  backdrop-filter: blur(8px);
-}
-.surface-1{background:linear-gradient(165deg,var(--surface-1),#0f1a31)}
-.surface-2{background:linear-gradient(165deg,var(--surface-2),#101d37)}
-.surface-3{background:linear-gradient(165deg,var(--surface-3),#132448)}
-.hero{
-  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
-  border:1px solid var(--line);
-}
-.h-title{font-size:1.75rem;font-weight:900;letter-spacing:.2px}
-.h-sub{color:var(--muted);font-size:.9rem;margin-top:4px}
-.k{color:var(--muted);font-size:.8rem}
-.v{font-size:1.6rem;font-weight:900;letter-spacing:.2px}
-.badge{
-  display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
-  background:linear-gradient(180deg,#0f1c37,#0d1730);font-size:.75rem;margin:5px 6px 0 0;color:#dce8ff
-}
-.zone-title{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:4px 0 8px}
-.strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.strip .card{margin-top:0;border-color:var(--line)}
-.strip .card .k{font-size:.76rem}
-.kpi-primary{grid-column:span 2;border:1px solid #5e86cd !important;background:linear-gradient(160deg,#1d3768,#13264a);box-shadow:0 14px 34px rgba(13,25,52,.45), 0 0 0 1px rgba(126,174,255,.12) inset}
-.kpi-primary .v{font-size:2rem;text-shadow:0 0 18px rgba(122,183,255,.22)}
-.kpi-primary:before{content:'';display:block;height:3px;border-radius:999px;background:linear-gradient(90deg,#79b2ff,#63f1df);margin:-4px 0 10px}
-.tabs{
-  display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:10px;z-index:10;
-  background:linear-gradient(180deg,rgba(10,16,31,.92),rgba(10,16,31,.72));
-  border:1px solid var(--line);border-radius:14px;padding:8px;
-}
-.tabbtn{
-  padding:9px 13px;border:1px solid #2d4474;border-radius:999px;
-  background:linear-gradient(180deg,#13213f,#101a32);color:#9fb3dd;
-  font-size:.84rem;font-weight:600;cursor:pointer;transition:all .18s ease
-}
-.tabbtn.active{
-  color:#eef5ff;
-  border-color:#77adff;
-  background:linear-gradient(180deg,#234279,#1a315e);
-  box-shadow:0 0 0 3px rgba(111,168,255,.20), 0 6px 16px rgba(42,92,190,.25);
-}
-.tabbtn:hover{transform:translateY(-1px);border-color:#78a9ff;box-shadow:0 0 0 3px rgba(111,168,255,.14)}
-.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line-soft)}
-.table-wrap table{min-width:680px}
-table{width:100%;border-collapse:collapse}
-th,td{padding:10px;border-bottom:1px solid var(--line-soft);text-align:left}
-th{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;background:rgba(6,12,24,.55)}
-tr:hover td{background:rgba(255,255,255,.02)}
-#agentTable tbody td:nth-child(2),#modelTable tbody td:nth-child(2),#bucketTable tbody td:nth-child(2){font-weight:800;color:#eef4ff}
-#agentTable tbody td:nth-child(5){color:var(--muted);font-size:.84rem}
-summary{cursor:pointer;color:#d3e2ff}
-.hidden{display:none}
-.bar{display:inline-block;width:130px;height:8px;background:#22365f;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
-.filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
-.input{width:100%;padding:10px;border-radius:11px;border:1px solid var(--line);background:#0c1730;color:var(--text)}
-.input.active{border-color:#6fa8ff;box-shadow:0 0 0 2px rgba(111,168,255,.18)}
-.filter-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.chip{padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:.72rem;color:#dce8ff;background:#102043}
-.spark{height:120px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
-.spark svg{width:100%;height:100%}
-.spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(99,241,223,.35))}
-.subpanel{margin-top:10px;padding:12px;border-radius:14px;border:1px solid var(--line-soft);background:linear-gradient(170deg,#101b33,#0c162b)}
-.subpanel h4{margin:0 0 8px;font-size:.86rem;color:#d8e7ff;letter-spacing:.02em}
-@media(max-width:980px){
-  body{padding:12px}
-  .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .kpi-primary{grid-column:span 2}
-  .filter{grid-template-columns:1fr 1fr}
-}
-@media(max-width:640px){
-  .h-title{font-size:1.25rem}
-  .h-sub{font-size:.78rem}
-  .strip{grid-template-columns:1fr}
-  .kpi-primary{grid-column:span 1}
-  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:static}
-  .tabbtn{width:100%;text-align:center;padding:10px 8px}
-  .filter{grid-template-columns:1fr}
-  .card{padding:12px}
-  .v{font-size:1.25rem}
-}
+:root{--bg-0:#06080f;--bg-1:#0c111b;--bg-2:#111827;--surface-1:#111a2a;--surface-2:#162235;--surface-3:#1b2b42;--line:#2a3750;--line-strong:#3a4e72;--text:#edf2ff;--text-muted:#9aaccc;--text-soft:#7f91b2;--brand:#7aa2ff;--brand-soft:#4d7fe8;--accent:#4ddac6;--ok:#32c77b;--warn:#f4b955;--bad:#ef5b6f;--info:#5aa9ff;--radius:14px;--radius-lg:18px;--shadow-1:0 12px 28px rgba(0,0,0,.28);--shadow-2:0 20px 52px rgba(0,0,0,.42)}
+*{box-sizing:border-box} html,body{height:100%}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--text);background:radial-gradient(900px 420px at 12% -5%, rgba(86,124,213,.22), transparent 60%),linear-gradient(165deg,var(--bg-1),var(--bg-0));}
+.app{max-width:1440px;margin:0 auto;padding:16px;display:grid;grid-template-columns:260px 1fr;gap:14px;min-height:100vh}.sidebar,.main{min-width:0}
+.card-l1,.card-l2,.card-l3{border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(165deg,var(--surface-1),#0f1828);box-shadow:var(--shadow-1)}.card-l2{background:linear-gradient(165deg,var(--surface-2),#121f30)}.card-l3{background:linear-gradient(165deg,var(--surface-3),#152236)}
+.header{padding:16px 18px;display:flex;justify-content:space-between;gap:12px;align-items:flex-end}.title h1{margin:0;font-size:1.35rem;letter-spacing:.01em}.title p{margin:4px 0 0;color:var(--text-muted);font-size:.85rem}
+.meta{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;align-items:center}.pill{padding:6px 10px;border:1px solid var(--line-strong);background:#122033;border-radius:999px;color:#dce7ff;font-size:.74rem}
+.live{display:flex;align-items:center;gap:8px;color:var(--text-muted);font-size:.8rem}.dot{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 6px rgba(50,199,123,.15)}
+.nav{padding:10px}.PremiumTabs{display:flex;flex-direction:column;gap:6px}
+.tabbtn{display:flex;justify-content:space-between;align-items:center;width:100%;padding:10px 12px;border-radius:12px;border:1px solid transparent;background:transparent;color:var(--text-muted);cursor:pointer;transition:.18s}.tabbtn:hover{background:#18273d;border-color:var(--line);color:var(--text)}.tabbtn.active{background:linear-gradient(160deg,#243b62,#1a2e4e);border-color:#6288d9;color:#eff5ff;box-shadow:0 0 0 2px rgba(107,144,230,.2)}
+.content{display:grid;gap:12px}.HeroStatusCard{padding:16px;border:1px solid #3b5684;background:linear-gradient(160deg,#1e3154,#172741);display:flex;justify-content:space-between;gap:12px}.HeroStatusCard .state{font-size:1.5rem;font-weight:800}.HeroStatusCard .sub{color:var(--text-muted);font-size:.82rem}
+.grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}.MetricCard{padding:12px;border-radius:var(--radius)}.MetricCard .label{font-size:.76rem;color:var(--text-soft);text-transform:uppercase;letter-spacing:.07em}.MetricCard .value{font-size:1.25rem;font-weight:800;margin-top:6px}.MetricCard .hint{font-size:.78rem;color:var(--text-muted);margin-top:4px}
+.FilterToolbar{padding:12px}.filter-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr auto;gap:8px}.input,select,button{font:inherit}.input{width:100%;padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#0d1726;color:var(--text);transition:.18s}.input:hover{border-color:#49648f}.input:focus{outline:0;border-color:var(--brand);box-shadow:0 0 0 3px rgba(122,162,255,.2)}.btn{padding:9px 11px;border-radius:10px;border:1px solid var(--line);background:#132136;color:#dce7ff;cursor:pointer}.btn:hover{background:#1a2a41}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.chip{font-size:.74rem;padding:4px 8px;border-radius:999px;border:1px solid var(--line);background:#13233a}
+.tabsec{animation:fadeSlide .18s ease}.hidden{display:none!important}@keyframes fadeSlide{from{opacity:.3;transform:translateY(4px)}to{opacity:1;transform:none}}
+.SectionHeader{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.SectionHeader h3{margin:0;font-size:1rem}.SectionHeader p{margin:0;color:var(--text-muted);font-size:.8rem}
+.DataPanel{padding:12px}.split{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:12px}.table-wrap table{width:100%;border-collapse:collapse;min-width:700px}
+th,td{padding:9px 10px;border-bottom:1px solid #22314a;text-align:left} thead th{position:sticky;top:0;background:#101a29;z-index:1;color:var(--text-muted);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;cursor:pointer}tbody tr:hover td{background:#16253a}
+.progress{position:relative;height:8px;background:#22334d;border-radius:999px;overflow:hidden;min-width:120px;display:inline-block;vertical-align:middle;margin-right:8px}.progress>span{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--brand),var(--accent));}
+.ranked-row{display:grid;grid-template-columns:1.6fr 1fr 48px;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid #24344f}.ranked-row strong{display:block}.ranked-row span{color:var(--text-muted);font-size:.78rem}.ranked-row em{font-style:normal;font-size:.8rem;color:#dbe7ff;text-align:right}
+.cards-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.InsightCard{padding:12px;border-radius:12px;transition:.2s}.InsightCard:hover{transform:translateY(-2px);box-shadow:var(--shadow-2)}.InsightCard .rank{font-size:.72rem;color:var(--text-soft)}.InsightCard h4{margin:4px 0}.InsightCard .value-sm{font-weight:700}
+.status-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px}.status-dot.up{background:var(--bad)}.status-dot.down{background:var(--ok)}.status-dot.flat{background:var(--info)}
+.row-toggle{background:none;border:none;color:#e7efff;padding:0;cursor:pointer;font:inherit;font-weight:600}
+.expand-row{display:none}.expand-row.open{display:table-row}.expand-inner{padding:8px 0}.expand-inner ul{list-style:none;padding:0;margin:0;display:grid;gap:6px}.expand-inner li{display:flex;justify-content:space-between;gap:10px;padding:8px;border:1px solid #2a3954;border-radius:10px;background:#121f33}.expand-inner code{color:#c9daff;font-size:.74rem}
+.status-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:10px}
+.StatusBadge{font-size:.7rem;padding:3px 7px;border-radius:999px;border:1px solid}.critical{color:#ffd9df;border-color:#8d3342;background:#3b1920}.warn{color:#ffe8bf;border-color:#8e6430;background:#322615}.info{color:#d9ebff;border-color:#325c8f;background:#15263d}.resolved{color:#d0ffea;border-color:#2f7a63;background:#123228}
+.findings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.finding{padding:12px;border-radius:12px;border:1px solid var(--line);background:#121f33}.finding header{display:flex;align-items:center;gap:8px}.finding h4{margin:0}.finding dl{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.finding dt{font-size:.72rem;color:var(--text-soft)}.finding dd{margin:0;font-size:.82rem}
+.legend{color:var(--text-muted);font-size:.78rem}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace}.muted{color:var(--text-muted)}
+@media (max-width:1100px){.app{grid-template-columns:1fr}.sidebar{order:2}.split,.grid4,.cards-3,.status-strip,.findings{grid-template-columns:1fr 1fr}}
+@media (max-width:700px){.split,.grid4,.cards-3,.status-strip,.findings{grid-template-columns:1fr}.filter-grid{grid-template-columns:1fr}.HeroStatusCard{flex-direction:column}.app{padding:10px}}
 </style>
 </head>
 <body>
-<div class="container">
-  <div class="card hero surface-1">
-    <div>
-      <div class="h-title">OpenClaw Command Dashboard</div>
-      <div class="h-sub">Usage, risk, and execution telemetry in one control surface</div>
-      <div class="badge">Live snapshots • estimated token/cost analytics</div><div class="badge">build 1772902252282</div>
-    </div>
-    <div class="k">Updated: 07/03/2026, 17:50:50</div>
-  </div>
-
-  <div class="zone-title">Performance Snapshot</div>
-  <div class="strip" style="margin-top:6px">
-    <div class="card kpi-primary"><div class="k">Primary signal</div><div class="v" style="color:var(--ok)">Stable</div><div class="k">Anomaly check · Δ +0 vs previous snapshot</div></div>
-    <div class="card"><div class="k">Token burn (today, est.)</div><div class="v">764,795</div></div>
-    <div class="card"><div class="k">Cost (today, est.)</div><div class="v">$6.12</div></div>
-    <div class="card"><div class="k">Top consumer</div><div class="v" style="font-size:1rem">main</div><div class="k">agent:main:discord:channel:147706923899172</div></div>
-  </div>
-
-  <div class="zone-title">Navigation</div>
-  <div class="card tabs surface-2">
-    <button class="tabbtn" data-tab="overview">Overview</button>
-    <button class="tabbtn" data-tab="cost">Cost & Model Mix</button>
-    <button class="tabbtn" data-tab="agents">Agent Load</button>
-    <button class="tabbtn" data-tab="context">Context Footprint</button>
-    <button class="tabbtn" data-tab="security">Security</button>
-    <button class="tabbtn" data-tab="insights">5-Day Insights</button>
-  </div>
-
-  <div class="zone-title">Filters</div>
-  <div class="card filter surface-3">
-    <input id="q" class="input" placeholder="Search (session key, file, text…)" />
-    <input id="fAgent" class="input" placeholder="Agent" />
-    <input id="fModel" class="input" placeholder="Model" />
-    <input id="fBucket" class="input" placeholder="Bucket/date" />
-  </div>
-  <div id="filterChips" class="filter-chips"></div>
-
-  <section id="tab-overview" class="card tabsec surface-1"><h3>Overview</h3>
-    <div class="subpanel">
-      <h4>System snapshot</h4>
-      <div class="table-wrap"><table><thead><tr><th>Item</th><th>Value</th></tr></thead><tbody>
-        <tr><td>Agents</td><td>11 · 8 bootstrap files present · sessions 73 · default main active just now</td></tr>
-        <tr><td>Sessions</td><td>73 active · default gpt-5.2 (272k ctx) · 11 stores</td></tr>
-        <tr><td>Memory</td><td>13 files · 21 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on</td></tr>
-        <tr><td>Heartbeat</td><td>30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled</td></tr>
-        <tr><td>Gateway</td><td>local · ws://127.0.0.1:18789 (local loopback) · reachable 18ms · auth token · 2bf5bd64c8d3 (172.</td></tr>
-        <tr><td>Update</td><td>pnpm · npm latest 2026.3.2</td></tr>
-        <tr><td>Codex left today</td><td>63% · 1h 33m</td></tr>
-        <tr><td>Codex left this week</td><td>14% · 4d 6h</td></tr>
-        <tr><td>Plan snapshot model</td><td>openai-codex/gpt-5.3-codex</td></tr>
-      </tbody></table></div>
-    </div>
-
-    <div class="subpanel">
-      <h4>Trend pulse</h4>
-      <div class="k">Sample 32/73 sessions</div>
-      <div class="k" style="margin-top:8px">Token trend (last 12 snapshots)</div>
-      <div class="spark" title="Recent token trend (last 12 snapshots)">
-        <svg viewBox="0 0 100 100" preserveAspectRatio="none">
-          <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
-          <polyline points="0,4.4075921608108075 9.090909090909092,3.4892758223306686 18.181818181818183,3.4892758223306686 27.27272727272727,3.0477708602064126 36.36363636363637,2.170470554100973 45.45454545454545,1.6760642320388826 54.54545454545454,1.6760642320388826 63.63636363636363,0 72.72727272727273,2.1139569867665102 81.81818181818183,1.5400821019784416 90.9090909090909,10.883930454520566 100,10.883930454520566"></polyline>
-        </svg>
+<div class="app">
+  <aside class="sidebar">
+    <div class="card-l1 nav">
+      <div class="PremiumTabs">
+        <button class="tabbtn active" data-tab="overview"><span>Overview</span><small>Health</small></button>
+        <button class="tabbtn" data-tab="cost"><span>Cost & Model Mix</span><small>Analytics</small></button>
+        <button class="tabbtn" data-tab="agents"><span>Agent Load</span><small>Operations</small></button>
+        <button class="tabbtn" data-tab="context"><span>Context Footprint</span><small>Optimization</small></button>
+        <button class="tabbtn" data-tab="security"><span>Security</span><small>Posture</small></button>
+        <button class="tabbtn" data-tab="insights"><span>5-Day Insights</span><small>Narrative</small></button>
       </div>
     </div>
+  </aside>
 
-    <div class="subpanel">
-      <h4>Token attribution</h4>
-      <div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody id="bucketTable"><tr data-bucket="interactive"><td>interactive</td><td>609,868</td><td>80%</td></tr><tr data-bucket="cron"><td>cron</td><td>154,927</td><td>20%</td></tr><tr data-bucket="system/other"><td>system/other</td><td>0</td><td>0%</td></tr></tbody></table></div>
-    </div>
+  <main class="main content">
+    <header class="card-l1 header">
+      <div class="title"><h1>OpenClaw Command Dashboard</h1><p>Operational telemetry for usage, cost, risk, and execution quality.</p></div>
+      <div class="meta"><span class="pill">Live snapshot</span><span class="pill mono">build 1772903197130</span><div class="live"><span class="dot"></span>Updated 07/03/2026, 18:06:35</div></div>
+    </header>
 
-    <details><summary>Snapshot history (expanded on demand)</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Estimated tokens</th><th>Security</th></tr></thead><tbody><tr><td>1</td><td>07/03/2026, 13:51:01</td><td>30</td><td>771,742</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>2</td><td>07/03/2026, 13:51:10</td><td>30</td><td>771,742</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>3</td><td>07/03/2026, 14:20:38</td><td>30</td><td>756,362</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>4</td><td>07/03/2026, 14:20:51</td><td>30</td><td>756,362</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>5</td><td>07/03/2026, 14:50:40</td><td>30</td><td>835,579</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>6</td><td>07/03/2026, 15:20:40</td><td>30</td><td>836,092</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>7</td><td>07/03/2026, 15:50:39</td><td>32</td><td>869,154</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>8</td><td>07/03/2026, 15:50:52</td><td>32</td><td>869,154</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>9</td><td>07/03/2026, 16:14:31</td><td>32</td><td>820,375</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>10</td><td>07/03/2026, 16:20:38</td><td>32</td><td>828,256</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>11</td><td>07/03/2026, 16:20:51</td><td>32</td><td>828,256</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>12</td><td>07/03/2026, 16:27:52</td><td>32</td><td>832,045</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>13</td><td>07/03/2026, 16:40:32</td><td>32</td><td>839,574</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>14</td><td>07/03/2026, 16:50:38</td><td>32</td><td>843,817</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>15</td><td>07/03/2026, 16:50:52</td><td>32</td><td>843,817</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>16</td><td>07/03/2026, 17:20:36</td><td>32</td><td>858,201</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>17</td><td>07/03/2026, 17:25:44</td><td>32</td><td>840,059</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>18</td><td>07/03/2026, 17:37:45</td><td>32</td><td>844,984</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>19</td><td>07/03/2026, 17:50:38</td><td>32</td><td>764,795</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>20</td><td>07/03/2026, 17:50:50</td><td>32</td><td>764,795</td><td>5 critical · 4 warn · 1 info</td></tr></tbody></table></div></details>
-  </section>
+    <section class="HeroStatusCard card-l2"><div><div class="label">Primary signal</div><div class="state" style="color:var(--ok)">System Stable</div><div class="sub">5-second health read · burn delta -8 (-0.0%)</div></div><div class="legend">Critical 5 · Warn 4 · Info 1</div></section>
+    <section class="grid4"><article class="MetricCard card-l2"><div class="label">Token Burn (est)</div><div class="value">764,787</div><div class="hint">-8 (-0.0%)</div></article><article class="MetricCard card-l2"><div class="label">Estimated Cost</div><div class="value">$6.12</div><div class="hint">Heuristic based</div></article><article class="MetricCard card-l2"><div class="label">Known Token Sessions</div><div class="value">32/73</div><div class="hint">Coverage ratio</div></article><article class="MetricCard card-l2"><div class="label">Context Weight</div><div class="value">16,692 tok</div><div class="hint">36 files</div></article></section>
 
-  <section id="tab-cost" class="card tabsec hidden surface-2"><h3>Cost & Models</h3>
-    <div class="table-wrap"><table id="modelTable"><thead><tr><th>Model</th><th>Estimated tokens</th><th>Share</th></tr></thead><tbody><tr data-model="gpt-5.3-codex"><td>gpt-5.3-codex</td><td>553,449</td><td>72%</td></tr><tr data-model="gpt-5-mini"><td>gpt-5-mini</td><td>171,172</td><td>22%</td></tr><tr data-model="gpt-5.2"><td>gpt-5.2</td><td>40,174</td><td>5%</td></tr></tbody></table></div>
-    <details><summary>Per-model within attribution buckets</summary><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Models</th></tr></thead><tbody><tr><td>cron</td><td>gpt-5-mini: 94,501 · gpt-5.3-codex: 30,918 · gpt-5.2: 29,508</td></tr><tr><td>interactive</td><td>gpt-5.3-codex: 522,531 · gpt-5-mini: 76,671 · gpt-5.2: 10,666</td></tr><tr><td>system/other</td><td>n/a</td></tr></tbody></table></div></details>
-    <div class="card"><h4>Recommended Actions (top 3)</h4><ul><li>Trim high-size context markdown files (top-10 card) to reduce prompt load.</li><li>Address security critical findings first (`openclaw security audit --deep`).</li><li>Monitor daily rollups and act on >15% day-over-day token spikes.</li></ul></div>
-  </section>
+    <section class="FilterToolbar card-l2"><div class="filter-grid"><input id="q" class="input" placeholder="Search sessions, files, incidents…" /><input id="fAgent" class="input" list="agentList" placeholder="Agent" /><input id="fModel" class="input" list="modelList" placeholder="Model" /><input id="fBucket" class="input" list="bucketList" placeholder="Bucket or date" /><button id="clearFilters" class="btn">Reset</button></div><datalist id="agentList"><option value="main"></option><option value="builder"></option><option value="growth-researcher"></option><option value="growth-publisher"></option><option value="growth-content"></option><option value="growth-analyst"></option><option value="growth-engagement"></option><option value="growth-strategist"></option></datalist><datalist id="modelList"><option value="gpt-5.3-codex"></option><option value="gpt-5-mini"></option><option value="gpt-5.2"></option></datalist><datalist id="bucketList"><option value="interactive"></option><option value="cron"></option><option value="system/other"></option></datalist><div id="filterChips" class="chips"></div></section>
 
-  <section id="tab-agents" class="card tabsec hidden surface-2"><h3>Agents</h3>
-    <div class="table-wrap"><table id="agentTable"><thead><tr><th>Agent</th><th>Estimated tokens</th><th>Share</th><th>Trend</th><th>Last active</th></tr></thead><tbody><tr data-agent="main"><td>main</td><td>596,975</td><td><span class="bar"><span style="width:78%"></span></span>78%</td><td>→</td><td>07/03/2026, 17:50:29</td></tr><tr data-agent="builder"><td>builder</td><td>112,346</td><td><span class="bar"><span style="width:15%"></span></span>15%</td><td>→</td><td>05/03/2026, 21:48:26</td></tr><tr data-agent="growth-researcher"><td>growth-researcher</td><td>11,678</td><td><span class="bar"><span style="width:2%"></span></span>2%</td><td>→</td><td>05/03/2026, 21:42:02</td></tr><tr data-agent="growth-publisher"><td>growth-publisher</td><td>11,467</td><td><span class="bar"><span style="width:1%"></span></span>1%</td><td>→</td><td>05/03/2026, 21:43:36</td></tr><tr data-agent="growth-content"><td>growth-content</td><td>11,005</td><td><span class="bar"><span style="width:1%"></span></span>1%</td><td>→</td><td>05/03/2026, 21:43:16</td></tr><tr data-agent="growth-analyst"><td>growth-analyst</td><td>10,666</td><td><span class="bar"><span style="width:1%"></span></span>1%</td><td>→</td><td>05/03/2026, 21:44:40</td></tr><tr data-agent="growth-engagement"><td>growth-engagement</td><td>10,658</td><td><span class="bar"><span style="width:1%"></span></span>1%</td><td>→</td><td>05/03/2026, 21:44:08</td></tr><tr data-agent="growth-strategist"><td>growth-strategist</td><td>0</td><td><span class="bar"><span style="width:0%"></span></span>0%</td><td>→</td><td>05/03/2026, 21:42:37</td></tr></tbody></table></div>
-    <details><summary>Top token-consuming sessions</summary><div class="table-wrap"><table id="sessionTable"><thead><tr><th>Agent</th><th>Session key</th><th>Model</th><th>Estimated tokens</th><th>Bucket</th></tr></thead><tbody><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:discord:channel:1477069238991720579">agent:main:discord:channel:1477069238991720579</td><td>gpt-5.3-codex</td><td>157,834</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:3">agent:main:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>103,549</td><td>interactive</td></tr><tr data-agent="builder" data-model="gpt-5.3-codex" data-bucket="interactive"><td>builder</td><td title="agent:builder:telegram:group:-1003842752959:topic:3">agent:builder:telegram:group:-1003842752959:topic:3</td><td>gpt-5.3-codex</td><td>101,577</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:direct:1773262118">agent:main:telegram:direct:1773262118</td><td>gpt-5.3-codex</td><td>32,399</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:203">agent:main:telegram:group:-1003842752959:topic:203</td><td>gpt-5.3-codex</td><td>27,389</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959">agent:main:telegram:group:-1003842752959</td><td>gpt-5.3-codex</td><td>23,074</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:4">agent:main:telegram:group:-1003842752959:topic:4</td><td>gpt-5.3-codex</td><td>18,979</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:1">agent:main:telegram:group:-1003842752959:topic:1</td><td>gpt-5.3-codex</td><td>17,570</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5-mini" data-bucket="interactive"><td>main</td><td title="agent:main:main">agent:main:main</td><td>gpt-5-mini</td><td>17,210</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5-mini" data-bucket="cron"><td>main</td><td title="agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec">agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec</td><td>gpt-5-mini</td><td>16,240</td><td>cron</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="cron"><td>main</td><td title="agent:main:cron:3f0534d5-8c91-46b6-83e4-58358e7223b8">agent:main:cron:3f0534d5-8c91-46b6-83e4-58358e7223b8</td><td>gpt-5.3-codex</td><td>15,881</td><td>cron</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="interactive"><td>main</td><td title="agent:main:discord:channel:1460618635105145074">agent:main:discord:channel:1460618635105145074</td><td>gpt-5.3-codex</td><td>15,100</td><td>interactive</td></tr><tr data-agent="main" data-model="gpt-5.3-codex" data-bucket="cron"><td>main</td><td title="agent:main:cron:85f946fb-58ed-4f8b-8022-47f08bbdd252">agent:main:cron:85f946fb-58ed-4f8b-8022-47f08bbdd252</td><td>gpt-5.3-codex</td><td>15,037</td><td>cron</td></tr><tr data-agent="main" data-model="gpt-5.2" data-bucket="cron"><td>main</td><td title="agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad">agent:main:cron:904f2d88-581a-44a0-84a7-c9a52035b4ad</td><td>gpt-5.2</td><td>14,975</td><td>cron</td></tr><tr data-agent="main" data-model="gpt-5-mini" data-bucket="interactive"><td>main</td><td title="agent:main:telegram:group:-1003842752959:topic:2">agent:main:telegram:group:-1003842752959:topic:2</td><td>gpt-5-mini</td><td>14,653</td><td>interactive</td></tr></tbody></table></div></details>
-  </section>
+    <section id="tab-overview" class="tabsec">
+      <div class="split"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>System Summary</h3><p>Structured runtime posture</p></div><div class="table-wrap"><table><thead><tr><th>Signal</th><th>Value</th></tr></thead><tbody><tr><td>Agents</td><td>11 · 8 bootstrap files present · sessions 73 · default main active 7m ago</td></tr><tr><td>Sessions</td><td>73 active · default gpt-5.2 (272k ctx) · 11 stores</td></tr><tr><td>Memory</td><td>13 files · 21 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on</td></tr><tr><td>Heartbeat</td><td>30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled</td></tr><tr><td>Gateway</td><td>local · ws://127.0.0.1:18789 (local loopback) · reachable 18ms · auth token · 2bf5bd64c8d3 (172.</td></tr><tr><td>Update</td><td>pnpm · npm latest 2026.3.2</td></tr><tr><td>Codex day left</td><td>63% · 1h 33m</td></tr><tr><td>Codex week left</td><td>14% · 4d 6h</td></tr><tr><td>Plan snapshot model</td><td>openai-codex/gpt-5.3-codex</td></tr></tbody></table></div></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Trend Visualization</h3><p>Last 12 snapshots</p></div><svg viewBox="0 0 100 100" style="height:150px;width:100%"><defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#7aa2ff"/><stop offset="100%" stop-color="#4ddac6"/></linearGradient></defs><polyline points="0,3.4892758223306686 9.090909090909092,3.4892758223306686 18.181818181818183,3.0477708602064126 27.27272727272727,2.170470554100973 36.36363636363637,1.6760642320388826 45.45454545454545,1.6760642320388826 54.54545454545454,0 63.63636363636363,2.1139569867665102 72.72727272727273,1.5400821019784416 81.81818181818183,10.883930454520566 90.9090909090909,10.883930454520566 100,10.884862637074534" fill="none" stroke="url(#sg)" stroke-width="3" stroke-linecap="round"/></svg><p class="legend">Micro-trend context for burn velocity and stability.</p></article></div>
+      <article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Bucket Share Breakdown</h3><p>Ranked load contribution</p></div><div class="ranked-row" data-bucket="interactive"><div><strong>interactive</strong><span>609,621 tokens</span></div><div class="progress"><span style="width:80%"></span></div><em>80%</em></div><div class="ranked-row" data-bucket="cron"><div><strong>cron</strong><span>155,166 tokens</span></div><div class="progress"><span style="width:20%"></span></div><em>20%</em></div><div class="ranked-row" data-bucket="system/other"><div><strong>system/other</strong><span>0 tokens</span></div><div class="progress"><span style="width:0%"></span></div><em>0%</em></div></article>
+      <details class="DataPanel card-l2" style="margin-top:10px"><summary>Snapshot History</summary><div class="table-wrap" style="margin-top:8px"><table><thead><tr><th>#</th><th>Captured</th><th>Sessions</th><th>Tokens</th><th>Security</th></tr></thead><tbody><tr><td>1</td><td>07/03/2026, 13:51:10</td><td>30</td><td>771,742</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>2</td><td>07/03/2026, 14:20:38</td><td>30</td><td>756,362</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>3</td><td>07/03/2026, 14:20:51</td><td>30</td><td>756,362</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>4</td><td>07/03/2026, 14:50:40</td><td>30</td><td>835,579</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>5</td><td>07/03/2026, 15:20:40</td><td>30</td><td>836,092</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>6</td><td>07/03/2026, 15:50:39</td><td>32</td><td>869,154</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>7</td><td>07/03/2026, 15:50:52</td><td>32</td><td>869,154</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>8</td><td>07/03/2026, 16:14:31</td><td>32</td><td>820,375</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>9</td><td>07/03/2026, 16:20:38</td><td>32</td><td>828,256</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>10</td><td>07/03/2026, 16:20:51</td><td>32</td><td>828,256</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>11</td><td>07/03/2026, 16:27:52</td><td>32</td><td>832,045</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>12</td><td>07/03/2026, 16:40:32</td><td>32</td><td>839,574</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>13</td><td>07/03/2026, 16:50:38</td><td>32</td><td>843,817</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>14</td><td>07/03/2026, 16:50:52</td><td>32</td><td>843,817</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>15</td><td>07/03/2026, 17:20:36</td><td>32</td><td>858,201</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>16</td><td>07/03/2026, 17:25:44</td><td>32</td><td>840,059</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>17</td><td>07/03/2026, 17:37:45</td><td>32</td><td>844,984</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>18</td><td>07/03/2026, 17:50:38</td><td>32</td><td>764,795</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>19</td><td>07/03/2026, 17:50:50</td><td>32</td><td>764,795</td><td>5 critical · 4 warn · 1 info</td></tr><tr><td>20</td><td>07/03/2026, 18:06:35</td><td>32</td><td>764,787</td><td>5 critical · 4 warn · 1 info</td></tr></tbody></table></div></details>
+    </section>
 
-  <section id="tab-context" class="card tabsec hidden surface-2"><h3>Context Files</h3>
-    <div class="badge">files: 36</div><div class="badge">bytes: 67,240</div><div class="badge">lines: 2,094</div><div class="badge">estimated tokens: 16,692</div>
-    <details open><summary>Context File Profiler</summary><div class="table-wrap"><table id="contextTable"><thead><tr><th>Path</th><th>Bytes</th><th>Lines</th><th>Est. tokens</th><th>Last modified</th></tr></thead><tbody><tr data-path="../growth-analyst/agents.md"><td title="../growth-analyst/AGENTS.md">../growth-analyst/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/agents.md"><td title="../growth-content/AGENTS.md">../growth-content/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/agents.md"><td title="../growth-engagement/AGENTS.md">../growth-engagement/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/agents.md"><td title="../growth-publisher/AGENTS.md">../growth-publisher/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/agents.md"><td title="../growth-researcher/AGENTS.md">../growth-researcher/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/agents.md"><td title="../growth-strategist/AGENTS.md">../growth-strategist/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="bootstrap.md"><td title="BOOTSTRAP.md">BOOTSTRAP.md</td><td>1,470</td><td>56</td><td>363</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="soul.md"><td title="SOUL.md">SOUL.md</td><td>1,190</td><td>50</td><td>297</td><td>04/03/2026, 22:41:43</td></tr><tr data-path="agents.md"><td title="AGENTS.md">AGENTS.md</td><td>1,182</td><td>32</td><td>295</td><td>05/03/2026, 00:24:04</td></tr><tr data-path="process.md"><td title="PROCESS.md">PROCESS.md</td><td>1,095</td><td>36</td><td>274</td><td>05/03/2026, 02:14:37</td></tr><tr data-path="tools.md"><td title="TOOLS.md">TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="../growth-analyst/tools.md"><td title="../growth-analyst/TOOLS.md">../growth-analyst/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/tools.md"><td title="../growth-content/TOOLS.md">../growth-content/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/tools.md"><td title="../growth-engagement/TOOLS.md">../growth-engagement/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/tools.md"><td title="../growth-publisher/TOOLS.md">../growth-publisher/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/tools.md"><td title="../growth-researcher/TOOLS.md">../growth-researcher/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/tools.md"><td title="../growth-strategist/TOOLS.md">../growth-strategist/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="token_audit.md"><td title="TOKEN_AUDIT.md">TOKEN_AUDIT.md</td><td>781</td><td>30</td><td>195</td><td>05/03/2026, 02:11:44</td></tr><tr data-path="identity.md"><td title="IDENTITY.md">IDENTITY.md</td><td>636</td><td>24</td><td>159</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="user.md"><td title="USER.md">USER.md</td><td>477</td><td>18</td><td>119</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="../growth-analyst/user.md"><td title="../growth-analyst/USER.md">../growth-analyst/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/user.md"><td title="../growth-content/USER.md">../growth-content/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/user.md"><td title="../growth-engagement/USER.md">../growth-engagement/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/user.md"><td title="../growth-publisher/USER.md">../growth-publisher/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/user.md"><td title="../growth-researcher/USER.md">../growth-researcher/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/user.md"><td title="../growth-strategist/USER.md">../growth-strategist/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="../growth-researcher/soul.md"><td title="../growth-researcher/SOUL.md">../growth-researcher/SOUL.md</td><td>476</td><td>17</td><td>119</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../trading-commander/soul.md"><td title="../trading-commander/SOUL.md">../trading-commander/SOUL.md</td><td>473</td><td>24</td><td>118</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="../growth-content/soul.md"><td title="../growth-content/SOUL.md">../growth-content/SOUL.md</td><td>472</td><td>17</td><td>118</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-strategist/soul.md"><td title="../growth-strategist/SOUL.md">../growth-strategist/SOUL.md</td><td>469</td><td>17</td><td>117</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-publisher/soul.md"><td title="../growth-publisher/SOUL.md">../growth-publisher/SOUL.md</td><td>463</td><td>17</td><td>116</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-analyst/soul.md"><td title="../growth-analyst/SOUL.md">../growth-analyst/SOUL.md</td><td>462</td><td>17</td><td>116</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-engagement/soul.md"><td title="../growth-engagement/SOUL.md">../growth-engagement/SOUL.md</td><td>460</td><td>17</td><td>115</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../trading-review-research/soul.md"><td title="../trading-review-research/SOUL.md">../trading-review-research/SOUL.md</td><td>440</td><td>22</td><td>110</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="../trading-execution-risk/soul.md"><td title="../trading-execution-risk/SOUL.md">../trading-execution-risk/SOUL.md</td><td>430</td><td>21</td><td>108</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="heartbeat.md"><td title="HEARTBEAT.md">HEARTBEAT.md</td><td>168</td><td>6</td><td>42</td><td>04/03/2026, 22:31:06</td></tr></tbody></table></div></details>
-    <details><summary>Top-10 Heaviest Context Files</summary><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est. tokens</th></tr></thead><tbody><tr><td>1</td><td title="../growth-analyst/AGENTS.md">../growth-analyst/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>2</td><td title="../growth-content/AGENTS.md">../growth-content/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>3</td><td title="../growth-engagement/AGENTS.md">../growth-engagement/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>4</td><td title="../growth-publisher/AGENTS.md">../growth-publisher/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>5</td><td title="../growth-researcher/AGENTS.md">../growth-researcher/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>6</td><td title="../growth-strategist/AGENTS.md">../growth-strategist/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>7</td><td title="BOOTSTRAP.md">BOOTSTRAP.md</td><td>1,470</td><td>363</td></tr><tr><td>8</td><td title="SOUL.md">SOUL.md</td><td>1,190</td><td>297</td></tr><tr><td>9</td><td title="AGENTS.md">AGENTS.md</td><td>1,182</td><td>295</td></tr><tr><td>10</td><td title="PROCESS.md">PROCESS.md</td><td>1,095</td><td>274</td></tr></tbody></table></div></details>
-  </section>
+    <section id="tab-cost" class="tabsec hidden"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Ranked Model Cards</h3><p>Comparative token contribution</p></div><div class="cards-3"><article class="InsightCard card-l2" data-model="gpt-5.3-codex"><div class="rank">#1</div><h4>gpt-5.3-codex</h4><div class="value-sm">553,449 tok</div><div class="progress"><span style="width:72%"></span></div><p>72% of estimated burn</p></article><article class="InsightCard card-l2" data-model="gpt-5-mini"><div class="rank">#2</div><h4>gpt-5-mini</h4><div class="value-sm">171,164 tok</div><div class="progress"><span style="width:22%"></span></div><p>22% of estimated burn</p></article><article class="InsightCard card-l2" data-model="gpt-5.2"><div class="rank">#3</div><h4>gpt-5.2</h4><div class="value-sm">40,174 tok</div><div class="progress"><span style="width:5%"></span></div><p>5% of estimated burn</p></article></div></article><div class="split" style="margin-top:10px"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Token Distribution by Bucket</h3><p>Model composition per bucket</p></div><div class="table-wrap"><table><thead><tr><th>Bucket</th><th>Model mix</th></tr></thead><tbody><tr><td>cron</td><td>gpt-5-mini: 94,740 · gpt-5.3-codex: 30,918 · gpt-5.2: 29,508</td></tr><tr><td>interactive</td><td>gpt-5.3-codex: 522,531 · gpt-5-mini: 76,424 · gpt-5.2: 10,666</td></tr><tr><td>system/other</td><td>n/a</td></tr></tbody></table></div></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Actionable Priorities</h3><p>Execution queue</p></div><article class="InsightCard card-l3"><div class="pill">P1</div><h4>Trim context footprint</h4><p class="muted">Top context files are inflating token load. Move archival notes out of hot context.</p></article><article class="InsightCard card-l3"><div class="pill">P0</div><h4>Resolve critical findings</h4><p class="muted">Run deep audit and close all critical findings before optimization work.</p></article><article class="InsightCard card-l3"><div class="pill">P2</div><h4>Monitor trend variance</h4><p class="muted">Alert on >15% day-over-day token movement and inspect root cause.</p></article></article></div></section>
 
-  <section id="tab-security" class="card tabsec hidden surface-2"><h3>Security</h3>
-    <div class="badge">Critical: 5 (+0)</div>
-    <div class="badge">Warn: 4 (+0)</div>
-    <div class="badge">Info: 1 (+0)</div>
-    <div class="k">Attribution rules: cron=session key contains :cron: · interactive=telegram/discord/group/direct/main session patterns · system/other=fallback bucket when no other rule matches</div>
-  </section>
+    <section id="tab-agents" class="tabsec hidden"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Ranked Agent Load</h3><p>Sortable with drilldown</p></div><div class="table-wrap"><table id="agentTable"><thead><tr><th data-sort="text">Agent</th><th data-sort="num">Tokens</th><th>Share</th><th>Trend</th><th data-sort="text">Last active</th></tr></thead><tbody><tr class="data-row" data-agent="main" data-sort-tokens="596967" data-sort-sessions="24">
+      <td><button class="row-toggle" data-expand="agent-0">main</button></td>
+      <td>596,967</td>
+      <td><div class="progress"><span style="width:78%"></span></div><span>78%</span></td>
+      <td><span class="status-dot down"></span>↓</td>
+      <td>07/03/2026, 17:59:59</td>
+    </tr>
+    <tr id="agent-0" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li><code>agent:main:discord:channel:1477069238991720579</code><span>157,834 tok · gpt-5.3-codex</span></li><li><code>agent:main:telegram:group:-1003842752959:topic:3</code><span>103,549 tok · gpt-5.3-codex</span></li><li><code>agent:main:telegram:direct:1773262118</code><span>32,399 tok · gpt-5.3-codex</span></li><li><code>agent:main:telegram:group:-1003842752959:topic:203</code><span>27,389 tok · gpt-5.3-codex</span></li></ul></div></td></tr><tr class="data-row" data-agent="builder" data-sort-tokens="112346" data-sort-sessions="2">
+      <td><button class="row-toggle" data-expand="agent-1">builder</button></td>
+      <td>112,346</td>
+      <td><div class="progress"><span style="width:15%"></span></div><span>15%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:48:26</td>
+    </tr>
+    <tr id="agent-1" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li><code>agent:builder:telegram:group:-1003842752959:topic:3</code><span>101,577 tok · gpt-5.3-codex</span></li></ul></div></td></tr><tr class="data-row" data-agent="growth-researcher" data-sort-tokens="11678" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-2">growth-researcher</button></td>
+      <td>11,678</td>
+      <td><div class="progress"><span style="width:2%"></span></div><span>2%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:42:02</td>
+    </tr>
+    <tr id="agent-2" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr><tr class="data-row" data-agent="growth-publisher" data-sort-tokens="11467" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-3">growth-publisher</button></td>
+      <td>11,467</td>
+      <td><div class="progress"><span style="width:1%"></span></div><span>1%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:43:36</td>
+    </tr>
+    <tr id="agent-3" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr><tr class="data-row" data-agent="growth-content" data-sort-tokens="11005" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-4">growth-content</button></td>
+      <td>11,005</td>
+      <td><div class="progress"><span style="width:1%"></span></div><span>1%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:43:16</td>
+    </tr>
+    <tr id="agent-4" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr><tr class="data-row" data-agent="growth-analyst" data-sort-tokens="10666" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-5">growth-analyst</button></td>
+      <td>10,666</td>
+      <td><div class="progress"><span style="width:1%"></span></div><span>1%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:44:40</td>
+    </tr>
+    <tr id="agent-5" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr><tr class="data-row" data-agent="growth-engagement" data-sort-tokens="10658" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-6">growth-engagement</button></td>
+      <td>10,658</td>
+      <td><div class="progress"><span style="width:1%"></span></div><span>1%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:44:08</td>
+    </tr>
+    <tr id="agent-6" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr><tr class="data-row" data-agent="growth-strategist" data-sort-tokens="0" data-sort-sessions="1">
+      <td><button class="row-toggle" data-expand="agent-7">growth-strategist</button></td>
+      <td>0</td>
+      <td><div class="progress"><span style="width:0%"></span></div><span>0%</span></td>
+      <td><span class="status-dot flat"></span>→</td>
+      <td>05/03/2026, 21:42:37</td>
+    </tr>
+    <tr id="agent-7" class="expand-row"><td colspan="5"><div class="expand-inner"><ul><li class="muted">No session drilldown for this snapshot.</li></ul></div></td></tr></tbody></table></div></article></section>
 
-  <section id="tab-insights" class="card tabsec hidden surface-2"><h3>Insights</h3>
-    <h4>5-day AI Insights (partial window)</h4><div class="badge">days used: 3/5</div>
-    <ul><li>Estimated tokens moved down by 135,371 across the available window.</li><li>Estimated daily costs track token movement and remain rough heuristics.</li><li>Top models: gpt-5.3-codex (1,771,722 est tokens) · gpt-5-mini (381,680 est tokens) · gpt-5.2 (204,858 est tokens)</li><li>Top agents: main (1,864,766 est tokens) · builder (327,072 est tokens) · growth-researcher (35,034 est tokens)</li><li>Top attribution buckets: interactive (1,968,395 est tokens) · cron (389,865 est tokens) · system/other (0 est tokens)</li><li>2026-03-06: -23.0% token shift vs previous day</li></ul>
-    <h4>Rollups & Exports</h4>
-    <ul><li><a href="reports/daily-rollups/2026-03-05.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-05.json</a></li><li><a href="reports/daily-rollups/2026-03-06.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-06.json</a></li><li><a href="reports/daily-rollups/2026-03-07.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-07.json</a></li></ul>
-    <div class="k">Preserved exports and rollup links are available above.</div>
-  </section>
+    <section id="tab-context" class="tabsec hidden"><section class="grid4"><article class="MetricCard card-l2"><div class="label">Total files</div><div class="value">36</div></article><article class="MetricCard card-l2"><div class="label">Total bytes</div><div class="value">67,240</div></article><article class="MetricCard card-l2"><div class="label">Token weight</div><div class="value">16,692</div></article><article class="MetricCard card-l2"><div class="label">Largest offender</div><div class="value" style="font-size:.9rem">../growth-analyst/AGENTS.md</div></article></section><details open class="DataPanel card-l2" style="margin-top:10px"><summary>Grouped file categories</summary><p class="legend">memory/*, agents/*, workspace root</p></details><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Context File Table</h3><p>Sticky header + fast scan density</p></div><div class="table-wrap"><table id="contextTable"><thead><tr><th data-sort="text">Path</th><th data-sort="num">Bytes</th><th data-sort="num">Lines</th><th data-sort="num">Est tokens</th><th data-sort="text">Last modified</th></tr></thead><tbody><tr data-path="../growth-analyst/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-analyst/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-content/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-engagement/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-publisher/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-researcher/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/agents.md" data-filecat="workspace" data-sort-bytes="7869"><td>../growth-strategist/AGENTS.md</td><td>7,869</td><td>213</td><td>1,951</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="bootstrap.md" data-filecat="workspace" data-sort-bytes="1470"><td>BOOTSTRAP.md</td><td>1,470</td><td>56</td><td>363</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="soul.md" data-filecat="workspace" data-sort-bytes="1190"><td>SOUL.md</td><td>1,190</td><td>50</td><td>297</td><td>04/03/2026, 22:41:43</td></tr><tr data-path="agents.md" data-filecat="workspace" data-sort-bytes="1182"><td>AGENTS.md</td><td>1,182</td><td>32</td><td>295</td><td>05/03/2026, 00:24:04</td></tr><tr data-path="process.md" data-filecat="workspace" data-sort-bytes="1095"><td>PROCESS.md</td><td>1,095</td><td>36</td><td>274</td><td>05/03/2026, 02:14:37</td></tr><tr data-path="tools.md" data-filecat="workspace" data-sort-bytes="860"><td>TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="../growth-analyst/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-analyst/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-content/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-engagement/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-publisher/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-researcher/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/tools.md" data-filecat="workspace" data-sort-bytes="860"><td>../growth-strategist/TOOLS.md</td><td>860</td><td>41</td><td>213</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="token_audit.md" data-filecat="workspace" data-sort-bytes="781"><td>TOKEN_AUDIT.md</td><td>781</td><td>30</td><td>195</td><td>05/03/2026, 02:11:44</td></tr><tr data-path="identity.md" data-filecat="workspace" data-sort-bytes="636"><td>IDENTITY.md</td><td>636</td><td>24</td><td>159</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="user.md" data-filecat="workspace" data-sort-bytes="477"><td>USER.md</td><td>477</td><td>18</td><td>119</td><td>04/03/2026, 22:31:06</td></tr><tr data-path="../growth-analyst/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-analyst/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:50</td></tr><tr data-path="../growth-content/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-content/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:43</td></tr><tr data-path="../growth-engagement/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-engagement/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:47</td></tr><tr data-path="../growth-publisher/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-publisher/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:45</td></tr><tr data-path="../growth-researcher/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-researcher/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:38</td></tr><tr data-path="../growth-strategist/user.md" data-filecat="workspace" data-sort-bytes="477"><td>../growth-strategist/USER.md</td><td>477</td><td>18</td><td>119</td><td>05/03/2026, 17:48:40</td></tr><tr data-path="../growth-researcher/soul.md" data-filecat="workspace" data-sort-bytes="476"><td>../growth-researcher/SOUL.md</td><td>476</td><td>17</td><td>119</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../trading-commander/soul.md" data-filecat="workspace" data-sort-bytes="473"><td>../trading-commander/SOUL.md</td><td>473</td><td>24</td><td>118</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="../growth-content/soul.md" data-filecat="workspace" data-sort-bytes="472"><td>../growth-content/SOUL.md</td><td>472</td><td>17</td><td>118</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-strategist/soul.md" data-filecat="workspace" data-sort-bytes="469"><td>../growth-strategist/SOUL.md</td><td>469</td><td>17</td><td>117</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-publisher/soul.md" data-filecat="workspace" data-sort-bytes="463"><td>../growth-publisher/SOUL.md</td><td>463</td><td>17</td><td>116</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-analyst/soul.md" data-filecat="workspace" data-sort-bytes="462"><td>../growth-analyst/SOUL.md</td><td>462</td><td>17</td><td>116</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../growth-engagement/soul.md" data-filecat="workspace" data-sort-bytes="460"><td>../growth-engagement/SOUL.md</td><td>460</td><td>17</td><td>115</td><td>05/03/2026, 17:49:13</td></tr><tr data-path="../trading-review-research/soul.md" data-filecat="workspace" data-sort-bytes="440"><td>../trading-review-research/SOUL.md</td><td>440</td><td>22</td><td>110</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="../trading-execution-risk/soul.md" data-filecat="workspace" data-sort-bytes="430"><td>../trading-execution-risk/SOUL.md</td><td>430</td><td>21</td><td>108</td><td>05/03/2026, 22:13:59</td></tr><tr data-path="heartbeat.md" data-filecat="workspace" data-sort-bytes="168"><td>HEARTBEAT.md</td><td>168</td><td>6</td><td>42</td><td>04/03/2026, 22:31:06</td></tr></tbody></table></div></article><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Top Heavy Files</h3><p>Optimization candidates</p></div><div class="table-wrap"><table><thead><tr><th>#</th><th>Path</th><th>Bytes</th><th>Est tokens</th></tr></thead><tbody><tr><td>1</td><td>../growth-analyst/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>2</td><td>../growth-content/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>3</td><td>../growth-engagement/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>4</td><td>../growth-publisher/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>5</td><td>../growth-researcher/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>6</td><td>../growth-strategist/AGENTS.md</td><td>7,869</td><td>1,951</td></tr><tr><td>7</td><td>BOOTSTRAP.md</td><td>1,470</td><td>363</td></tr><tr><td>8</td><td>SOUL.md</td><td>1,190</td><td>297</td></tr><tr><td>9</td><td>AGENTS.md</td><td>1,182</td><td>295</td></tr><tr><td>10</td><td>PROCESS.md</td><td>1,095</td><td>274</td></tr></tbody></table></div></article></section>
+
+    <section id="tab-security" class="tabsec hidden"><section class="status-strip"><article class="MetricCard card-l2"><div class="label">Critical</div><div class="value" style="color:var(--bad)">5</div></article><article class="MetricCard card-l2"><div class="label">Warn</div><div class="value" style="color:var(--warn)">4</div></article><article class="MetricCard card-l2"><div class="label">Info</div><div class="value" style="color:var(--info)">1</div></article><article class="MetricCard card-l2"><div class="label">Resolved</div><div class="value" style="color:var(--ok)">0</div></article></section><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Incident Findings</h3><p>Severity, confidence, recommendations</p></div><div class="findings"><article class="finding critical"><header><span class="StatusBadge critical">CRITICAL</span><h4>Policy</h4></header><dl><div><dt>Source</dt><dd>security audit</dd></div><div><dt>Affected</dt><dd>Gateway</dd></div><div><dt>Confidence</dt><dd>high</dd></div><div><dt>Count</dt><dd>5</dd></div></dl><p>Run deep audit and patch immediately</p></article><article class="finding warn"><header><span class="StatusBadge warn">WARN</span><h4>Runtime</h4></header><dl><div><dt>Source</dt><dd>usage heuristics</dd></div><div><dt>Affected</dt><dd>Cron load</dd></div><div><dt>Confidence</dt><dd>medium</dd></div><div><dt>Count</dt><dd>4</dd></div></dl><p>Lower redundant schedule frequency</p></article><article class="finding info"><header><span class="StatusBadge info">INFO</span><h4>Attribution</h4></header><dl><div><dt>Source</dt><dd>classifier</dd></div><div><dt>Affected</dt><dd>Session buckets</dd></div><div><dt>Confidence</dt><dd>medium</dd></div><div><dt>Count</dt><dd>1</dd></div></dl><p>Review custom key patterns</p></article><article class="finding resolved"><header><span class="StatusBadge resolved">RESOLVED</span><h4>Delta</h4></header><dl><div><dt>Source</dt><dd>snapshot diff</dd></div><div><dt>Affected</dt><dd>Critical Δ</dd></div><div><dt>Confidence</dt><dd>high</dd></div><div><dt>Count</dt><dd>0</dd></div></dl><p>Change vs prev: +0</p></article></div><p class="legend" style="margin-top:10px">Rules: cron=session key contains :cron: · interactive=telegram/discord/group/direct/main session patterns · system/other=fallback bucket when no other rule matches</p></article></section>
+
+    <section id="tab-insights" class="tabsec hidden"><div class="split"><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Daily Trend Narrative</h3><p>Partial 5-day window</p></div><ul><li>Estimated tokens moved down by 135,379 across the available window.</li><li>Estimated daily costs track token movement and remain rough heuristics.</li><li>Top models: gpt-5.3-codex (1,771,722 est tokens) · gpt-5-mini (381,672 est tokens) · gpt-5.2 (204,858 est tokens)</li><li>Top agents: main (1,864,758 est tokens) · builder (327,072 est tokens) · growth-researcher (35,034 est tokens)</li><li>Top attribution buckets: interactive (1,968,148 est tokens) · cron (390,104 est tokens) · system/other (0 est tokens)</li><li>2026-03-06: -23.0% token shift vs previous day</li></ul></article><article class="DataPanel card-l2"><div class="SectionHeader"><h3>Top Movers & Shifts</h3><p>Anomaly notes</p></div><p class="muted">Biggest shifts are extracted from rollup deltas and highlighted in trend bullets.</p></article></div><article class="DataPanel card-l2" style="margin-top:10px"><div class="SectionHeader"><h3>Exports</h3><p>Download artifacts</p></div><ul><li><a href="reports/daily-rollups/2026-03-05.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-05.json</a></li><li><a href="reports/daily-rollups/2026-03-06.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-06.json</a></li><li><a href="reports/daily-rollups/2026-03-07.json" target="_blank" rel="noreferrer">reports/daily-rollups/2026-03-07.json</a></li></ul><p class="legend">Summary markdown: <a href="reports/daily-rollups/summary-5d.md" target="_blank" rel="noreferrer">reports/daily-rollups/summary-5d.md</a></p></article></section>
+  </main>
 </div>
 <script>
 (function(){
-  function show(tab){
-    document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));
-    var el=document.getElementById('tab-'+tab);
-    if(el)el.classList.remove('hidden');
-    document.querySelectorAll('.tabbtn').forEach(function(btn){
-      if(btn.getAttribute('data-tab')===tab) btn.classList.add('active');
-      else btn.classList.remove('active');
-    });
+  function show(tab){document.querySelectorAll('.tabsec').forEach(s=>s.classList.add('hidden'));const el=document.getElementById('tab-'+tab); if(el) el.classList.remove('hidden');document.querySelectorAll('.tabbtn').forEach(btn=>btn.classList.toggle('active',btn.dataset.tab===tab));}
+  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.tab)));show('overview');
+  function txt(v){return (v||'').toLowerCase()}
+  function applyFilters(){
+    const q=document.getElementById('q').value.trim();const a=document.getElementById('fAgent').value.trim();const m=document.getElementById('fModel').value.trim();const b=document.getElementById('fBucket').value.trim();
+    const filters=[['Search',q],['Agent',a],['Model',m],['Bucket/Date',b]].filter(x=>x[1]);document.getElementById('filterChips').innerHTML=filters.map(function(f){return '<span class="chip">'+f[0]+': '+f[1]+'</span>';}).join('');
+    document.querySelectorAll('#agentTable tbody tr.data-row').forEach(r=>{const ok = (!q || txt(r.innerText).includes(txt(q))) && (!a || txt(r.dataset.agent).includes(txt(a)));const target=document.getElementById(r.querySelector('[data-expand]').dataset.expand);r.style.display = ok ? '' : 'none';if(target) target.style.display = ok && target.classList.contains('open') ? '' : 'none';});
+    document.querySelectorAll('#contextTable tbody tr').forEach(r=>{const ok = (!q || txt(r.innerText).includes(txt(q))) && (!b || txt(r.dataset.filecat||'').includes(txt(b)) || txt(r.innerText).includes(txt(b)));r.style.display = ok ? '' : 'none';});
+    document.querySelectorAll('[data-model]').forEach(c=>c.style.display = (!m || txt(c.dataset.model).includes(txt(m))) ? '' : 'none');
+    document.querySelectorAll('[data-bucket]').forEach(c=>c.style.display = (!b || txt(c.dataset.bucket).includes(txt(b))) ? '' : 'none');
   }
-  document.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>show(b.getAttribute('data-tab'))));
-  show('overview');
-
-  function ftxt(v){return (v||'').toLowerCase()}
-  function apply(){
-    var qEl=document.getElementById('q'), aEl=document.getElementById('fAgent'), mEl=document.getElementById('fModel'), bEl=document.getElementById('fBucket');
-    var q=ftxt(qEl.value),a=ftxt(aEl.value),m=ftxt(mEl.value),b=ftxt(bEl.value);
-
-    [qEl,aEl,mEl,bEl].forEach(function(el){
-      if(!el) return;
-      if((el.value||'').trim()) el.classList.add('active'); else el.classList.remove('active');
-    });
-
-    var chips=[];
-    if(q) chips.push('Search: '+qEl.value.trim());
-    if(a) chips.push('Agent: '+aEl.value.trim());
-    if(m) chips.push('Model: '+mEl.value.trim());
-    if(b) chips.push('Bucket/date: '+bEl.value.trim());
-    var chipWrap=document.getElementById('filterChips');
-    if(chipWrap) chipWrap.innerHTML = chips.map(function(c){ return '<span class="chip">'+c.replace(/</g,'&lt;')+'</span>'; }).join('');
-
-    [['#sessionTable tbody tr',q,a,m,b],['#contextTable tbody tr',q,'','','']].forEach(function(set){
-      document.querySelectorAll(set[0]).forEach(function(r){
-        var txt=ftxt(r.innerText); var ok=true;
-        if(set[1] && !txt.includes(set[1])) ok=false;
-        if(set[2] && !ftxt(r.getAttribute('data-agent')).includes(set[2])) ok=false;
-        if(set[3] && !ftxt(r.getAttribute('data-model')).includes(set[3])) ok=false;
-        if(set[4] && !ftxt(r.getAttribute('data-bucket')).includes(set[4]) && !txt.includes(set[4])) ok=false;
-        r.style.display=ok?'':'none';
-      });
-    });
-  }
-  ['q','fAgent','fModel','fBucket'].forEach(id=>{var x=document.getElementById(id); if(x) x.addEventListener('input',apply)});
+  ['q','fAgent','fModel','fBucket'].forEach(id=>document.getElementById(id).addEventListener('input',applyFilters));
+  document.getElementById('clearFilters').addEventListener('click',()=>{['q','fAgent','fModel','fBucket'].forEach(id=>document.getElementById(id).value='');applyFilters();});
+  document.querySelectorAll('.row-toggle').forEach(btn=>btn.addEventListener('click',()=>{const target=document.getElementById(btn.dataset.expand); if(!target) return;target.classList.toggle('open');target.style.display = target.classList.contains('open') ? '' : 'none';}));
+  function makeSortable(table){if(!table) return;table.querySelectorAll('thead th[data-sort]').forEach((th,col)=>{let asc=true;th.addEventListener('click',()=>{const rows=[...table.querySelectorAll('tbody tr.data-row')];rows.sort((ra,rb)=>{const va=ra.children[col].innerText.trim(); const vb=rb.children[col].innerText.trim();if(th.dataset.sort==='num') return asc ? (parseFloat(va.replace(/[^d.-]/g,''))||0)-(parseFloat(vb.replace(/[^d.-]/g,''))||0) : (parseFloat(vb.replace(/[^d.-]/g,''))||0)-(parseFloat(va.replace(/[^d.-]/g,''))||0);return asc ? va.localeCompare(vb) : vb.localeCompare(va);});const tb=table.querySelector('tbody');rows.forEach(r=>{tb.appendChild(r); const exp=document.getElementById(r.querySelector('[data-expand]')?.dataset.expand||''); if(exp) tb.appendChild(exp);});asc=!asc;});});}
+  makeSortable(document.getElementById('agentTable'));
 })();
 </script>
 </body>

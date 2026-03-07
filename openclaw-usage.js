@@ -477,9 +477,12 @@ body{
   display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
   background:linear-gradient(180deg,#0f1c37,#0d1730);font-size:.75rem;margin:5px 6px 0 0;color:#dce8ff
 }
+.zone-title{font-size:.76rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:4px 0 8px}
 .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
 .strip .card{margin-top:0;border-color:var(--line)}
 .strip .card .k{font-size:.76rem}
+.kpi-primary{grid-column:span 2;border:1px solid #4a6fb0 !important;background:linear-gradient(165deg,#14254a,#101a33)}
+.kpi-primary .v{font-size:2rem}
 .tabs{
   display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:10px;z-index:10;
   background:linear-gradient(180deg,rgba(10,16,31,.92),rgba(10,16,31,.72));
@@ -497,24 +500,31 @@ table{width:100%;border-collapse:collapse}
 th,td{padding:10px;border-bottom:1px solid var(--line-soft);text-align:left}
 th{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;background:rgba(6,12,24,.55)}
 tr:hover td{background:rgba(255,255,255,.02)}
+#agentTable tbody td:nth-child(2),#modelTable tbody td:nth-child(2),#bucketTable tbody td:nth-child(2){font-weight:800;color:#eef4ff}
+#agentTable tbody td:nth-child(5){color:var(--muted);font-size:.84rem}
 summary{cursor:pointer;color:#d3e2ff}
 .hidden{display:none}
 .bar{display:inline-block;width:130px;height:8px;background:#22365f;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
 .bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
 .filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
 .input{width:100%;padding:10px;border-radius:11px;border:1px solid var(--line);background:#0c1730;color:var(--text)}
-.spark{height:74px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
+.input.active{border-color:#6fa8ff;box-shadow:0 0 0 2px rgba(111,168,255,.18)}
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:.72rem;color:#dce8ff;background:#102043}
+.spark{height:120px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
 .spark svg{width:100%;height:100%}
 .spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(99,241,223,.35))}
 @media(max-width:980px){
   body{padding:12px}
   .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .kpi-primary{grid-column:span 2}
   .filter{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
   .h-title{font-size:1.25rem}
   .h-sub{font-size:.78rem}
   .strip{grid-template-columns:1fr}
+  .kpi-primary{grid-column:span 1}
   .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:static}
   .tabbtn{width:100%;text-align:center;padding:10px 8px}
   .filter{grid-template-columns:1fr}
@@ -534,13 +544,15 @@ summary{cursor:pointer;color:#d3e2ff}
     <div class="k">Updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div>
   </div>
 
-  <div class="strip" style="margin-top:12px">
-    <div class="card"><div class="k">Cost (today, est.)</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
+  <div class="zone-title">Performance Snapshot</div>
+  <div class="strip" style="margin-top:6px">
+    <div class="card kpi-primary"><div class="k">Primary signal</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'Attention' : 'Stable'}</div><div class="k">Anomaly check · Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs previous snapshot</div></div>
     <div class="card"><div class="k">Token burn (today, est.)</div><div class="v">${total.toLocaleString()}</div></div>
+    <div class="card"><div class="k">Cost (today, est.)</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
     <div class="card"><div class="k">Top consumer</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,42)}</div></div>
-    <div class="card"><div class="k">Anomaly signal</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'Attention' : 'Stable'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs previous snapshot</div></div>
   </div>
 
+  <div class="zone-title">Navigation</div>
   <div class="card tabs">
     <button class="tabbtn" data-tab="overview">Overview</button>
     <button class="tabbtn" data-tab="cost">Cost & Model Mix</button>
@@ -550,12 +562,14 @@ summary{cursor:pointer;color:#d3e2ff}
     <button class="tabbtn" data-tab="insights">5-Day Insights</button>
   </div>
 
+  <div class="zone-title">Filters</div>
   <div class="card filter">
-    <input id="q" class="input" placeholder="Search session/file text" />
-    <input id="fAgent" class="input" placeholder="Filter agent" />
-    <input id="fModel" class="input" placeholder="Filter model" />
-    <input id="fBucket" class="input" placeholder="Filter bucket/date" />
+    <input id="q" class="input" placeholder="Search (session key, file, text…)" />
+    <input id="fAgent" class="input" placeholder="Agent" />
+    <input id="fModel" class="input" placeholder="Model" />
+    <input id="fBucket" class="input" placeholder="Bucket/date" />
   </div>
+  <div id="filterChips" class="filter-chips"></div>
 
   <section id="tab-overview" class="card tabsec"><h3>Overview</h3>
     <div class="k">/status snapshot</div>
@@ -571,6 +585,7 @@ summary{cursor:pointer;color:#d3e2ff}
       <tr><td>Plan snapshot model</td><td>${planUsage.model || 'n/a'}</td></tr>
     </tbody></table></div>
     <div class="k" style="margin-top:8px">Sample ${latest.knownTokenSessions || 0}/${latest.totalSessions || latest.sessionCount || 0} sessions</div>
+    <div class="k" style="margin-top:8px">Token trend (last 12 snapshots)</div>
     <div class="spark" title="Recent token trend (last 12 snapshots)">
       <svg viewBox="0 0 100 100" preserveAspectRatio="none">
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#74a8ff"/><stop offset="100%" stop-color="#79e3ff"/></linearGradient></defs>
@@ -621,7 +636,22 @@ summary{cursor:pointer;color:#d3e2ff}
 
   function ftxt(v){return (v||'').toLowerCase()}
   function apply(){
-    var q=ftxt(document.getElementById('q').value),a=ftxt(document.getElementById('fAgent').value),m=ftxt(document.getElementById('fModel').value),b=ftxt(document.getElementById('fBucket').value);
+    var qEl=document.getElementById('q'), aEl=document.getElementById('fAgent'), mEl=document.getElementById('fModel'), bEl=document.getElementById('fBucket');
+    var q=ftxt(qEl.value),a=ftxt(aEl.value),m=ftxt(mEl.value),b=ftxt(bEl.value);
+
+    [qEl,aEl,mEl,bEl].forEach(function(el){
+      if(!el) return;
+      if((el.value||'').trim()) el.classList.add('active'); else el.classList.remove('active');
+    });
+
+    var chips=[];
+    if(q) chips.push('Search: '+qEl.value.trim());
+    if(a) chips.push('Agent: '+aEl.value.trim());
+    if(m) chips.push('Model: '+mEl.value.trim());
+    if(b) chips.push('Bucket/date: '+bEl.value.trim());
+    var chipWrap=document.getElementById('filterChips');
+    if(chipWrap) chipWrap.innerHTML = chips.map(function(c){ return '<span class="chip">'+c.replace(/</g,'&lt;')+'</span>'; }).join('');
+
     [['#sessionTable tbody tr',q,a,m,b],['#contextTable tbody tr',q,'','','']].forEach(function(set){
       document.querySelectorAll(set[0]).forEach(function(r){
         var txt=ftxt(r.innerText); var ok=true;

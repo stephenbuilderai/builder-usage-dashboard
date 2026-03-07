@@ -1,11 +1,11 @@
 {
   "date": "2026-03-07",
-  "capturedAt": "2026-03-07T13:20:38.696Z",
+  "capturedAt": "2026-03-07T13:20:51.305Z",
   "tokens": 756362,
   "estimatedCostUsd": 6.05,
   "byModel": {
-    "gpt-5-mini": 170.505,
     "gpt-5.3-codex": 545.683,
+    "gpt-5-mini": 170.505,
     "gpt-5.2": 40.174
   },
   "byAgent": {

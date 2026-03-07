@@ -427,53 +427,99 @@ function renderHtml(history, buildId) {
 <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>OpenClaw Usage Dashboard</title>
 <style>
-:root{--bg:#070b16;--bg2:#0f1630;--panel:#111a31cc;--panel2:#1a284acc;--line:#2f426fcc;--text:#edf2ff;--muted:#9fb1dc;--accent:#74a8ff;--accent2:#79e3ff;--ok:#88e7b8;--bad:#ff8080}
+:root{
+  --bg:#060913;
+  --bg-soft:#0b1222;
+  --panel:#0f172bcc;
+  --panel-strong:#111d35ee;
+  --line:#2a3b66;
+  --line-soft:#1c2b4f;
+  --text:#f4f7ff;
+  --muted:#9eb1d9;
+  --accent:#6fa8ff;
+  --accent-2:#63f1df;
+  --ok:#7de0a8;
+  --warn:#f7cc76;
+  --bad:#ff8f9d;
+}
 *{box-sizing:border-box}
-body{margin:0;color:var(--text);font-family:Inter,system-ui,sans-serif;padding:16px;line-height:1.4;background:radial-gradient(circle at 15% 0%, #243d7d 0%, var(--bg2) 30%, var(--bg) 60%);min-height:100vh}
-body:before{content:"";position:fixed;inset:-20% -10%;pointer-events:none;background:conic-gradient(from 0deg at 50% 50%,rgba(116,168,255,.08),rgba(121,227,255,.06),rgba(145,115,255,.08),rgba(116,168,255,.08));filter:blur(70px);animation:spin 26s linear infinite;z-index:-1}
-@keyframes spin{to{transform:rotate(360deg)}}
-.container{max-width:1240px;margin:0 auto}
-.card{background:linear-gradient(170deg,var(--panel2),var(--panel));backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:16px;padding:14px;margin-top:12px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
-.hero{display:flex;align-items:end;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.h-title{font-size:1.6rem;font-weight:800;letter-spacing:.2px}
-.h-sub{color:var(--muted);font-size:.85rem;margin-top:4px}
-.k{color:var(--muted);font-size:.78rem}.v{font-size:1.45rem;font-weight:800}
-.badge{display:inline-block;padding:5px 10px;border-radius:999px;border:1px solid var(--line);background:#0f1730c7;font-size:.75rem;margin:4px 6px 0 0}
+body{
+  margin:0;
+  color:var(--text);
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  padding:18px;
+  line-height:1.45;
+  background:
+    radial-gradient(1000px 500px at 10% -5%, rgba(111,168,255,.22), transparent 60%),
+    radial-gradient(800px 400px at 95% 0%, rgba(99,241,223,.16), transparent 60%),
+    linear-gradient(160deg,var(--bg-soft) 0%,var(--bg) 60%);
+  min-height:100vh;
+}
+.container{max-width:1280px;margin:0 auto}
+.card{
+  background:linear-gradient(165deg,var(--panel-strong),var(--panel));
+  border:1px solid var(--line-soft);
+  border-radius:18px;
+  padding:16px;
+  margin-top:12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.03);
+  backdrop-filter: blur(8px);
+}
+.hero{
+  display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  border:1px solid var(--line);
+}
+.h-title{font-size:1.75rem;font-weight:900;letter-spacing:.2px}
+.h-sub{color:var(--muted);font-size:.9rem;margin-top:4px}
+.k{color:var(--muted);font-size:.8rem}
+.v{font-size:1.6rem;font-weight:900;letter-spacing:.2px}
+.badge{
+  display:inline-block;padding:6px 10px;border-radius:999px;border:1px solid var(--line);
+  background:linear-gradient(180deg,#0f1c37,#0d1730);font-size:.75rem;margin:5px 6px 0 0;color:#dce8ff
+}
 .strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
-.strip .card{margin-top:0}
-.tabs{display:flex;flex-wrap:wrap;gap:8px}
-.tabbtn{padding:8px 12px;border:1px solid #385493;border-radius:999px;background:linear-gradient(180deg,#1b2b52,#141f3d);color:#e4eeff;font-size:.84rem;cursor:pointer;transition:all .18s ease}
-.tabbtn:hover{transform:translateY(-1px);border-color:#6d96ff;box-shadow:0 0 0 3px rgba(116,168,255,.14)}
+.strip .card{margin-top:0;border-color:var(--line)}
+.strip .card .k{font-size:.76rem}
+.tabs{
+  display:flex;flex-wrap:wrap;gap:8px;position:sticky;top:10px;z-index:10;
+  background:linear-gradient(180deg,rgba(10,16,31,.92),rgba(10,16,31,.72));
+  border:1px solid var(--line);border-radius:14px;padding:8px;
+}
+.tabbtn{
+  padding:9px 13px;border:1px solid #324d82;border-radius:999px;
+  background:linear-gradient(180deg,#1a2b52,#131f3b);color:#e7efff;
+  font-size:.84rem;font-weight:600;cursor:pointer;transition:all .18s ease
+}
+.tabbtn:hover{transform:translateY(-1px);border-color:#78a9ff;box-shadow:0 0 0 3px rgba(111,168,255,.14)}
+.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px;border:1px solid var(--line-soft)}
+.table-wrap table{min-width:680px}
 table{width:100%;border-collapse:collapse}
-th,td{padding:9px;border-bottom:1px solid var(--line);text-align:left}
-th{color:var(--muted);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em}
+th,td{padding:10px;border-bottom:1px solid var(--line-soft);text-align:left}
+th{color:var(--muted);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;background:rgba(6,12,24,.55)}
 tr:hover td{background:rgba(255,255,255,.02)}
-summary{cursor:pointer;color:#cfe0ff}
+summary{cursor:pointer;color:#d3e2ff}
 .hidden{display:none}
-.bar{display:inline-block;width:120px;height:8px;background:#233560;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
-.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))}
+.bar{display:inline-block;width:130px;height:8px;background:#22365f;border-radius:999px;overflow:hidden;margin-right:6px;vertical-align:middle}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent-2))}
 .filter{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:8px}
-.input{width:100%;padding:9px;border-radius:10px;border:1px solid var(--line);background:#0f1730;color:var(--text)}
-.spark{height:70px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
+.input{width:100%;padding:10px;border-radius:11px;border:1px solid var(--line);background:#0c1730;color:var(--text)}
+.spark{height:74px;width:100%;margin-top:8px;background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid var(--line);border-radius:12px;padding:6px}
 .spark svg{width:100%;height:100%}
-.spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(121,227,255,.4))}
-/* mobile friendliness */
-.table-wrap{overflow:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
-.table-wrap table{min-width:640px}
-@media(max-width:900px){
+.spark polyline{fill:none;stroke:url(#g);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 8px rgba(99,241,223,.35))}
+@media(max-width:980px){
   body{padding:12px}
   .strip{grid-template-columns:repeat(2,minmax(0,1fr))}
   .filter{grid-template-columns:1fr 1fr}
 }
 @media(max-width:640px){
-  .h-title{font-size:1.2rem}
+  .h-title{font-size:1.25rem}
   .h-sub{font-size:.78rem}
   .strip{grid-template-columns:1fr}
-  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;position:static}
   .tabbtn{width:100%;text-align:center;padding:10px 8px}
   .filter{grid-template-columns:1fr}
   .card{padding:12px}
-  .v{font-size:1.2rem}
+  .v{font-size:1.25rem}
 }
 </style>
 </head>
@@ -481,27 +527,27 @@ summary{cursor:pointer;color:#cfe0ff}
 <div class="container">
   <div class="card hero">
     <div>
-      <div class="h-title">OpenClaw Executive Dashboard</div>
-      <div class="h-sub">Operational token intelligence • premium live view</div>
-      <div class="badge">Live snapshot data • token/cost are estimates</div><div class="badge">build: ${buildId}</div>
+      <div class="h-title">OpenClaw Command Dashboard</div>
+      <div class="h-sub">Usage, risk, and execution telemetry in one control surface</div>
+      <div class="badge">Live snapshots • estimated token/cost analytics</div><div class="badge">build ${buildId}</div>
     </div>
-    <div class="k">Last updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div>
+    <div class="k">Updated: ${dt ? dt.toLocaleString('en-GB') : 'n/a'}</div>
   </div>
 
   <div class="strip" style="margin-top:12px">
-    <div class="card"><div class="k">Estimated cost today</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
-    <div class="card"><div class="k">Estimated tokens today</div><div class="v">${total.toLocaleString()}</div></div>
-    <div class="card"><div class="k">Top burner</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,38)}</div></div>
-    <div class="card"><div class="k">Anomaly / regression flag</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'ALERT' : 'normal'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs prev</div></div>
+    <div class="card"><div class="k">Cost (today, est.)</div><div class="v">$${Number(latest.estimatedCostUsd||0).toFixed(2)}</div></div>
+    <div class="card"><div class="k">Token burn (today, est.)</div><div class="v">${total.toLocaleString()}</div></div>
+    <div class="card"><div class="k">Top consumer</div><div class="v" style="font-size:1rem">${topBurner.agent || 'n/a'}</div><div class="k">${(topBurner.key||'n/a').slice(0,42)}</div></div>
+    <div class="card"><div class="k">Anomaly signal</div><div class="v" style="color:${anomaly ? 'var(--bad)' : 'var(--ok)'}">${anomaly ? 'Attention' : 'Stable'}</div><div class="k">Δ ${delta>=0?'+':''}${delta.toLocaleString()} vs previous snapshot</div></div>
   </div>
 
   <div class="card tabs">
     <button class="tabbtn" data-tab="overview">Overview</button>
-    <button class="tabbtn" data-tab="cost">Cost & Models</button>
-    <button class="tabbtn" data-tab="agents">Agents</button>
-    <button class="tabbtn" data-tab="context">Context Files</button>
+    <button class="tabbtn" data-tab="cost">Cost & Model Mix</button>
+    <button class="tabbtn" data-tab="agents">Agent Load</button>
+    <button class="tabbtn" data-tab="context">Context Footprint</button>
     <button class="tabbtn" data-tab="security">Security</button>
-    <button class="tabbtn" data-tab="insights">Insights</button>
+    <button class="tabbtn" data-tab="insights">5-Day Insights</button>
   </div>
 
   <div class="card filter">

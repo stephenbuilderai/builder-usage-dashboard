@@ -28,3 +28,9 @@ The agent will:
 2. Add entries when patterns are used 3x in 7 days
 3. Demote unused entries to WARM after 30 days
 4. Never exceed 100 lines (compacts automatically)
+
+## Migrated Permanent Rules (2026-03-04)
+- Communication: avoid yes-man tone; deliverable-first; challenge vague/risky direction.
+- YouTube workflows: Supadata first, fallback second.
+- Reliability: run fallback chain before reporting failure.
+- Reminder ops: completed tasks must disable matching reminder immediately.

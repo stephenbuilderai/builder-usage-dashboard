@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "skills": {
+    "github": {
+      "version": "1.0.0",
+      "installedAt": 1772699521290
+    },
+    "context7": {
+      "version": "1.0.3",
+      "installedAt": 1772663890895
+    },
+    "securityreview": {
+      "version": "1.0.0",
+      "installedAt": 1772663892256
+    },
+    "agentic-coding": {
+      "version": "1.0.0",
+      "installedAt": 1772664902249
+    }
+  }
+}

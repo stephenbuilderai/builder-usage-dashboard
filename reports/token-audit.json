@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-03-07T12:51:06.274Z",
+  "generatedAt": "2026-03-07T13:20:32.973Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 50,
-    "tokens": 306790,
-    "bytes": 1233068
+    "files": 47,
+    "tokens": 310479,
+    "bytes": 1247866
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 1063689,
-      "lines": 36604,
-      "tokens": 265793
+      "bytes": 1080149,
+      "lines": 37169,
+      "tokens": 269906
     },
     {
       "file": "reports/usage-latest.json",
@@ -38,16 +38,16 @@
       "tokens": 1690
     },
     {
-      "file": "skills/agentic-coding/SKILL.md",
-      "bytes": 5332,
-      "lines": 151,
-      "tokens": 1333
-    },
-    {
       "file": "token-audit.js",
       "bytes": 5152,
       "lines": 132,
       "tokens": 1288
+    },
+    {
+      "file": "skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md",
+      "bytes": 4287,
+      "lines": 65,
+      "tokens": 1068
     },
     {
       "file": "reports/token-audit.json",
@@ -74,28 +74,28 @@
       "tokens": 730
     },
     {
+      "file": "skills/self-improving/corrections.md",
+      "bytes": 2415,
+      "lines": 63,
+      "tokens": 597
+    },
+    {
       "file": "skills/self-improving/boundaries.md",
       "bytes": 2236,
       "lines": 60,
       "tokens": 556
     },
     {
-      "file": "skills/agentic-coding/memory-template.md",
-      "bytes": 1840,
-      "lines": 87,
-      "tokens": 460
+      "file": "skills/qmd/SKILL.md",
+      "bytes": 1664,
+      "lines": 73,
+      "tokens": 416
     },
     {
-      "file": "skills/agentic-coding/setup.md",
-      "bytes": 1743,
-      "lines": 53,
-      "tokens": 436
-    },
-    {
-      "file": "skills/agentic-coding/prompt-contracts.md",
-      "bytes": 1529,
-      "lines": 70,
-      "tokens": 383
+      "file": "skills/supadata-youtube/SKILL.md",
+      "bytes": 1656,
+      "lines": 46,
+      "tokens": 414
     },
     {
       "file": "skills/self-improving/setup.md",
@@ -110,10 +110,10 @@
       "tokens": 363
     },
     {
-      "file": "skills/agentic-coding/protocol.md",
-      "bytes": 1369,
-      "lines": 66,
-      "tokens": 343
+      "file": "skills/summarize/SKILL.md",
+      "bytes": 1393,
+      "lines": 52,
+      "tokens": 348
     },
     {
       "file": "SOUL.md",
@@ -128,16 +128,16 @@
       "tokens": 295
     },
     {
-      "file": "skills/github/SKILL.md",
-      "bytes": 1113,
-      "lines": 48,
-      "tokens": 279
-    },
-    {
       "file": "PROCESS.md",
       "bytes": 1095,
       "lines": 36,
       "tokens": 274
+    },
+    {
+      "file": "skills/self-improving/memory.md",
+      "bytes": 1077,
+      "lines": 37,
+      "tokens": 269
     },
     {
       "file": "docs/reports/daily-rollups/summary-5d.md",
@@ -162,8 +162,8 @@
     {
       "folder": "reports",
       "files": 8,
-      "bytes": 1147123,
-      "tokens": 285359
+      "bytes": 1163583,
+      "tokens": 289472
     },
     {
       "folder": ".",
@@ -173,9 +173,9 @@
     },
     {
       "folder": "skills",
-      "files": 23,
-      "bytes": 38037,
-      "tokens": 9465
+      "files": 20,
+      "bytes": 36375,
+      "tokens": 9041
     },
     {
       "folder": "docs",

@@ -13,7 +13,7 @@ Overview
 │                 │ 23.0.3) app 2026.3.7 linux 6.8.0-94-generic                                                       │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 29 · default main active just now                       │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 29 · default main active 1m ago                         │
 │ Memory          │ 13 files · 26 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │
 │                 │ (120)                                                                                             │
 │ Probes          │ skipped (use --deep)                                                                              │
@@ -58,20 +58,20 @@ Channels
 └──────────┴─────────┴────────┴───────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌──────────────────────────────────────────────┬────────┬──────────┬───────────────┬──────────────────────────────────┐
-│ Key                                          │ Kind   │ Age      │ Model         │ Tokens                           │
-├──────────────────────────────────────────────┼────────┼──────────┼───────────────┼──────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
-│ agent:main:telegram:group:-1003…             │ group  │ 1m ago   │ gpt-5.3-codex │ 126k/272k (46%) · 🗄️ 99% cached  │
-│ agent:main:subagent:4a3609a2-5c…             │ direct │ 1m ago   │ gpt-5.2       │ unknown/200k (?%)                │
-│ agent:main:telegram:group:-1003…             │ group  │ 2m ago   │ gpt-5.3-codex │ 42k/272k (15%) · 🗄️ 99% cached   │
-│ agent:main:main                              │ direct │ 28m ago  │ gpt-5-mini    │ 17k/400k (4%) · 🗄️ 9% cached     │
-│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 29m ago  │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 11% cached    │
-│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 29m ago  │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 11% cached    │
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ 30m ago  │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
-│ agent:main:telegram:direct:1773…             │ direct │ 38m ago  │ gpt-5.3-codex │ 142k/272k (52%) · 🗄️ 100% cached │
-└──────────────────────────────────────────────┴────────┴──────────┴───────────────┴──────────────────────────────────┘
+┌───────────────────────────────────────────────┬────────┬─────────┬───────────────┬──────────────────────────────────┐
+│ Key                                           │ Kind   │ Age     │ Model         │ Tokens                           │
+├───────────────────────────────────────────────┼────────┼─────────┼───────────────┼──────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 1m ago  │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
+│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 1m ago  │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
+│ agent:main:telegram:group:-1003…              │ group  │ 1m ago  │ gpt-5.3-codex │ 126k/272k (46%) · 🗄️ 99% cached  │
+│ agent:main:subagent:4a3609a2-5c…              │ direct │ 1m ago  │ gpt-5.2       │ unknown/200k (?%)                │
+│ agent:main:telegram:group:-1003…              │ group  │ 2m ago  │ gpt-5.3-codex │ 42k/272k (15%) · 🗄️ 99% cached   │
+│ agent:main:main                               │ direct │ 28m ago │ gpt-5-mini    │ 17k/400k (4%) · 🗄️ 9% cached     │
+│ agent:main:cron:09e9053c-4dcf-4…              │ direct │ 29m ago │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 11% cached    │
+│ agent:main:cron:09e9053c-4dcf-4…              │ direct │ 29m ago │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 11% cached    │
+│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 31m ago │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
+│ agent:main:telegram:direct:1773…              │ direct │ 38m ago │ gpt-5.3-codex │ 142k/272k (52%) · 🗄️ 100% cached │
+└───────────────────────────────────────────────┴────────┴─────────┴───────────────┴──────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting

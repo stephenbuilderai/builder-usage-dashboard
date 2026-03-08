@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-08T05:51:38.204Z",
+  "generatedAt": "2026-03-08T06:21:27.152Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
     "files": 56,
-    "tokens": 635261,
-    "bytes": 2548693
+    "tokens": 639714,
+    "bytes": 2566530
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 2297335,
-      "lines": 77815,
-      "tokens": 573797
+      "bytes": 2315170,
+      "lines": 78408,
+      "tokens": 578249
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 107881,
+      "bytes": 107883,
       "lines": 617,
-      "tokens": 26313
+      "tokens": 26314
     },
     {
       "file": "openclaw-usage.js",
@@ -162,8 +162,8 @@
     {
       "folder": "reports",
       "files": 10,
-      "bytes": 2424415,
-      "tokens": 604265
+      "bytes": 2442252,
+      "tokens": 608718
     },
     {
       "folder": ".",

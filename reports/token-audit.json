@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-08T15:51:45.103Z",
+  "generatedAt": "2026-03-08T16:21:45.410Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
     "files": 56,
-    "tokens": 812562,
-    "bytes": 3258830
+    "tokens": 818521,
+    "bytes": 3282688
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 2993202,
-      "lines": 100942,
-      "tokens": 747510
+      "bytes": 3011051,
+      "lines": 101535,
+      "tokens": 751966
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 122404,
+      "bytes": 126376,
       "lines": 617,
-      "tokens": 29954
+      "tokens": 30947
     },
     {
       "file": "openclaw-usage.js",
@@ -86,6 +86,12 @@
       "tokens": 730
     },
     {
+      "file": "SOUL.md",
+      "bytes": 2688,
+      "lines": 68,
+      "tokens": 671
+    },
+    {
       "file": "skills/self-improving/corrections.md",
       "bytes": 2415,
       "lines": 63,
@@ -102,6 +108,12 @@
       "bytes": 2236,
       "lines": 60,
       "tokens": 556
+    },
+    {
+      "file": "AGENTS.md",
+      "bytes": 1881,
+      "lines": 43,
+      "tokens": 470
     },
     {
       "file": "skills/qmd/SKILL.md",
@@ -134,12 +146,6 @@
       "tokens": 363
     },
     {
-      "file": "SOUL.md",
-      "bytes": 1450,
-      "lines": 52,
-      "tokens": 362
-    },
-    {
       "file": "skills/summarize/SKILL.md",
       "bytes": 1393,
       "lines": 52,
@@ -150,26 +156,20 @@
       "bytes": 1310,
       "lines": 41,
       "tokens": 328
-    },
-    {
-      "file": "AGENTS.md",
-      "bytes": 1182,
-      "lines": 32,
-      "tokens": 295
     }
   ],
   "byFolder": [
     {
       "folder": "reports",
       "files": 10,
-      "bytes": 3134291,
-      "tokens": 781501
+      "bytes": 3156162,
+      "tokens": 786963
     },
     {
       "folder": ".",
       "files": 11,
-      "bytes": 62719,
-      "tokens": 15659
+      "bytes": 64656,
+      "tokens": 16143
     },
     {
       "folder": "skills",
@@ -180,8 +180,8 @@
     {
       "folder": "docs",
       "files": 8,
-      "bytes": 6108,
-      "tokens": 1526
+      "bytes": 6158,
+      "tokens": 1539
     },
     {
       "folder": ".clawhub",

@@ -9,7 +9,7 @@ Overview
 │ Tailscale       │ off                                                                                               │
 │ Channel         │ stable (config)                                                                                   │
 │ Update          │ pnpm · npm latest 2026.3.7                                                                        │
-│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 17ms · auth token · 2bf5bd64c8d3 (172.  │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 21ms · auth token · 2bf5bd64c8d3 (172.  │
 │                 │ 23.0.3) app 2026.3.7 linux 6.8.0-94-generic                                                       │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
@@ -63,7 +63,7 @@ Sessions
 ├──────────────────────────────────────────────┼────────┼──────────┼───────────────┼──────────────────────────────────┤
 │ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
 │ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 14k/400k (4%) · 🗄️ 297% cached   │
-│ agent:main:telegram:group:-1003…             │ group  │ just now │ gpt-5.3-codex │ 126k/272k (46%) · 🗄️ 99% cached  │
+│ agent:main:telegram:group:-1003…             │ group  │ 1m ago   │ gpt-5.3-codex │ 126k/272k (46%) · 🗄️ 99% cached  │
 │ agent:main:subagent:4a3609a2-5c…             │ direct │ 1m ago   │ gpt-5.2       │ unknown/200k (?%)                │
 │ agent:main:telegram:group:-1003…             │ group  │ 2m ago   │ gpt-5.3-codex │ 42k/272k (15%) · 🗄️ 99% cached   │
 │ agent:main:main                              │ direct │ 28m ago  │ gpt-5-mini    │ 17k/400k (4%) · 🗄️ 9% cached     │

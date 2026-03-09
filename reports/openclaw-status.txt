@@ -63,13 +63,13 @@ Sessions
 ├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:main                                 │ direct │ just now │ gpt-5-mini   │ 18k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:main                                 │ direct │ 1m ago   │ gpt-5-mini   │ 18k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 59m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 196% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 196% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 32k/400k (8%) · 🗄️ 87% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 2h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 2h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 196% cached │
 └─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
 

@@ -9,7 +9,7 @@ Overview
 │ Tailscale       │ off                                                                                               │
 │ Channel         │ stable (config)                                                                                   │
 │ Update          │ pnpm · npm latest 2026.3.7                                                                        │
-│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 17ms · auth token · 2bf5bd64c8d3 (172.  │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 24ms · auth token · 2bf5bd64c8d3 (172.  │
 │                 │ 23.0.3) app 2026.3.7 linux 6.8.0-94-generic                                                       │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
@@ -63,14 +63,14 @@ Sessions
 ├──────────────────────────────────────────────┼────────┼──────────┼───────────────┼──────────────────────────────────┤
 │ agent:main:telegram:group:-1003…             │ group  │ just now │ gpt-5.3-codex │ 136k/272k (50%) · 🗄️ 98% cached  │
 │ agent:main:subagent:63e0b012-11…             │ direct │ just now │ gpt-5.3-codex │ 83k/272k (31%) · 🗄️ 2649% cached │
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ just now │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
+│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ 1m ago   │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
+│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ 1m ago   │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
 │ agent:main:telegram:group:-1003…             │ group  │ 10m ago  │ gpt-5.3-codex │ 50k/272k (18%) · 🗄️ 98% cached   │
 │ agent:main:main                              │ direct │ 28m ago  │ gpt-5-mini    │ 17k/400k (4%)                    │
-│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 29m ago  │ gpt-5-mini    │ 14k/400k (4%)                    │
-│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 29m ago  │ gpt-5-mini    │ 14k/400k (4%)                    │
+│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 30m ago  │ gpt-5-mini    │ 14k/400k (4%)                    │
+│ agent:main:cron:09e9053c-4dcf-4…             │ direct │ 30m ago  │ gpt-5-mini    │ 14k/400k (4%)                    │
 │ agent:main:subagent:4a3609a2-5c…             │ direct │ 30m ago  │ gpt-5.3-codex │ 29k/272k (11%) · 🗄️ 320% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ 30m ago  │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
+│ agent:main:cron:da0d4fa5-733f-4…             │ direct │ 31m ago  │ gpt-5-mini    │ 15k/400k (4%) · 🗄️ 751% cached   │
 └──────────────────────────────────────────────┴────────┴──────────┴───────────────┴──────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq

@@ -8,11 +8,12 @@ Overview
 │ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │
 │ Tailscale       │ off                                                                                               │
 │ Channel         │ stable (config)                                                                                   │
-│ Update          │ pnpm · npm latest unknown                                                                         │
-│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · unreachable (timeout)                             │
+│ Update          │ available · pnpm · npm update 2026.3.8                                                            │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 24ms · auth token · 2bf5bd64c8d3 (172.  │
+│                 │ 23.0.3) app 2026.3.7 linux 6.8.0-94-generic                                                       │
 │ Gateway service │ systemd not installed                                                                             │
 │ Node service    │ systemd not installed                                                                             │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 136 · default main active just now                      │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 136 · default main active 1m ago                        │
 │ Memory          │ 13 files · 26 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │
 │                 │ (120)                                                                                             │
 │ Probes          │ skipped (use --deep)                                                                              │
@@ -51,30 +52,33 @@ Channels
 ┌──────────┬─────────┬────────┬───────────────────────────────────────────────────────────────────────────────────────┐
 │ Channel  │ Enabled │ State  │ Detail                                                                                │
 ├──────────┼─────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-│ Telegram │ ON      │ OK     │ token config (8216…Faqo · len 46) · accounts 1/1                                      │
+│ Telegram │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows             │
+│          │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…                │
 │ Discord  │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                      │
 └──────────┴─────────┴────────┴───────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌─────────────────────────────────────────────────┬────────┬──────────┬──────────────┬────────────────────────────────┐
-│ Key                                             │ Kind   │ Age      │ Model        │ Tokens                         │
-├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
-│ agent:main:main                                 │ direct │ 25m ago  │ gpt-5.2      │ 19k/272k (7%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 122% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 122% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 58m ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 192% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 1h ago   │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 219% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 1h ago   │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 192% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 2h ago   │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 219% cached │
-└─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
+┌──────────────────────────────────────────────────┬────────┬─────────┬──────────────┬────────────────────────────────┐
+│ Key                                              │ Kind   │ Age     │ Model        │ Tokens                         │
+├──────────────────────────────────────────────────┼────────┼─────────┼──────────────┼────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 1m ago  │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 1m ago  │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
+│ agent:main:main                                  │ direct │ 26m ago │ gpt-5.2      │ 19k/272k (7%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 28m ago │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 122% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 28m ago │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 122% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 31m ago │ gpt-5-mini   │ 15k/272k (5%) · 🗄️ 219% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 59m ago │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 192% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 1h ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 219% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 1h ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 192% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 2h ago  │ gpt-5.2      │ 15k/272k (5%) · 🗄️ 219% cached │
+└──────────────────────────────────────────────────┴────────┴─────────┴──────────────┴────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting
 
+Update available (npm 2026.3.8). Run: openclaw update
+
 Next steps:
   Need to share?      openclaw status --all
   Need to debug live? openclaw logs --follow
-  Fix reachability first: openclaw gateway probe
+  Need to test channels? openclaw status --deep

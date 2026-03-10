@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-03-10T12:05:21.729Z",
+  "generatedAt": "2026-03-10T12:35:04.636Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 60,
-    "tokens": 951326,
-    "bytes": 3815834
+    "files": 61,
+    "tokens": 952101,
+    "bytes": 3818936
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 3552558,
-      "lines": 118403,
-      "tokens": 886858
+      "bytes": 3552649,
+      "lines": 118407,
+      "tokens": 886881
     },
     {
       "file": "reports/usage-latest.json",
@@ -75,9 +75,9 @@
     },
     {
       "file": "SOUL.md",
-      "bytes": 3266,
-      "lines": 71,
-      "tokens": 816
+      "bytes": 3340,
+      "lines": 72,
+      "tokens": 834
     },
     {
       "file": "skills/self-improving/scaling.md",
@@ -90,6 +90,12 @@
       "bytes": 2951,
       "lines": 107,
       "tokens": 730
+    },
+    {
+      "file": "ROUTING.md",
+      "bytes": 2873,
+      "lines": 116,
+      "tokens": 718
     },
     {
       "file": "skills/self-improving/corrections.md",
@@ -111,9 +117,9 @@
     },
     {
       "file": "AGENTS.md",
-      "bytes": 1965,
-      "lines": 43,
-      "tokens": 491
+      "bytes": 2029,
+      "lines": 44,
+      "tokens": 507
     },
     {
       "file": "skills/qmd/SKILL.md",
@@ -150,26 +156,20 @@
       "bytes": 1393,
       "lines": 52,
       "tokens": 348
-    },
-    {
-      "file": "skills/model-usage/scripts/test_model_usage.py",
-      "bytes": 1310,
-      "lines": 41,
-      "tokens": 328
     }
   ],
   "byFolder": [
     {
       "folder": "reports",
       "files": 12,
-      "bytes": 3687091,
-      "tokens": 919213
+      "bytes": 3687182,
+      "tokens": 919236
     },
     {
       "folder": ".",
-      "files": 11,
-      "bytes": 65318,
-      "tokens": 16309
+      "files": 12,
+      "bytes": 68329,
+      "tokens": 17061
     },
     {
       "folder": "skills",

@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-03-10T11:05:20.472Z",
+  "generatedAt": "2026-03-10T11:35:07.133Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
     "files": 60,
-    "tokens": 951021,
-    "bytes": 3814613
+    "tokens": 951144,
+    "bytes": 3815106
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 3552292,
-      "lines": 118391,
-      "tokens": 886793
+      "bytes": 3552379,
+      "lines": 118395,
+      "tokens": 886814
     },
     {
       "file": "reports/usage-latest.json",
@@ -75,9 +75,9 @@
     },
     {
       "file": "SOUL.md",
-      "bytes": 2944,
-      "lines": 70,
-      "tokens": 735
+      "bytes": 3266,
+      "lines": 71,
+      "tokens": 816
     },
     {
       "file": "skills/self-improving/scaling.md",
@@ -111,9 +111,9 @@
     },
     {
       "file": "AGENTS.md",
-      "bytes": 1881,
+      "bytes": 1965,
       "lines": 43,
-      "tokens": 470
+      "tokens": 491
     },
     {
       "file": "skills/qmd/SKILL.md",
@@ -162,14 +162,14 @@
     {
       "folder": "reports",
       "files": 12,
-      "bytes": 3686227,
-      "tokens": 918998
+      "bytes": 3686314,
+      "tokens": 919019
     },
     {
       "folder": ".",
       "files": 11,
-      "bytes": 64912,
-      "tokens": 16207
+      "bytes": 65318,
+      "tokens": 16309
     },
     {
       "folder": "skills",

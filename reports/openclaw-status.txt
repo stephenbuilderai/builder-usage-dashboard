@@ -61,13 +61,13 @@ Sessions
 ┌─────────────────────────────────────────────────┬────────┬──────────┬──────────────┬────────────────────────────────┐
 │ Key                                             │ Kind   │ Age      │ Model        │ Tokens                         │
 ├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
+│ agent:main:main                                 │ direct │ just now │ gpt-5-mini   │ 20k/400k (5%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 21k/400k (5%) · 🗄️ 355% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 21k/400k (5%) · 🗄️ 355% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
-│ agent:main:main                                 │ direct │ 30m ago  │ gpt-5-mini   │ 20k/400k (5%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 28m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 28m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 21k/400k (5%) · 🗄️ 355% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 57m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 58m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 100% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 197% cached │
 │ agent:main:telegram:group:-1003…                │ group  │ 1h ago   │ gpt-5.4      │ 20k/200k (10%) · 🗄️ 96% cached │
 │ agent:main:telegram:direct:1773…                │ direct │ 1h ago   │ gpt-5.4      │ 75k/200k (37%) · 🗄️ 3% cached  │

@@ -1,9 +1,10 @@
 {
-  "capturedAt": "2026-03-09T11:36:48.618Z",
-  "source": "openclaw-agent-session_status",
-  "dayLeftPercent": 61.5,
-  "dayLeftText": "9h 9m",
-  "weekLeftPercent": 92.59,
-  "weekLeftText": "5d 11h 9m",
-  "model": "openai-codex/gpt-5.3-codex"
+  "capturedAt": "2026-03-10T06:35:22.356Z",
+  "source": "fallback",
+  "error": "Invalid session_status payload",
+  "dayLeftPercent": null,
+  "dayLeftText": null,
+  "weekLeftPercent": null,
+  "weekLeftText": null,
+  "model": null
 }

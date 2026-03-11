@@ -1,595 +1,5 @@
 [
   {
-    "capturedAt": "2026-03-09T13:05:07.688Z",
-    "securitySummary": "5 critical · 4 warn · 1 info",
-    "statusOverview": {
-      "Dashboard": "http://127.0.0.1:18789/",
-      "OS": "linux 6.8.0-94-generic (x64) · node 22.22.0",
-      "Tailscale": "off",
-      "Channel": "stable (config)",
-      "Update": "available · pnpm · npm update 2026.3.8",
-      "Gateway": "local · ws://127.0.0.1:18789 (local loopback) · reachable 19ms · auth token · 2bf5bd64c8d3 (172.",
-      "Gateway service": "systemd not installed",
-      "Node service": "systemd not installed",
-      "Agents": "11 · 8 bootstrap files present · sessions 95 · default main active just now",
-      "Memory": "13 files · 26 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on",
-      "Probes": "skipped (use --deep)",
-      "Events": "none",
-      "Heartbeat": "30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled",
-      "Sessions": "95 active · default gpt-5.2 (200k ctx) · 11 stores"
-    },
-    "securityCounts": {
-      "critical": 5,
-      "warn": 4,
-      "info": 1
-    },
-    "allAgents": true,
-    "totalSessions": 95,
-    "sessionCount": 22,
-    "knownTokenSessions": 22,
-    "estimatedUsedTokens": 760132,
-    "estimatedCostUsd": 6.08,
-    "byModelEstimatedTokens": {
-      "gpt-5-mini": 263.586,
-      "gpt-5.3-codex": 485.88,
-      "gpt-5.2": 10.666
-    },
-    "byAgentEstimatedTokens": {
-      "main": 592.312,
-      "builder": 112.346,
-      "growth-analyst": 10.666,
-      "growth-engagement": 10.658,
-      "growth-publisher": 11.467,
-      "growth-content": 11.005,
-      "growth-strategist": 0,
-      "growth-researcher": 11.678
-    },
-    "byAgentMeta": {
-      "main": {
-        "lastActiveAt": 1773061498475,
-        "sessions": 14
-      },
-      "builder": {
-        "lastActiveAt": 1772743706892,
-        "sessions": 2
-      },
-      "growth-analyst": {
-        "lastActiveAt": 1772743480915,
-        "sessions": 1
-      },
-      "growth-engagement": {
-        "lastActiveAt": 1772743448112,
-        "sessions": 1
-      },
-      "growth-publisher": {
-        "lastActiveAt": 1772743416746,
-        "sessions": 1
-      },
-      "growth-content": {
-        "lastActiveAt": 1772743396372,
-        "sessions": 1
-      },
-      "growth-strategist": {
-        "lastActiveAt": 1772743357121,
-        "sessions": 1
-      },
-      "growth-researcher": {
-        "lastActiveAt": 1772743322160,
-        "sessions": 1
-      }
-    },
-    "byBucketEstimatedTokens": {
-      "cron": 232.533,
-      "interactive": 527.599,
-      "system/other": 0
-    },
-    "byBucketByModel": {
-      "cron": {
-        "gpt-5-mini": 200.605,
-        "gpt-5.3-codex": 31.928
-      },
-      "interactive": {
-        "gpt-5-mini": 62.981,
-        "gpt-5.3-codex": 453.952,
-        "gpt-5.2": 10.666
-      },
-      "system/other": {}
-    },
-    "attributionRules": {
-      "cron": "session key contains :cron:",
-      "interactive": "telegram/discord/group/direct/main session patterns",
-      "system/other": "fallback bucket when no other rule matches",
-      "limitations": "Pattern-based heuristics; may misclassify custom keys or future formats."
-    },
-    "topSessions": [
-      {
-        "agent": "main",
-        "key": "agent:main:telegram:direct:1773262118",
-        "model": "gpt-5.3-codex",
-        "tokens": 142190,
-        "updatedAt": 1773010395190,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:telegram:group:-1003842752959:topic:203",
-        "model": "gpt-5.3-codex",
-        "tokens": 131454,
-        "updatedAt": 1773015996004,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:da0d4fa5-733f-40c3-96de-f097859919a2",
-        "model": "gpt-5-mini",
-        "tokens": 112773,
-        "updatedAt": 1773061498475,
-        "bucket": "cron"
-      },
-      {
-        "agent": "builder",
-        "key": "agent:builder:telegram:group:-1003842752959:topic:3",
-        "model": "gpt-5.3-codex",
-        "tokens": 101577,
-        "updatedAt": 1772743706892,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:telegram:group:-1003842752959:topic:3",
-        "model": "gpt-5.3-codex",
-        "tokens": 50071,
-        "updatedAt": 1773013889978,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec",
-        "model": "gpt-5-mini",
-        "tokens": 28000,
-        "updatedAt": 1773025200135,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:main",
-        "model": "gpt-5-mini",
-        "tokens": 18173,
-        "updatedAt": 1773061250191,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:telegram:group:-1003842752959",
-        "model": "gpt-5.3-codex",
-        "tokens": 17891,
-        "updatedAt": 1773027615180,
-        "bucket": "interactive"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:5d18fb33-f132-49df-b03c-ebe69b2bb7eb",
-        "model": "gpt-5-mini",
-        "tokens": 16417,
-        "updatedAt": 1773055487391,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:3f0534d5-8c91-46b6-83e4-58358e7223b8",
-        "model": "gpt-5.3-codex",
-        "tokens": 15994,
-        "updatedAt": 1773055148760,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:85f946fb-58ed-4f8b-8022-47f08bbdd252",
-        "model": "gpt-5.3-codex",
-        "tokens": 15934,
-        "updatedAt": 1773054900335,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3",
-        "model": "gpt-5-mini",
-        "tokens": 14831,
-        "updatedAt": 1773027600141,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:09e9053c-4dcf-4818-86d3-4a9259a55ba0",
-        "model": "gpt-5-mini",
-        "tokens": 14345,
-        "updatedAt": 1773059813719,
-        "bucket": "cron"
-      },
-      {
-        "agent": "main",
-        "key": "agent:main:cron:136295b7-5907-45da-8526-e3e8a5604525",
-        "model": "gpt-5-mini",
-        "tokens": 14239,
-        "updatedAt": 1773027000107,
-        "bucket": "cron"
-      },
-      {
-        "agent": "growth-researcher",
-        "key": "agent:growth-researcher:main",
-        "model": "gpt-5-mini",
-        "tokens": 11678,
-        "updatedAt": 1772743322160,
-        "bucket": "interactive"
-      }
-    ],
-    "dedupeApplied": true,
-    "contextProfiler": {
-      "fileCount": 36,
-      "totalBytes": 69693,
-      "totalLines": 2125,
-      "totalEstimatedTokens": 17305,
-      "files": [
-        {
-          "path": "../growth-analyst/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:50.030Z"
-        },
-        {
-          "path": "../growth-content/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:43.029Z"
-        },
-        {
-          "path": "../growth-engagement/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:47.396Z"
-        },
-        {
-          "path": "../growth-publisher/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:45.285Z"
-        },
-        {
-          "path": "../growth-researcher/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:38.660Z"
-        },
-        {
-          "path": "../growth-strategist/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:40.897Z"
-        },
-        {
-          "path": "SOUL.md",
-          "bytes": 2944,
-          "lineCount": 70,
-          "estimatedTokens": 735,
-          "lastModified": "2026-03-08T16:56:43.419Z"
-        },
-        {
-          "path": "AGENTS.md",
-          "bytes": 1881,
-          "lineCount": 43,
-          "estimatedTokens": 470,
-          "lastModified": "2026-03-08T16:13:04.104Z"
-        },
-        {
-          "path": "BOOTSTRAP.md",
-          "bytes": 1470,
-          "lineCount": 56,
-          "estimatedTokens": 363,
-          "lastModified": "2026-03-04T21:31:06.220Z"
-        },
-        {
-          "path": "PROCESS.md",
-          "bytes": 1095,
-          "lineCount": 36,
-          "estimatedTokens": 274,
-          "lastModified": "2026-03-05T01:14:37.542Z"
-        },
-        {
-          "path": "TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-04T21:31:06.217Z"
-        },
-        {
-          "path": "../growth-analyst/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:50.031Z"
-        },
-        {
-          "path": "../growth-content/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:43.029Z"
-        },
-        {
-          "path": "../growth-engagement/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:47.397Z"
-        },
-        {
-          "path": "../growth-publisher/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:45.286Z"
-        },
-        {
-          "path": "../growth-researcher/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:38.660Z"
-        },
-        {
-          "path": "../growth-strategist/TOOLS.md",
-          "bytes": 860,
-          "lineCount": 41,
-          "estimatedTokens": 213,
-          "lastModified": "2026-03-05T16:48:40.898Z"
-        },
-        {
-          "path": "TOKEN_AUDIT.md",
-          "bytes": 781,
-          "lineCount": 30,
-          "estimatedTokens": 195,
-          "lastModified": "2026-03-05T01:11:44.652Z"
-        },
-        {
-          "path": "IDENTITY.md",
-          "bytes": 636,
-          "lineCount": 24,
-          "estimatedTokens": 159,
-          "lastModified": "2026-03-04T21:31:06.218Z"
-        },
-        {
-          "path": "USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-04T21:31:06.218Z"
-        },
-        {
-          "path": "../growth-analyst/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:50.032Z"
-        },
-        {
-          "path": "../growth-content/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:43.030Z"
-        },
-        {
-          "path": "../growth-engagement/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:47.397Z"
-        },
-        {
-          "path": "../growth-publisher/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:45.286Z"
-        },
-        {
-          "path": "../growth-researcher/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:38.661Z"
-        },
-        {
-          "path": "../growth-strategist/USER.md",
-          "bytes": 477,
-          "lineCount": 18,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:48:40.899Z"
-        },
-        {
-          "path": "../growth-researcher/SOUL.md",
-          "bytes": 476,
-          "lineCount": 17,
-          "estimatedTokens": 119,
-          "lastModified": "2026-03-05T16:49:13.173Z"
-        },
-        {
-          "path": "../trading-commander/SOUL.md",
-          "bytes": 473,
-          "lineCount": 24,
-          "estimatedTokens": 118,
-          "lastModified": "2026-03-05T21:13:59.018Z"
-        },
-        {
-          "path": "../growth-content/SOUL.md",
-          "bytes": 472,
-          "lineCount": 17,
-          "estimatedTokens": 118,
-          "lastModified": "2026-03-05T16:49:13.176Z"
-        },
-        {
-          "path": "../growth-strategist/SOUL.md",
-          "bytes": 469,
-          "lineCount": 17,
-          "estimatedTokens": 117,
-          "lastModified": "2026-03-05T16:49:13.175Z"
-        },
-        {
-          "path": "../growth-publisher/SOUL.md",
-          "bytes": 463,
-          "lineCount": 17,
-          "estimatedTokens": 116,
-          "lastModified": "2026-03-05T16:49:13.178Z"
-        },
-        {
-          "path": "../growth-analyst/SOUL.md",
-          "bytes": 462,
-          "lineCount": 17,
-          "estimatedTokens": 116,
-          "lastModified": "2026-03-05T16:49:13.181Z"
-        },
-        {
-          "path": "../growth-engagement/SOUL.md",
-          "bytes": 460,
-          "lineCount": 17,
-          "estimatedTokens": 115,
-          "lastModified": "2026-03-05T16:49:13.180Z"
-        },
-        {
-          "path": "../trading-review-research/SOUL.md",
-          "bytes": 440,
-          "lineCount": 22,
-          "estimatedTokens": 110,
-          "lastModified": "2026-03-05T21:13:59.030Z"
-        },
-        {
-          "path": "../trading-execution-risk/SOUL.md",
-          "bytes": 430,
-          "lineCount": 21,
-          "estimatedTokens": 108,
-          "lastModified": "2026-03-05T21:13:59.024Z"
-        },
-        {
-          "path": "HEARTBEAT.md",
-          "bytes": 168,
-          "lineCount": 6,
-          "estimatedTokens": 42,
-          "lastModified": "2026-03-04T21:31:06.218Z"
-        }
-      ],
-      "top10": [
-        {
-          "path": "../growth-analyst/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:50.030Z"
-        },
-        {
-          "path": "../growth-content/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:43.029Z"
-        },
-        {
-          "path": "../growth-engagement/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:47.396Z"
-        },
-        {
-          "path": "../growth-publisher/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:45.285Z"
-        },
-        {
-          "path": "../growth-researcher/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:38.660Z"
-        },
-        {
-          "path": "../growth-strategist/AGENTS.md",
-          "bytes": 7869,
-          "lineCount": 213,
-          "estimatedTokens": 1951,
-          "lastModified": "2026-03-05T16:48:40.897Z"
-        },
-        {
-          "path": "SOUL.md",
-          "bytes": 2944,
-          "lineCount": 70,
-          "estimatedTokens": 735,
-          "lastModified": "2026-03-08T16:56:43.419Z"
-        },
-        {
-          "path": "AGENTS.md",
-          "bytes": 1881,
-          "lineCount": 43,
-          "estimatedTokens": 470,
-          "lastModified": "2026-03-08T16:13:04.104Z"
-        },
-        {
-          "path": "BOOTSTRAP.md",
-          "bytes": 1470,
-          "lineCount": 56,
-          "estimatedTokens": 363,
-          "lastModified": "2026-03-04T21:31:06.220Z"
-        },
-        {
-          "path": "PROCESS.md",
-          "bytes": 1095,
-          "lineCount": 36,
-          "estimatedTokens": 274,
-          "lastModified": "2026-03-05T01:14:37.542Z"
-        }
-      ],
-      "notes": "Estimated tokens uses chars/4 heuristic."
-    },
-    "planUsage": {
-      "capturedAt": "2026-03-09T11:36:48.618Z",
-      "source": "openclaw-agent-session_status",
-      "dayLeftPercent": 61.5,
-      "dayLeftText": "9h 9m",
-      "weekLeftPercent": 92.59,
-      "weekLeftText": "5d 11h 9m",
-      "model": "openai-codex/gpt-5.3-codex"
-    },
-    "aiInsights": {
-      "partial": true,
-      "last5Days": [
-        "2026-03-07",
-        "2026-03-08",
-        "2026-03-09"
-      ],
-      "bullets": [
-        "Estimated tokens moved down by 323,951 across the available window.",
-        "Estimated daily costs track token movement and remain rough heuristics.",
-        "Top models: gpt-5.3-codex (1,723,656 est tokens) · gpt-5-mini (582,898 est tokens) · gpt-5.2 (61,506 est tokens)",
-        "Top agents: main (1,864,600 est tokens) · builder (337,038 est tokens) · growth-researcher (35,034 est tokens)",
-        "Top attribution buckets: interactive (1,616,840 est tokens) · cron (751,220 est tokens) · system/other (0 est tokens)",
-        "2026-03-08: -51.7% token shift vs previous day"
-      ],
-      "rollupLinks": [
-        "reports/daily-rollups/2026-03-07.json",
-        "reports/daily-rollups/2026-03-08.json",
-        "reports/daily-rollups/2026-03-09.json"
-      ],
-      "summaryPath": "reports/daily-rollups/summary-5d.md"
-    }
-  },
-  {
     "capturedAt": "2026-03-09T13:05:18.166Z",
     "securitySummary": "5 critical · 4 warn · 1 info",
     "statusOverview": {
@@ -118896,6 +118306,605 @@
       "Channel": "stable (config)",
       "Update": "available · pnpm · npm update 2026.3.8",
       "Gateway": "local · ws://127.0.0.1:18789 (local loopback) · reachable 26ms · auth token · 2bf5bd64c8d3 (172.",
+      "Gateway service": "systemd not installed",
+      "Node service": "systemd not installed",
+      "Agents": "11 · 8 bootstrap files present · sessions 141 · default main active just now",
+      "Memory": "13 files · 26 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on",
+      "Probes": "skipped (use --deep)",
+      "Events": "none",
+      "Heartbeat": "30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled",
+      "Sessions": "141 active · default gpt-5.4 (200k ctx) · 11 stores"
+    },
+    "securityCounts": {
+      "critical": 5,
+      "warn": 4,
+      "info": 1
+    },
+    "allAgents": true,
+    "totalSessions": 141,
+    "sessionCount": 31,
+    "knownTokenSessions": 31,
+    "estimatedUsedTokens": 901161,
+    "estimatedCostUsd": 7.21,
+    "byModelEstimatedTokens": {
+      "gpt-5-mini": 349.065,
+      "gpt-5.4": 429.084,
+      "gpt-5.3-codex": 112.346,
+      "gpt-5.2": 10.666
+    },
+    "byAgentEstimatedTokens": {
+      "main": 733.341,
+      "builder": 112.346,
+      "growth-analyst": 10.666,
+      "growth-engagement": 10.658,
+      "growth-publisher": 11.467,
+      "growth-content": 11.005,
+      "growth-strategist": 0,
+      "growth-researcher": 11.678
+    },
+    "byAgentMeta": {
+      "main": {
+        "lastActiveAt": 1773272122145,
+        "sessions": 23
+      },
+      "builder": {
+        "lastActiveAt": 1772743706892,
+        "sessions": 2
+      },
+      "growth-analyst": {
+        "lastActiveAt": 1772743480915,
+        "sessions": 1
+      },
+      "growth-engagement": {
+        "lastActiveAt": 1772743448112,
+        "sessions": 1
+      },
+      "growth-publisher": {
+        "lastActiveAt": 1772743416746,
+        "sessions": 1
+      },
+      "growth-content": {
+        "lastActiveAt": 1772743396372,
+        "sessions": 1
+      },
+      "growth-strategist": {
+        "lastActiveAt": 1772743357121,
+        "sessions": 1
+      },
+      "growth-researcher": {
+        "lastActiveAt": 1772743322160,
+        "sessions": 1
+      }
+    },
+    "byBucketEstimatedTokens": {
+      "cron": 389.716,
+      "interactive": 511.445,
+      "system/other": 0
+    },
+    "byBucketByModel": {
+      "cron": {
+        "gpt-5-mini": 261.613,
+        "gpt-5.4": 128.103
+      },
+      "interactive": {
+        "gpt-5-mini": 87.452,
+        "gpt-5.4": 300.981,
+        "gpt-5.3-codex": 112.346,
+        "gpt-5.2": 10.666
+      },
+      "system/other": {}
+    },
+    "attributionRules": {
+      "cron": "session key contains :cron:",
+      "interactive": "telegram/discord/group/direct/main session patterns",
+      "system/other": "fallback bucket when no other rule matches",
+      "limitations": "Pattern-based heuristics; may misclassify custom keys or future formats."
+    },
+    "topSessions": [
+      {
+        "agent": "main",
+        "key": "agent:main:cron:ea6e4393-8324-4219-bf3f-2f99119546fa",
+        "model": "gpt-5.4",
+        "tokens": 128103,
+        "updatedAt": 1773212400494,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:group:-1003842752959:topic:203",
+        "model": "gpt-5.4",
+        "tokens": 125844,
+        "updatedAt": 1773236804258,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:direct:1773262118",
+        "model": "gpt-5.4",
+        "tokens": 111215,
+        "updatedAt": 1773257719841,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "builder",
+        "key": "agent:builder:telegram:group:-1003842752959:topic:3",
+        "model": "gpt-5.3-codex",
+        "tokens": 101577,
+        "updatedAt": 1772743706892,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:4917be37-a12b-40e4-bf76-467320f870e1",
+        "model": "gpt-5-mini",
+        "tokens": 33279,
+        "updatedAt": 1773255600023,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:85f946fb-58ed-4f8b-8022-47f08bbdd252",
+        "model": "gpt-5-mini",
+        "tokens": 31208,
+        "updatedAt": 1773227700014,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:group:-1003842752959",
+        "model": "gpt-5.4",
+        "tokens": 25945,
+        "updatedAt": 1773243018634,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:group:-1003842752959:topic:3",
+        "model": "gpt-5-mini",
+        "tokens": 23785,
+        "updatedAt": 1773123544003,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:53c5c999-5bc4-4ce7-935a-11dc7e4a24ec",
+        "model": "gpt-5-mini",
+        "tokens": 22048,
+        "updatedAt": 1773198000017,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:group:-1003842752959:topic:2",
+        "model": "gpt-5.4",
+        "tokens": 19624,
+        "updatedAt": 1773172881380,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:main",
+        "model": "gpt-5-mini",
+        "tokens": 18859,
+        "updatedAt": 1773270374032,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:telegram:group:-1003842752959:topic:1",
+        "model": "gpt-5.4",
+        "tokens": 18353,
+        "updatedAt": 1773228237364,
+        "bucket": "interactive"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:cca51773-a65a-4bae-bcef-cbbfea102cde",
+        "model": "gpt-5-mini",
+        "tokens": 17452,
+        "updatedAt": 1773244260011,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:1f031cb2-16c0-403e-adba-026a2cba4e3e",
+        "model": "gpt-5-mini",
+        "tokens": 16914,
+        "updatedAt": 1773243900026,
+        "bucket": "cron"
+      },
+      {
+        "agent": "main",
+        "key": "agent:main:cron:ab7d78ef-c093-48b8-a15e-5ea03e7c3ee3",
+        "model": "gpt-5-mini",
+        "tokens": 16778,
+        "updatedAt": 1773200400015,
+        "bucket": "cron"
+      }
+    ],
+    "dedupeApplied": true,
+    "contextProfiler": {
+      "fileCount": 37,
+      "totalBytes": 73110,
+      "totalLines": 2244,
+      "totalEstimatedTokens": 18159,
+      "files": [
+        {
+          "path": "../growth-analyst/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:50.030Z"
+        },
+        {
+          "path": "../growth-content/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:47.396Z"
+        },
+        {
+          "path": "../growth-publisher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:45.285Z"
+        },
+        {
+          "path": "../growth-researcher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:40.897Z"
+        },
+        {
+          "path": "SOUL.md",
+          "bytes": 3340,
+          "lineCount": 72,
+          "estimatedTokens": 834,
+          "lastModified": "2026-03-10T12:11:59.576Z"
+        },
+        {
+          "path": "ROUTING.md",
+          "bytes": 2873,
+          "lineCount": 116,
+          "estimatedTokens": 718,
+          "lastModified": "2026-03-10T12:11:59.521Z"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 2029,
+          "lineCount": 44,
+          "estimatedTokens": 507,
+          "lastModified": "2026-03-10T12:11:59.626Z"
+        },
+        {
+          "path": "BOOTSTRAP.md",
+          "bytes": 1470,
+          "lineCount": 56,
+          "estimatedTokens": 363,
+          "lastModified": "2026-03-04T21:31:06.220Z"
+        },
+        {
+          "path": "PROCESS.md",
+          "bytes": 1095,
+          "lineCount": 36,
+          "estimatedTokens": 274,
+          "lastModified": "2026-03-05T01:14:37.542Z"
+        },
+        {
+          "path": "TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-04T21:31:06.217Z"
+        },
+        {
+          "path": "../growth-analyst/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:50.031Z"
+        },
+        {
+          "path": "../growth-content/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:47.397Z"
+        },
+        {
+          "path": "../growth-publisher/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:45.286Z"
+        },
+        {
+          "path": "../growth-researcher/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/TOOLS.md",
+          "bytes": 860,
+          "lineCount": 41,
+          "estimatedTokens": 213,
+          "lastModified": "2026-03-05T16:48:40.898Z"
+        },
+        {
+          "path": "TOKEN_AUDIT.md",
+          "bytes": 781,
+          "lineCount": 30,
+          "estimatedTokens": 195,
+          "lastModified": "2026-03-05T01:11:44.652Z"
+        },
+        {
+          "path": "IDENTITY.md",
+          "bytes": 636,
+          "lineCount": 24,
+          "estimatedTokens": 159,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        },
+        {
+          "path": "USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        },
+        {
+          "path": "../growth-analyst/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:50.032Z"
+        },
+        {
+          "path": "../growth-content/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:43.030Z"
+        },
+        {
+          "path": "../growth-engagement/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:47.397Z"
+        },
+        {
+          "path": "../growth-publisher/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:45.286Z"
+        },
+        {
+          "path": "../growth-researcher/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:38.661Z"
+        },
+        {
+          "path": "../growth-strategist/USER.md",
+          "bytes": 477,
+          "lineCount": 18,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:48:40.899Z"
+        },
+        {
+          "path": "../growth-researcher/SOUL.md",
+          "bytes": 476,
+          "lineCount": 17,
+          "estimatedTokens": 119,
+          "lastModified": "2026-03-05T16:49:13.173Z"
+        },
+        {
+          "path": "../trading-commander/SOUL.md",
+          "bytes": 473,
+          "lineCount": 24,
+          "estimatedTokens": 118,
+          "lastModified": "2026-03-05T21:13:59.018Z"
+        },
+        {
+          "path": "../growth-content/SOUL.md",
+          "bytes": 472,
+          "lineCount": 17,
+          "estimatedTokens": 118,
+          "lastModified": "2026-03-05T16:49:13.176Z"
+        },
+        {
+          "path": "../growth-strategist/SOUL.md",
+          "bytes": 469,
+          "lineCount": 17,
+          "estimatedTokens": 117,
+          "lastModified": "2026-03-05T16:49:13.175Z"
+        },
+        {
+          "path": "../growth-publisher/SOUL.md",
+          "bytes": 463,
+          "lineCount": 17,
+          "estimatedTokens": 116,
+          "lastModified": "2026-03-05T16:49:13.178Z"
+        },
+        {
+          "path": "../growth-analyst/SOUL.md",
+          "bytes": 462,
+          "lineCount": 17,
+          "estimatedTokens": 116,
+          "lastModified": "2026-03-05T16:49:13.181Z"
+        },
+        {
+          "path": "../growth-engagement/SOUL.md",
+          "bytes": 460,
+          "lineCount": 17,
+          "estimatedTokens": 115,
+          "lastModified": "2026-03-05T16:49:13.180Z"
+        },
+        {
+          "path": "../trading-review-research/SOUL.md",
+          "bytes": 440,
+          "lineCount": 22,
+          "estimatedTokens": 110,
+          "lastModified": "2026-03-05T21:13:59.030Z"
+        },
+        {
+          "path": "../trading-execution-risk/SOUL.md",
+          "bytes": 430,
+          "lineCount": 21,
+          "estimatedTokens": 108,
+          "lastModified": "2026-03-05T21:13:59.024Z"
+        },
+        {
+          "path": "HEARTBEAT.md",
+          "bytes": 168,
+          "lineCount": 6,
+          "estimatedTokens": 42,
+          "lastModified": "2026-03-04T21:31:06.218Z"
+        }
+      ],
+      "top10": [
+        {
+          "path": "../growth-analyst/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:50.030Z"
+        },
+        {
+          "path": "../growth-content/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:43.029Z"
+        },
+        {
+          "path": "../growth-engagement/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:47.396Z"
+        },
+        {
+          "path": "../growth-publisher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:45.285Z"
+        },
+        {
+          "path": "../growth-researcher/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:38.660Z"
+        },
+        {
+          "path": "../growth-strategist/AGENTS.md",
+          "bytes": 7869,
+          "lineCount": 213,
+          "estimatedTokens": 1951,
+          "lastModified": "2026-03-05T16:48:40.897Z"
+        },
+        {
+          "path": "SOUL.md",
+          "bytes": 3340,
+          "lineCount": 72,
+          "estimatedTokens": 834,
+          "lastModified": "2026-03-10T12:11:59.576Z"
+        },
+        {
+          "path": "ROUTING.md",
+          "bytes": 2873,
+          "lineCount": 116,
+          "estimatedTokens": 718,
+          "lastModified": "2026-03-10T12:11:59.521Z"
+        },
+        {
+          "path": "AGENTS.md",
+          "bytes": 2029,
+          "lineCount": 44,
+          "estimatedTokens": 507,
+          "lastModified": "2026-03-10T12:11:59.626Z"
+        },
+        {
+          "path": "BOOTSTRAP.md",
+          "bytes": 1470,
+          "lineCount": 56,
+          "estimatedTokens": 363,
+          "lastModified": "2026-03-04T21:31:06.220Z"
+        }
+      ],
+      "notes": "Estimated tokens uses chars/4 heuristic."
+    },
+    "planUsage": {
+      "capturedAt": "2026-03-11T20:06:01.140Z",
+      "source": "openclaw-agent-session_status",
+      "dayLeftPercent": 12.15,
+      "dayLeftText": "2h 55m",
+      "weekLeftPercent": 58.88,
+      "weekLeftText": "4d 2h 55m",
+      "model": "openai-codex/gpt-5.4"
+    },
+    "aiInsights": {
+      "partial": true,
+      "last5Days": [
+        "2026-03-09",
+        "2026-03-10",
+        "2026-03-11"
+      ],
+      "bullets": [
+        "Estimated tokens moved up by 153,068 across the available window.",
+        "Estimated daily costs track token movement and remain rough heuristics.",
+        "Top models: gpt-5-mini (851,478 est tokens) · gpt-5.4 (731,228 est tokens) · gpt-5.3-codex (634,837 est tokens)",
+        "Top agents: main (1,779,735 est tokens) · builder (337,038 est tokens) · growth-researcher (35,034 est tokens)",
+        "Top attribution buckets: interactive (1,424,847 est tokens) · cron (858,348 est tokens) · system/other (0 est tokens)",
+        "2026-03-10: -15.3% token shift vs previous day"
+      ],
+      "rollupLinks": [
+        "reports/daily-rollups/2026-03-09.json",
+        "reports/daily-rollups/2026-03-10.json",
+        "reports/daily-rollups/2026-03-11.json"
+      ],
+      "summaryPath": "reports/daily-rollups/summary-5d.md"
+    }
+  },
+  {
+    "capturedAt": "2026-03-11T23:35:46.545Z",
+    "securitySummary": "5 critical · 4 warn · 1 info",
+    "statusOverview": {
+      "Dashboard": "http://127.0.0.1:18789/",
+      "OS": "linux 6.8.0-94-generic (x64) · node 22.22.0",
+      "Tailscale": "off",
+      "Channel": "stable (config)",
+      "Update": "available · pnpm · npm update 2026.3.8",
+      "Gateway": "local · ws://127.0.0.1:18789 (local loopback) · reachable 27ms · auth token · 2bf5bd64c8d3 (172.",
       "Gateway service": "systemd not installed",
       "Node service": "systemd not installed",
       "Agents": "11 · 8 bootstrap files present · sessions 141 · default main active just now",

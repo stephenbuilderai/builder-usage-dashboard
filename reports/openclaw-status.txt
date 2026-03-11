@@ -64,11 +64,11 @@ Sessions
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 386% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 386% cached │
 │ agent:main:telegram:group:-1003…                │ group  │ 7m ago   │ gpt-5.4      │ 96k/200k (48%) · 🗄️ 60% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 28m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 28m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 386% cached │
 │ agent:main:main                                 │ direct │ 33m ago  │ gpt-5-mini   │ 18k/400k (5%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 57m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 58m ago  │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 287% cached │
 │ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 14k/400k (4%) · 🗄️ 99% cached  │
 └─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘

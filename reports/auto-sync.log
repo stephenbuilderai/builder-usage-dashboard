@@ -8330,3 +8330,114 @@ To https://github.com/stephenbuilderai/builder-usage-dashboard.git
 ++ date -Is
 + echo '[2026-03-11T00:35:40+01:00] pushed'
 [2026-03-11T00:35:40+01:00] pushed
+[2026-03-11T01:05:18+01:00] auto-sync start
+Scanned 61 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 953,124 | Size: 3.65 MB
+Top token-heavy files:
+01. 887,779  reports/usage-history.json
+02. 28,052  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 993  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 30, estimated tokens: 634,307
+[master bb4aabc] chore: auto-sync dashboard 2026-03-11T01:05:27+01:00
+ 12 files changed, 4183 insertions(+), 4098 deletions(-)
+ create mode 100644 docs/reports/daily-rollups/2026-03-11.json
+ create mode 100644 reports/daily-rollups/2026-03-11.json
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   9d38fd2..bb4aabc  master -> master
+[2026-03-11T01:05:28+01:00] pushed
+[2026-03-11T01:05:33+01:00] auto-sync start
+Scanned 63 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 953,572 | Size: 3.65 MB
+Top token-heavy files:
+01. 887,806  reports/usage-history.json
+02. 28,069  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 993  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 30, estimated tokens: 634,307
+[master 12635c8] chore: auto-sync dashboard 2026-03-11T01:05:40+01:00
+ 10 files changed, 4054 insertions(+), 4047 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   bb4aabc..12635c8  master -> master
+[2026-03-11T01:05:41+01:00] pushed
+[2026-03-11T01:35:19+01:00] auto-sync start
+Scanned 63 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 953,601 | Size: 3.65 MB
+Top token-heavy files:
+01. 887,835  reports/usage-history.json
+02. 28,069  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 993  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 30, estimated tokens: 747,325
+[master 9da079e] chore: auto-sync dashboard 2026-03-11T01:35:28+01:00
+ 12 files changed, 4148 insertions(+), 4139 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   12635c8..9da079e  master -> master
+[2026-03-11T01:35:29+01:00] pushed
+++ date -Is
++ echo '[2026-03-11T01:35:32+01:00] auto-sync start'
+[2026-03-11T01:35:32+01:00] auto-sync start
++ node token-audit.js --root . --top 25 --out reports/token-audit.json --html reports/token-audit.html
+Scanned 63 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 953,657 | Size: 3.65 MB
+Top token-heavy files:
+01. 887,864  reports/usage-history.json
+02. 28,070  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 993  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
++ node openclaw-usage.js capture
+Captured OpenClaw usage snapshot.
+Sessions: 30, estimated tokens: 747,325
++ git add docs/index.html docs/version.json docs/reports/daily-rollups/2026-03-05.json docs/reports/daily-rollups/2026-03-06.json docs/reports/daily-rollups/2026-03-07.json docs/reports/daily-rollups/2026-03-08.json docs/reports/daily-rollups/2026-03-09.json docs/reports/daily-rollups/2026-03-10.json docs/reports/daily-rollups/2026-03-11.json docs/reports/daily-rollups/summary-5d.md reports/usage-dashboard.html reports/usage-history.json reports/usage-latest.json reports/openclaw-status.txt reports/daily-rollups/2026-03-05.json reports/daily-rollups/2026-03-06.json reports/daily-rollups/2026-03-07.json reports/daily-rollups/2026-03-08.json reports/daily-rollups/2026-03-09.json reports/daily-rollups/2026-03-10.json reports/daily-rollups/2026-03-11.json reports/daily-rollups/summary-5d.md reports/token-audit.json reports/token-audit.html
++ git diff --cached --quiet
+++ date -Is
++ git commit -m 'chore: auto-sync dashboard 2026-03-11T01:35:40+01:00'
+[master 04c1850] chore: auto-sync dashboard 2026-03-11T01:35:40+01:00
+ 10 files changed, 4056 insertions(+), 4049 deletions(-)
+++ git rev-parse --abbrev-ref HEAD
++ CURRENT_BRANCH=master
++ git push origin master
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   9da079e..04c1850  master -> master
+++ date -Is
++ echo '[2026-03-11T01:35:41+01:00] pushed'
+[2026-03-11T01:35:41+01:00] pushed

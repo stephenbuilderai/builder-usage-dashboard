@@ -3,13 +3,13 @@
 Window: 2026-03-09 → 2026-03-12 (4 day(s))
 
 ## Trend narrative
-- Estimated tokens moved up by 149,801 across the available window.
+- Estimated tokens moved up by 150,127 across the available window.
 - Estimated daily costs track token movement and remain rough heuristics.
 
 ## Biggest drivers
-- Top models: gpt-5-mini (1,195,171 est tokens) · gpt-5.4 (1,162,417 est tokens) · gpt-5.3-codex (747,183 est tokens)
-- Top agents: main (2,509,809 est tokens) · builder (449,384 est tokens) · growth-researcher (46,712 est tokens)
-- Top attribution buckets: interactive (1,937,811 est tokens) · cron (1,243,278 est tokens) · system/other (0 est tokens)
+- Top models: gpt-5-mini (1,195,497 est tokens) · gpt-5.4 (1,162,417 est tokens) · gpt-5.3-codex (747,183 est tokens)
+- Top agents: main (2,510,135 est tokens) · builder (449,384 est tokens) · growth-researcher (46,712 est tokens)
+- Top attribution buckets: interactive (1,937,826 est tokens) · cron (1,243,589 est tokens) · system/other (0 est tokens)
 
 ## Anomalies
 - 2026-03-10: -15.3% token shift vs previous day

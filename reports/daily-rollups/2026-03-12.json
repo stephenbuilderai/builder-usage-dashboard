@@ -1,16 +1,16 @@
 {
   "date": "2026-03-12",
-  "capturedAt": "2026-03-12T21:05:32.502Z",
-  "tokens": 982171,
-  "estimatedCostUsd": 7.86,
+  "capturedAt": "2026-03-12T21:35:35.712Z",
+  "tokens": 987176,
+  "estimatedCostUsd": 7.9,
   "byModel": {
-    "gpt-5-mini": 374.927,
-    "gpt-5.4": 484.232,
+    "gpt-5-mini": 356.493,
+    "gpt-5.4": 507.671,
     "gpt-5.3-codex": 112.346,
     "gpt-5.2": 10.666
   },
   "byAgent": {
-    "main": 814.351,
+    "main": 819.356,
     "builder": 112.346,
     "growth-analyst": 10.666,
     "growth-engagement": 10.658,
@@ -20,8 +20,8 @@
     "growth-researcher": 11.678
   },
   "attributionBuckets": {
-    "cron": 327.509,
-    "interactive": 654.662,
+    "cron": 309.075,
+    "interactive": 678.101,
     "system/other": 0
   },
   "securityCounts": {

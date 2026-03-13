@@ -58,20 +58,20 @@ Channels
 └──────────┴─────────┴────────┴───────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌─────────────────────────────────────────────────┬────────┬──────────┬──────────────┬────────────────────────────────┐
-│ Key                                             │ Kind   │ Age      │ Model        │ Tokens                         │
-├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 18k/400k (5%) · 🗄️ 249% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 18k/400k (5%) · 🗄️ 249% cached │
-│ agent:main:main                                 │ direct │ 10m ago  │ gpt-5-mini   │ 19k/400k (5%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 27m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5-mini   │ 18k/400k (5%) · 🗄️ 249% cached │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 57m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 15k/400k (4%)                  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 1h ago   │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 2h ago   │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 109% cached │
-└─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
+┌────────────────────────────────────────────────┬────────┬──────────┬──────────────┬─────────────────────────────────┐
+│ Key                                            │ Kind   │ Age      │ Model        │ Tokens                          │
+├────────────────────────────────────────────────┼────────┼──────────┼──────────────┼─────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ just now │ gpt-5-mini   │ 15k/400k (4%)                   │
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ just now │ gpt-5-mini   │ 15k/400k (4%)                   │
+│ agent:main:telegram:direct:1773…               │ direct │ 1m ago   │ gpt-5.4      │ 125k/400k (31%) · 🗄️ 97% cached │
+│ agent:main:main                                │ direct │ 10m ago  │ gpt-5-mini   │ 19k/400k (5%)                   │
+│ agent:main:cron:09e9053c-4dcf-4…               │ direct │ 27m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 100% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…               │ direct │ 27m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 100% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ 30m ago  │ gpt-5-mini   │ 15k/400k (4%)                   │
+│ agent:main:cron:09e9053c-4dcf-4…               │ direct │ 57m ago  │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached   │
+│ agent:main:cron:da0d4fa5-733f-4…               │ direct │ 1h ago   │ gpt-5-mini   │ 18k/400k (5%) · 🗄️ 249% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…               │ direct │ 1h ago   │ gpt-5-mini   │ 15k/400k (4%) · 🗄️ 99% cached   │
+└────────────────────────────────────────────────┴────────┴──────────┴──────────────┴─────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting

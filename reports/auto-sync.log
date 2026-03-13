@@ -14507,3 +14507,354 @@ To https://github.com/stephenbuilderai/builder-usage-dashboard.git
 ++ date -Is
 + echo '[2026-03-13T09:05:49+01:00] pushed'
 [2026-03-13T09:05:49+01:00] pushed
+[2026-03-13T09:35:26+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 962,595 | Size: 3.68 MB
+Top token-heavy files:
+01. 896,308  reports/usage-history.json
+02. 27,777  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,917  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 921,996
+[master 8472bd7] chore: auto-sync dashboard 2026-03-13T09:35:34+01:00
+ 12 files changed, 3124 insertions(+), 3100 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   903e89f..8472bd7  master -> master
+[2026-03-13T09:35:35+01:00] pushed
+[2026-03-13T10:05:28+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 962,795 | Size: 3.68 MB
+Top token-heavy files:
+01. 896,501  reports/usage-history.json
+02. 27,785  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 922,083
+[master 703e217] chore: auto-sync dashboard 2026-03-13T10:05:36+01:00
+ 12 files changed, 3117 insertions(+), 3093 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   8472bd7..703e217  master -> master
+[2026-03-13T10:05:37+01:00] pushed
+[2026-03-13T10:05:42+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 962,993 | Size: 3.68 MB
+Top token-heavy files:
+01. 896,693  reports/usage-history.json
+02. 27,792  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,917  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 922,083
+[master 05c2c08] chore: auto-sync dashboard 2026-03-13T10:06:00+01:00
+ 10 files changed, 3048 insertions(+), 3026 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   703e217..05c2c08  master -> master
+[2026-03-13T10:06:39+01:00] pushed
+[2026-03-13T10:35:25+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 963,147 | Size: 3.68 MB
+Top token-heavy files:
+01. 896,883  reports/usage-history.json
+02. 27,770  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,903  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 934,451
+[master a7a996f] chore: auto-sync dashboard 2026-03-13T10:35:33+01:00
+ 12 files changed, 3145 insertions(+), 3119 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   05c2c08..a7a996f  master -> master
+[2026-03-13T10:35:35+01:00] pushed
+[2026-03-13T11:05:27+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 963,388 | Size: 3.69 MB
+Top token-heavy files:
+01. 897,076  reports/usage-history.json
+02. 27,801  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 988,802
+[master 86cd825] chore: auto-sync dashboard 2026-03-13T11:05:49+01:00
+ 12 files changed, 3194 insertions(+), 3170 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   a7a996f..86cd825  master -> master
+[2026-03-13T11:05:50+01:00] pushed
+[2026-03-13T11:05:56+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 963,591 | Size: 3.69 MB
+Top token-heavy files:
+01. 897,269  reports/usage-history.json
+02. 27,811  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 989,172
+[master 620e0dc] chore: auto-sync dashboard 2026-03-13T11:06:04+01:00
+ 12 files changed, 3142 insertions(+), 3118 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   86cd825..620e0dc  master -> master
+[2026-03-13T11:06:05+01:00] pushed
+[2026-03-13T11:35:26+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 963,783 | Size: 3.69 MB
+Top token-heavy files:
+01. 897,461  reports/usage-history.json
+02. 27,811  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 893,792
+[master e895646] chore: auto-sync dashboard 2026-03-13T11:35:34+01:00
+ 12 files changed, 3152 insertions(+), 3129 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   620e0dc..e895646  master -> master
+[2026-03-13T11:35:35+01:00] pushed
+[2026-03-13T11:35:39+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 963,980 | Size: 3.69 MB
+Top token-heavy files:
+01. 897,649  reports/usage-history.json
+02. 27,820  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 893,792
+[master e756016] chore: auto-sync dashboard 2026-03-13T11:35:47+01:00
+ 10 files changed, 3079 insertions(+), 3056 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   e895646..e756016  master -> master
+[2026-03-13T11:35:49+01:00] pushed
+[2026-03-13T12:05:27+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 964,168 | Size: 3.69 MB
+Top token-heavy files:
+01. 897,837  reports/usage-history.json
+02. 27,820  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 895,895
+[master 714b9d3] chore: auto-sync dashboard 2026-03-13T12:05:35+01:00
+ 12 files changed, 3178 insertions(+), 3155 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   e756016..714b9d3  master -> master
+[2026-03-13T12:05:36+01:00] pushed
+++ date -Is
++ echo '[2026-03-13T12:05:41+01:00] auto-sync start'
+[2026-03-13T12:05:41+01:00] auto-sync start
++ node token-audit.js --root . --top 25 --out reports/token-audit.json --html reports/token-audit.html
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 964,362 | Size: 3.69 MB
+Top token-heavy files:
+01. 898,023  reports/usage-history.json
+02. 27,828  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
++ node openclaw-usage.js capture
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 895,895
++ git add docs/index.html docs/version.json docs/reports/daily-rollups/2026-03-05.json docs/reports/daily-rollups/2026-03-06.json docs/reports/daily-rollups/2026-03-07.json docs/reports/daily-rollups/2026-03-08.json docs/reports/daily-rollups/2026-03-09.json docs/reports/daily-rollups/2026-03-10.json docs/reports/daily-rollups/2026-03-11.json docs/reports/daily-rollups/2026-03-12.json docs/reports/daily-rollups/2026-03-13.json docs/reports/daily-rollups/summary-5d.md reports/usage-dashboard.html reports/usage-history.json reports/usage-latest.json reports/openclaw-status.txt reports/daily-rollups/2026-03-05.json reports/daily-rollups/2026-03-06.json reports/daily-rollups/2026-03-07.json reports/daily-rollups/2026-03-08.json reports/daily-rollups/2026-03-09.json reports/daily-rollups/2026-03-10.json reports/daily-rollups/2026-03-11.json reports/daily-rollups/2026-03-12.json reports/daily-rollups/2026-03-13.json reports/daily-rollups/summary-5d.md reports/token-audit.json reports/token-audit.html
++ git diff --cached --quiet
+++ date -Is
++ git commit -m 'chore: auto-sync dashboard 2026-03-13T12:05:49+01:00'
+[master 3d36e28] chore: auto-sync dashboard 2026-03-13T12:05:49+01:00
+ 10 files changed, 3071 insertions(+), 3048 deletions(-)
+++ git rev-parse --abbrev-ref HEAD
++ CURRENT_BRANCH=master
++ git push origin master
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   714b9d3..3d36e28  master -> master
+++ date -Is
++ echo '[2026-03-13T12:05:50+01:00] pushed'
+[2026-03-13T12:05:50+01:00] pushed
+++ date -Is
++ echo '[2026-03-13T12:05:51+01:00] auto-sync start'
+[2026-03-13T12:05:51+01:00] auto-sync start
++ node token-audit.js --root . --top 25 --out reports/token-audit.json --html reports/token-audit.html
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 964,547 | Size: 3.69 MB
+Top token-heavy files:
+01. 898,208  reports/usage-history.json
+02. 27,828  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
++ node openclaw-usage.js capture
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 895,895
++ git add docs/index.html docs/version.json docs/reports/daily-rollups/2026-03-05.json docs/reports/daily-rollups/2026-03-06.json docs/reports/daily-rollups/2026-03-07.json docs/reports/daily-rollups/2026-03-08.json docs/reports/daily-rollups/2026-03-09.json docs/reports/daily-rollups/2026-03-10.json docs/reports/daily-rollups/2026-03-11.json docs/reports/daily-rollups/2026-03-12.json docs/reports/daily-rollups/2026-03-13.json docs/reports/daily-rollups/summary-5d.md reports/usage-dashboard.html reports/usage-history.json reports/usage-latest.json reports/openclaw-status.txt reports/daily-rollups/2026-03-05.json reports/daily-rollups/2026-03-06.json reports/daily-rollups/2026-03-07.json reports/daily-rollups/2026-03-08.json reports/daily-rollups/2026-03-09.json reports/daily-rollups/2026-03-10.json reports/daily-rollups/2026-03-11.json reports/daily-rollups/2026-03-12.json reports/daily-rollups/2026-03-13.json reports/daily-rollups/summary-5d.md reports/token-audit.json reports/token-audit.html
++ git diff --cached --quiet
+++ date -Is
++ git commit -m 'chore: auto-sync dashboard 2026-03-13T12:05:59+01:00'
+[master 55a8dfe] chore: auto-sync dashboard 2026-03-13T12:05:59+01:00
+ 10 files changed, 3074 insertions(+), 3051 deletions(-)
+++ git rev-parse --abbrev-ref HEAD
++ CURRENT_BRANCH=master
++ git push origin master
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   3d36e28..55a8dfe  master -> master
+++ date -Is
++ echo '[2026-03-13T12:06:00+01:00] pushed'
+[2026-03-13T12:06:00+01:00] pushed
+[2026-03-13T12:35:27+01:00] auto-sync start
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 964,731 | Size: 3.69 MB
+Top token-heavy files:
+01. 898,393  reports/usage-history.json
+02. 27,827  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 922,585
+[master ef3aaf5] chore: auto-sync dashboard 2026-03-13T12:35:35+01:00
+ 12 files changed, 3192 insertions(+), 3169 deletions(-)
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   55a8dfe..ef3aaf5  master -> master
+[2026-03-13T12:35:36+01:00] pushed
+++ date -Is
++ echo '[2026-03-13T12:35:40+01:00] auto-sync start'
+[2026-03-13T12:35:40+01:00] auto-sync start
++ node token-audit.js --root . --top 25 --out reports/token-audit.json --html reports/token-audit.html
+Scanned 67 files in /data/.openclaw/workspace/agents/builder
+Estimated tokens: 964,924 | Size: 3.69 MB
+Top token-heavy files:
+01. 898,579  reports/usage-history.json
+02. 27,834  reports/usage-latest.json
+03. 12,348  openclaw-usage.js
+04. 2,691  skills/model-usage/scripts/model_usage.py
+05. 1,918  reports/openclaw-status.txt
+06. 1,690  skills/self-improving/SKILL.md
+07. 1,288  token-audit.js
+08. 1,068  skills/self-improving/archive/migrated-lightweight-learnings-2026-03-04.md
+09. 994  reports/token-audit.json
+10. 858  skills/self-improving/operations.md
+
+Wrote JSON report: /data/.openclaw/workspace/agents/builder/reports/token-audit.json
+Wrote HTML report: /data/.openclaw/workspace/agents/builder/reports/token-audit.html
++ node openclaw-usage.js capture
+Captured OpenClaw usage snapshot.
+Sessions: 33, estimated tokens: 922,585
++ git add docs/index.html docs/version.json docs/reports/daily-rollups/2026-03-05.json docs/reports/daily-rollups/2026-03-06.json docs/reports/daily-rollups/2026-03-07.json docs/reports/daily-rollups/2026-03-08.json docs/reports/daily-rollups/2026-03-09.json docs/reports/daily-rollups/2026-03-10.json docs/reports/daily-rollups/2026-03-11.json docs/reports/daily-rollups/2026-03-12.json docs/reports/daily-rollups/2026-03-13.json docs/reports/daily-rollups/summary-5d.md reports/usage-dashboard.html reports/usage-history.json reports/usage-latest.json reports/openclaw-status.txt reports/daily-rollups/2026-03-05.json reports/daily-rollups/2026-03-06.json reports/daily-rollups/2026-03-07.json reports/daily-rollups/2026-03-08.json reports/daily-rollups/2026-03-09.json reports/daily-rollups/2026-03-10.json reports/daily-rollups/2026-03-11.json reports/daily-rollups/2026-03-12.json reports/daily-rollups/2026-03-13.json reports/daily-rollups/summary-5d.md reports/token-audit.json reports/token-audit.html
++ git diff --cached --quiet
+++ date -Is
++ git commit -m 'chore: auto-sync dashboard 2026-03-13T12:35:48+01:00'
+[master 3a6f73c] chore: auto-sync dashboard 2026-03-13T12:35:48+01:00
+ 10 files changed, 3084 insertions(+), 3061 deletions(-)
+++ git rev-parse --abbrev-ref HEAD
++ CURRENT_BRANCH=master
++ git push origin master
+To https://github.com/stephenbuilderai/builder-usage-dashboard.git
+   ef3aaf5..3a6f73c  master -> master
+++ date -Is
++ echo '[2026-03-13T12:35:49+01:00] pushed'
+[2026-03-13T12:35:49+01:00] pushed

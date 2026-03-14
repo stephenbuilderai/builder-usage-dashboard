@@ -1,0 +1,6 @@
++ set -euo pipefail
++ REPO_DIR=/data/.openclaw/workspace/agents/builder
++ LOG_DIR=/data/.openclaw/workspace/agents/builder/reports
++ LOG_FILE=/data/.openclaw/workspace/agents/builder/reports/auto-sync.log
++ mkdir -p /data/.openclaw/workspace/agents/builder/reports
++ cd /data/.openclaw/workspace/agents/builder

@@ -1,9 +1,9 @@
 {
-  "capturedAt": "2026-03-13T23:05:49.105Z",
+  "capturedAt": "2026-03-14T12:02:37.558Z",
   "source": "openclaw-agent-session_status",
-  "dayLeftPercent": 99.65,
-  "dayLeftText": "23h 55m",
-  "weekLeftPercent": 85.74,
-  "weekLeftText": "5d 23h 55m",
+  "dayLeftPercent": 63,
+  "dayLeftText": "2h 29m",
+  "weekLeftPercent": 8,
+  "weekLeftText": "4d 7h",
   "model": "openai-codex/gpt-5.4"
 }

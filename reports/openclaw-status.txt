@@ -1,29 +1,27 @@
 OpenClaw status
 
 Overview
-┌─────────────────┬───────────────────────────────────────────────────────────────────────────────────────────────────┐
-│ Item            │ Value                                                                                             │
-├─────────────────┼───────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Dashboard       │ http://127.0.0.1:18789/                                                                           │
-│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                       │
-│ Tailscale       │ off                                                                                               │
-│ Channel         │ stable (config)                                                                                   │
-│ Update          │ available · pnpm · npm update 2026.3.13                                                           │
-│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · reachable 16ms · auth token · 2bf5bd64c8d3 (172.  │
-│                 │ 23.0.3) app 2026.3.13 linux 6.8.0-94-generic                                                      │
-│ Gateway service │ systemd not installed                                                                             │
-│ Node service    │ systemd not installed                                                                             │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 147 · default main active just now                      │
-│ Memory          │ 19 files · 49 chunks · sources memory · plugin memory-core · vector ready · fts ready · cache on  │
-│                 │ (150)                                                                                             │
-│ Probes          │ skipped (use --deep)                                                                              │
-│ Events          │ none                                                                                              │
-│ Heartbeat       │ 30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled    │
-│                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth- │
-│                 │ strategist), disabled (trading-commander), disabled (trading-execution-risk), disabled (trading-  │
-│                 │ review-research)                                                                                  │
-│ Sessions        │ 147 active · default gpt-5.4 (200k ctx) · 11 stores                                               │
-└─────────────────┴───────────────────────────────────────────────────────────────────────────────────────────────────┘
+┌─────────────────┬────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│ Item            │ Value                                                                                              │
+├─────────────────┼────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Dashboard       │ http://127.0.0.1:18789/                                                                            │
+│ OS              │ linux 6.8.0-94-generic (x64) · node 22.22.0                                                        │
+│ Tailscale       │ off                                                                                                │
+│ Channel         │ stable (config)                                                                                    │
+│ Update          │ pnpm · npm latest 2026.3.13                                                                        │
+│ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · unreachable (missing scope: operator.read)         │
+│ Gateway service │ systemd not installed                                                                              │
+│ Node service    │ systemd not installed                                                                              │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 147 · default main active just now                       │
+│ Memory          │ enabled (plugin memory-core) · unavailable                                                         │
+│ Probes          │ skipped (use --deep)                                                                               │
+│ Events          │ none                                                                                               │
+│ Heartbeat       │ 30m (main), disabled (builder), disabled (growth-analyst), disabled (growth-content), disabled     │
+│                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth-  │
+│                 │ strategist), disabled (trading-commander), disabled (trading-execution-risk), disabled (trading-   │
+│                 │ review-research)                                                                                   │
+│ Sessions        │ 147 active · default gpt-5.4 (200k ctx) · 11 stores                                                │
+└─────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 Security audit
 Summary: 5 critical · 4 warn · 1 info
@@ -49,36 +47,33 @@ Full report: openclaw security audit
 Deep probe: openclaw security audit --deep
 
 Channels
-┌──────────┬─────────┬────────┬───────────────────────────────────────────────────────────────────────────────────────┐
-│ Channel  │ Enabled │ State  │ Detail                                                                                │
-├──────────┼─────────┼────────┼───────────────────────────────────────────────────────────────────────────────────────┤
-│ Telegram │ ON      │ WARN   │ token config (8216…Faqo · len 46) · accounts 1/1 · gateway: Config allows             │
-│          │         │        │ unmentioned group messages (requireMention=false). Telegram Bot API p…                │
-│ Discord  │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                      │
-└──────────┴─────────┴────────┴───────────────────────────────────────────────────────────────────────────────────────┘
+┌──────────┬─────────┬────────┬────────────────────────────────────────────────────────────────────────────────────────┐
+│ Channel  │ Enabled │ State  │ Detail                                                                                 │
+├──────────┼─────────┼────────┼────────────────────────────────────────────────────────────────────────────────────────┤
+│ Telegram │ ON      │ OK     │ token config (8216…Faqo · len 46) · accounts 1/1                                       │
+│ Discord  │ ON      │ OK     │ token config (MTQ3…u8Js · len 72) · accounts 1/1                                       │
+└──────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌───────────────────────────────────────────────┬────────┬──────────┬──────────────┬──────────────────────────────────┐
-│ Key                                           │ Kind   │ Age      │ Model        │ Tokens                           │
-├───────────────────────────────────────────────┼────────┼──────────┼──────────────┼──────────────────────────────────┤
-│ agent:main:telegram:group:-1003…              │ group  │ just now │ gpt-5.4      │ 53k/272k (19%) · 🗄️ 43% cached   │
-│ agent:main:telegram:direct:1773…              │ direct │ just now │ gpt-5.4      │ 162k/272k (60%) · 🗄️ 100% cached │
-│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 1m ago   │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 234% cached   │
-│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 1m ago   │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 234% cached   │
-│ agent:main:cron:09e9053c-4dcf-4…              │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 139% cached   │
-│ agent:main:cron:09e9053c-4dcf-4…              │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 139% cached   │
-│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 31m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 234% cached   │
-│ agent:main:cron:09e9053c-4dcf-4…              │ direct │ 59m ago  │ gpt-5-mini   │ 16k/400k (4%) · 🗄️ 193% cached   │
-│ agent:main:main                               │ direct │ 1h ago   │ gpt-5-mini   │ 20k/400k (5%)                    │
-│ agent:main:cron:da0d4fa5-733f-4…              │ direct │ 1h ago   │ gpt-5-mini   │ 24k/400k (6%) · 🗄️ 134% cached   │
-└───────────────────────────────────────────────┴────────┴──────────┴──────────────┴──────────────────────────────────┘
+┌─────────────────────────────────────────────────┬────────┬──────────┬──────────────┬─────────────────────────────────┐
+│ Key                                             │ Kind   │ Age      │ Model        │ Tokens                          │
+├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼─────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 223% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 223% cached  │
+│ agent:main:telegram:direct:1773…                │ direct │ 2m ago   │ gpt-5.4      │ 56k/272k (21%) · 🗄️ 97% cached  │
+│ agent:main:telegram:group:-1003…                │ group  │ 14m ago  │ gpt-5.4      │ 26k/272k (9%) · 🗄️ 99% cached   │
+│ agent:trading-commander:cron:0d…                │ direct │ 17m ago  │ gpt-5.4      │ 37k/272k (13%) · 🗄️ 615% cached │
+│ agent:trading-commander:cron:0d…                │ direct │ 17m ago  │ gpt-5.4      │ 37k/272k (13%) · 🗄️ 615% cached │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 114% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 114% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 223% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 59m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 139% cached  │
+└─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴─────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting
 
-Update available (npm 2026.3.13). Run: openclaw update
-
 Next steps:
   Need to share?      openclaw status --all
   Need to debug live? openclaw logs --follow
-  Need to test channels? openclaw status --deep
+  Fix reachability first: openclaw gateway probe

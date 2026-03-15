@@ -1,23 +1,23 @@
 {
-  "generatedAt": "2026-03-15T00:02:06.125Z",
+  "generatedAt": "2026-03-15T00:32:07.561Z",
   "summary": {
     "root": "/data/.openclaw/workspace/agents/builder",
-    "files": 69,
-    "tokens": 989178,
-    "bytes": 3967289
+    "files": 71,
+    "tokens": 989844,
+    "bytes": 3969971
   },
   "topFiles": [
     {
       "file": "reports/usage-history.json",
-      "bytes": 3696214,
-      "lines": 123318,
-      "tokens": 922754
+      "bytes": 3697123,
+      "lines": 123346,
+      "tokens": 922982
     },
     {
       "file": "reports/usage-latest.json",
-      "bytes": 112595,
-      "lines": 649,
-      "tokens": 27506
+      "bytes": 112676,
+      "lines": 651,
+      "tokens": 27523
     },
     {
       "file": "openclaw-usage.js",
@@ -33,9 +33,9 @@
     },
     {
       "file": "reports/openclaw-status.txt",
-      "bytes": 10196,
+      "bytes": 10208,
       "lines": 85,
-      "tokens": 1917
+      "tokens": 1918
     },
     {
       "file": "skills/self-improving/SKILL.md",
@@ -161,9 +161,9 @@
   "byFolder": [
     {
       "folder": "reports",
-      "files": 16,
-      "bytes": 3832287,
-      "tokens": 955500
+      "files": 17,
+      "bytes": 3834129,
+      "tokens": 955956
     },
     {
       "folder": ".",
@@ -179,9 +179,9 @@
     },
     {
       "folder": "docs",
-      "files": 14,
-      "bytes": 10961,
-      "tokens": 2741
+      "files": 15,
+      "bytes": 11801,
+      "tokens": 2951
     },
     {
       "folder": ".clawhub",

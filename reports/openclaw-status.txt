@@ -66,7 +66,7 @@ Sessions
 │ agent:trading-commander:cron:4c…                 │ direct │ 8m ago   │ gpt-5.4      │ 12k/272k (4%) · 🗄️ 311% cached │
 │ agent:trading-commander:cron:4c…                 │ direct │ 13m ago  │ gpt-5.4      │ 18k/272k (7%) · 🗄️ 765% cached │
 │ agent:trading-commander:cron:4c…                 │ direct │ 18m ago  │ gpt-5.4      │ 17k/272k (6%) · 🗄️ 401% cached │
-│ agent:main:main                                  │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached  │
+│ agent:main:main                                  │ direct │ 19m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached  │
 │ agent:trading-commander:cron:4c…                 │ direct │ 23m ago  │ gpt-5.4      │ 22k/272k (8%) · 🗄️ 461% cached │
 └──────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
 

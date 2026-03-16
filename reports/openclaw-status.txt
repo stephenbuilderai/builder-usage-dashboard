@@ -58,25 +58,25 @@ Sessions
 ┌─────────────────────────────────┬────────┬─────────┬───────────────────────────────┬─────────────────────────────────┐
 │ Key                             │ Kind   │ Age     │ Model                         │ Tokens                          │
 ├─────────────────────────────────┼────────┼─────────┼───────────────────────────────┼─────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 20k/1049k (2%) · 🗄️ 160% cached │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 160% cached │
 │ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 20k/1049k (2%) · 🗄️ 160% cached │
-│ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf-  │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 160% cached │
 │ 4…                              │        │         │                               │                                 │
 │ agent:main:cron:09e9053c-4dcf-  │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
 │ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 31m ago │ google/gemini-3.1-pro-preview │ 20k/1049k (2%) · 🗄️ 160% cached │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
 │ 4…                              │        │         │                               │                                 │
-│ agent:main:main                 │ direct │ 57m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 15% cached  │
-│ agent:main:cron:09e9053c-4dcf-  │ direct │ 58m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 160% cached │
+│ agent:main:main                 │ direct │ 29m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%)                  │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 31m ago │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 160% cached │
 │ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1h ago  │ gemini-2.5-flash-lite         │ 18k/272k (7%) · 🗄️ 456% cached  │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 58m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
 │ 4…                              │        │         │                               │                                 │
-│ agent:trading-                  │ group  │ 1h ago  │ google/gemini-3.1-pro-preview │ 72k/1049k (7%) · 🗄️ 92% cached  │
-│ commander:telegra…              │        │         │                               │                                 │
-│ agent:trading-                  │ direct │ 1h ago  │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 133% cached │
-│ commander:cron:0d…              │        │         │                               │                                 │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1h ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 160% cached │
+│ 4…                              │        │         │                               │                                 │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 1h ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
+│ 4…                              │        │         │                               │                                 │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 2h ago  │ google/gemini-3.1-pro-preview │ 20k/1049k (2%) · 🗄️ 160% cached │
+│ 4…                              │        │         │                               │                                 │
 └─────────────────────────────────┴────────┴─────────┴───────────────────────────────┴─────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq

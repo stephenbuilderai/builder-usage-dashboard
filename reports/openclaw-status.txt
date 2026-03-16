@@ -60,14 +60,14 @@ Sessions
 ├──────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
 │ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 18k/272k (6%) · 🗄️ 300% cached │
 │ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 18k/272k (6%) · 🗄️ 300% cached │
-│ agent:trading-commander:cron:0a…                 │ direct │ 1m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 280% cached │
-│ agent:trading-commander:cron:0a…                 │ direct │ 1m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 280% cached │
+│ agent:trading-commander:cron:0a…                 │ direct │ 2m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 280% cached │
+│ agent:trading-commander:cron:0a…                 │ direct │ 2m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 280% cached │
 │ agent:main:main                                  │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached  │
 │ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached │
 │ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 30m ago  │ gpt-5.2      │ 18k/272k (6%) · 🗄️ 300% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ 31m ago  │ gpt-5.2      │ 18k/272k (6%) · 🗄️ 300% cached │
 │ agent:main:cron:09e9053c-4dcf-4…                 │ direct │ 59m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached │
-│ agent:trading-commander:cron:62…                 │ direct │ 59m ago  │ gpt-5.4      │ 21k/272k (8%) · 🗄️ 369% cached │
+│ agent:trading-commander:cron:62…                 │ direct │ 1h ago   │ gpt-5.4      │ 21k/272k (8%) · 🗄️ 369% cached │
 └──────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq

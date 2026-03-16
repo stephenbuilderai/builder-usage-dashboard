@@ -12,7 +12,7 @@ Overview
 │ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · unreachable (missing scope: operator.read)         │
 │ Gateway service │ systemd not installed                                                                              │
 │ Node service    │ systemd not installed                                                                              │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 149 · default main active just now                       │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 155 · default main active just now                       │
 │ Memory          │ enabled (plugin memory-core) · unavailable                                                         │
 │ Probes          │ skipped (use --deep)                                                                               │
 │ Events          │ none                                                                                               │
@@ -20,7 +20,7 @@ Overview
 │                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth-  │
 │                 │ strategist), disabled (trading-commander), disabled (trading-execution-risk), disabled (trading-   │
 │                 │ review-research)                                                                                   │
-│ Sessions        │ 149 active · default gpt-5.4 (200k ctx) · 11 stores                                                │
+│ Sessions        │ 155 active · default gpt-5.4 (200k ctx) · 11 stores                                                │
 └─────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 Security audit
@@ -55,20 +55,20 @@ Channels
 └──────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌─────────────────────────────────────────────────┬────────┬──────────┬──────────────┬─────────────────────────────────┐
-│ Key                                             │ Kind   │ Age      │ Model        │ Tokens                          │
-├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼─────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 323% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 323% cached  │
-│ agent:trading-commander:cron:4c…                │ direct │ 2m ago   │ gpt-5.4      │ 12k/272k (5%) · 🗄️ 480% cached  │
-│ agent:trading-commander:cron:4c…                │ direct │ 2m ago   │ gpt-5.4      │ 12k/272k (5%) · 🗄️ 480% cached  │
-│ agent:main:telegram:group:-1003…                │ group  │ 2m ago   │ gpt-5.2      │ 20k/272k (8%) · 🗄️ 22% cached   │
-│ agent:main:main                                 │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached   │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…                │ direct │ 30m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 323% cached  │
-│ agent:main:telegram:direct:1773…                │ direct │ 48m ago  │ gpt-5.2      │ 89k/272k (33%) · 🗄️ 100% cached │
-└─────────────────────────────────────────────────┴────────┴──────────┴──────────────┴─────────────────────────────────┘
+┌──────────────────────────────────────────────────┬────────┬──────────┬──────────────┬────────────────────────────────┐
+│ Key                                              │ Kind   │ Age      │ Model        │ Tokens                         │
+├──────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 335% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 335% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 13k/272k (5%) · 🗄️ 458% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 13k/272k (5%) · 🗄️ 458% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 7m ago   │ gpt-5.4      │ 15k/272k (5%) · 🗄️ 532% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 12m ago  │ gpt-5.4      │ 16k/272k (6%) · 🗄️ 528% cached │
+│ agent:trading-commander:telegra…                 │ group  │ 15m ago  │ gpt-5.4      │ 12k/272k (4%) · 🗄️ 21% cached  │
+│ agent:trading-commander:cron:4c…                 │ direct │ 17m ago  │ gpt-5.4      │ 16k/272k (6%) · 🗄️ 540% cached │
+│ agent:main:main                                  │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached  │
+│ agent:main:discord:channel:1477…                 │ group  │ 21m ago  │ gpt-5.4      │ 38k/272k (14%) · 🗄️ 98% cached │
+└──────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting

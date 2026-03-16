@@ -60,9 +60,9 @@ Sessions
 ├─────────────────────────────────────────────────┼────────┼──────────┼──────────────┼─────────────────────────────────┤
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 391% cached  │
 │ agent:main:cron:da0d4fa5-733f-4…                │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 391% cached  │
-│ agent:trading-commander:cron:0a…                │ direct │ 1m ago   │ gpt-5.4      │ 20k/272k (7%) · 🗄️ 277% cached  │
-│ agent:trading-commander:cron:0a…                │ direct │ 1m ago   │ gpt-5.4      │ 20k/272k (7%) · 🗄️ 277% cached  │
-│ agent:trading-commander:telegra…                │ group  │ 11m ago  │ gpt-5.4      │ 53k/272k (20%) · 🗄️ 99% cached  │
+│ agent:trading-commander:cron:0a…                │ direct │ 2m ago   │ gpt-5.4      │ 20k/272k (7%) · 🗄️ 277% cached  │
+│ agent:trading-commander:cron:0a…                │ direct │ 2m ago   │ gpt-5.4      │ 20k/272k (7%) · 🗄️ 277% cached  │
+│ agent:trading-commander:telegra…                │ group  │ 12m ago  │ gpt-5.4      │ 53k/272k (20%) · 🗄️ 99% cached  │
 │ agent:main:discord:channel:1477…                │ group  │ 12m ago  │ gpt-5.4      │ 44k/272k (16%) · 🗄️ 100% cached │
 │ agent:main:main                                 │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached   │
 │ agent:main:cron:09e9053c-4dcf-4…                │ direct │ 29m ago  │ gpt-5.2      │ 16k/272k (6%) · 🗄️ 193% cached  │

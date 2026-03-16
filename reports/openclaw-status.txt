@@ -58,16 +58,16 @@ Sessions
 ┌────────────────────────────────────────┬────────┬──────────┬───────────────────────┬─────────────────────────────────┐
 │ Key                                    │ Kind   │ Age      │ Model                 │ Tokens                          │
 ├────────────────────────────────────────┼────────┼──────────┼───────────────────────┼─────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ just now │ gemini-2.5-flash-lite │ 16k/272k (6%) · 🗄️ 196% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ just now │ gemini-2.5-flash-lite │ 16k/272k (6%) · 🗄️ 196% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ just now │ gemini-2.5-flash-lite │ 16k/272k (6%) · 🗄️ 195% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ just now │ gemini-2.5-flash-lite │ 16k/272k (6%) · 🗄️ 195% cached  │
+│ agent:trading-commander:telegra…       │ group  │ 3m ago   │ gpt-5.4               │ 72k/272k (26%) · 🗄️ 98% cached  │
 │ agent:main:main                        │ direct │ 6m ago   │ gpt-5.2               │ 21k/272k (8%) · 🗄️ 99% cached   │
-│ agent:main:cron:09e9053c-4dcf-4…       │ direct │ 29m ago  │ gpt-5.2               │ 17k/272k (6%) · 🗄️ 192% cached  │
-│ agent:main:cron:09e9053c-4dcf-4…       │ direct │ 29m ago  │ gpt-5.2               │ 17k/272k (6%) · 🗄️ 192% cached  │
-│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ 30m ago  │ gpt-5.2               │ 16k/272k (6%) · 🗄️ 196% cached  │
-│ agent:main:telegram:group:-1003…       │ group  │ 33m ago  │ gpt-5.2               │ 21k/272k (8%) · 🗄️ 21% cached   │
-│ agent:trading-commander:telegra…       │ group  │ 45m ago  │ gpt-5.4               │ 59k/272k (22%) · 🗄️ 96% cached  │
-│ agent:main:telegram:direct:1773…       │ direct │ 46m ago  │ gpt-5.4               │ 159k/272k (59%) · 🗄️ 98% cached │
-│ agent:main:cron:70f8d2e4-087c-4…       │ direct │ 58m ago  │ gpt-5.2               │ 17k/272k (6%) · 🗄️ 290% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…       │ direct │ 29m ago  │ gpt-5.2               │ 36k/272k (13%) · 🗄️ 640% cached │
+│ agent:main:cron:09e9053c-4dcf-4…       │ direct │ 29m ago  │ gpt-5.2               │ 36k/272k (13%) · 🗄️ 640% cached │
+│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ 30m ago  │ gpt-5.2               │ 16k/272k (6%) · 🗄️ 195% cached  │
+│ agent:main:cron:09e9053c-4dcf-4…       │ direct │ 59m ago  │ gpt-5.2               │ 17k/272k (6%) · 🗄️ 192% cached  │
+│ agent:main:cron:da0d4fa5-733f-4…       │ direct │ 1h ago   │ gpt-5.2               │ 16k/272k (6%) · 🗄️ 196% cached  │
+│ agent:main:telegram:group:-1003…       │ group  │ 1h ago   │ gpt-5.2               │ 21k/272k (8%) · 🗄️ 21% cached   │
 └────────────────────────────────────────┴────────┴──────────┴───────────────────────┴─────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq

@@ -58,24 +58,24 @@ Sessions
 ┌─────────────────────────────────┬────────┬─────────┬───────────────────────────────┬─────────────────────────────────┐
 │ Key                             │ Kind   │ Age     │ Model                         │ Tokens                          │
 ├─────────────────────────────────┼────────┼─────────┼───────────────────────────────┼─────────────────────────────────┤
-│ agent:main:main                 │ direct │ 1m ago  │ gpt-5.2                       │ 21k/272k (8%) · 🗄️ 99% cached   │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 2m ago  │ gemini-2.5-flash-lite         │ 18k/272k (7%) · 🗄️ 456% cached  │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 15k/1049k (1%) · 🗄️ 86% cached  │
 │ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 2m ago  │ gemini-2.5-flash-lite         │ 18k/272k (7%) · 🗄️ 456% cached  │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 15k/1049k (1%) · 🗄️ 86% cached  │
 │ 4…                              │        │         │                               │                                 │
-│ agent:trading-                  │ group  │ 18m ago │ google/gemini-3.1-pro-preview │ 72k/1049k (7%) · 🗄️ 92% cached  │
+│ agent:main:main                 │ direct │ 27m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 15% cached  │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 160% cached │
+│ 4…                              │        │         │                               │                                 │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 160% cached │
+│ 4…                              │        │         │                               │                                 │
+│ agent:main:cron:da0d4fa5-733f-  │ direct │ 31m ago │ gemini-2.5-flash-lite         │ 18k/272k (7%) · 🗄️ 456% cached  │
+│ 4…                              │        │         │                               │                                 │
+│ agent:trading-                  │ group  │ 48m ago │ google/gemini-3.1-pro-preview │ 72k/1049k (7%) · 🗄️ 92% cached  │
 │ commander:telegra…              │        │         │                               │                                 │
-│ agent:trading-                  │ direct │ 19m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 133% cached │
+│ agent:trading-                  │ direct │ 48m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 133% cached │
 │ commander:cron:0d…              │        │         │                               │                                 │
-│ agent:trading-                  │ direct │ 19m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 133% cached │
+│ agent:trading-                  │ direct │ 48m ago │ google/gemini-3.1-pro-preview │ 23k/1049k (2%) · 🗄️ 133% cached │
 │ commander:cron:0d…              │        │         │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf-  │ direct │ 30m ago │ gpt-5.2                       │ 17k/272k (6%) · 🗄️ 187% cached  │
-│ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf-  │ direct │ 30m ago │ gpt-5.2                       │ 17k/272k (6%) · 🗄️ 187% cached  │
-│ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f-  │ direct │ 32m ago │ gpt-5.2                       │ 18k/272k (7%) · 🗄️ 456% cached  │
-│ 4…                              │        │         │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf-  │ direct │ 1h ago  │ gpt-5.2                       │ 36k/272k (13%) · 🗄️ 640% cached │
+│ agent:main:cron:09e9053c-4dcf-  │ direct │ 59m ago │ gpt-5.2                       │ 17k/272k (6%) · 🗄️ 187% cached  │
 │ 4…                              │        │         │                               │                                 │
 └─────────────────────────────────┴────────┴─────────┴───────────────────────────────┴─────────────────────────────────┘
 

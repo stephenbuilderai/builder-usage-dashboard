@@ -12,7 +12,7 @@ Overview
 │ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · unreachable (missing scope: operator.read)         │
 │ Gateway service │ systemd not installed                                                                              │
 │ Node service    │ systemd not installed                                                                              │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 167 · default main active just now                       │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 175 · default main active just now                       │
 │ Memory          │ enabled (plugin memory-core) · unavailable                                                         │
 │ Probes          │ skipped (use --deep)                                                                               │
 │ Events          │ none                                                                                               │
@@ -20,7 +20,7 @@ Overview
 │                 │ (growth-engagement), disabled (growth-publisher), disabled (growth-researcher), disabled (growth-  │
 │                 │ strategist), disabled (trading-commander), disabled (trading-execution-risk), disabled (trading-   │
 │                 │ review-research)                                                                                   │
-│ Sessions        │ 167 active · default gpt-5.4 (200k ctx) · 11 stores                                                │
+│ Sessions        │ 175 active · default gpt-5.4 (200k ctx) · 11 stores                                                │
 └─────────────────┴────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 Security audit
@@ -58,16 +58,16 @@ Sessions
 ┌──────────────────────────────────────────────────┬────────┬──────────┬──────────────┬────────────────────────────────┐
 │ Key                                              │ Kind   │ Age      │ Model        │ Tokens                         │
 ├──────────────────────────────────────────────────┼────────┼──────────┼──────────────┼────────────────────────────────┤
-│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 387% cached │
-│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 16k/272k (6%) · 🗄️ 387% cached │
-│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 15k/272k (6%) · 🗄️ 539% cached │
-│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 15k/272k (6%) · 🗄️ 539% cached │
-│ agent:trading-commander:cron:4c…                 │ direct │ 7m ago   │ gpt-5.4      │ 22k/272k (8%) · 🗄️ 544% cached │
-│ agent:trading-commander:cron:4c…                 │ direct │ 12m ago  │ gpt-5.4      │ 12k/272k (4%) · 🗄️ 208% cached │
-│ agent:main:discord:channel:1477…                 │ group  │ 17m ago  │ gpt-5.4      │ 42k/272k (15%) · 🗄️ 93% cached │
-│ agent:trading-commander:cron:4c…                 │ direct │ 17m ago  │ gpt-5.4      │ 17k/272k (6%) · 🗄️ 508% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 17k/272k (6%) · 🗄️ 317% cached │
+│ agent:main:cron:da0d4fa5-733f-4…                 │ direct │ just now │ gpt-5-mini   │ 17k/272k (6%) · 🗄️ 317% cached │
+│ agent:trading-commander:cron:0a…                 │ direct │ 1m ago   │ gpt-5.4      │ 13k/272k (5%) · 🗄️ 198% cached │
+│ agent:trading-commander:cron:0a…                 │ direct │ 1m ago   │ gpt-5.4      │ 13k/272k (5%) · 🗄️ 198% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 388% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 2m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 388% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 7m ago   │ gpt-5.4      │ 19k/272k (7%) · 🗄️ 694% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 12m ago  │ gpt-5.4      │ 16k/272k (6%) · 🗄️ 324% cached │
+│ agent:trading-commander:cron:4c…                 │ direct │ 17m ago  │ gpt-5.4      │ 18k/272k (7%) · 🗄️ 473% cached │
 │ agent:main:main                                  │ direct │ 18m ago  │ gpt-5.2      │ 20k/272k (7%) · 🗄️ 99% cached  │
-│ agent:trading-commander:cron:4c…                 │ direct │ 22m ago  │ gpt-5.4      │ 18k/272k (6%) · 🗄️ 654% cached │
 └──────────────────────────────────────────────────┴────────┴──────────┴──────────────┴────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq

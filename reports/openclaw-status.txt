@@ -12,7 +12,7 @@ Overview
 │ Gateway         │ local · ws://127.0.0.1:18789 (local loopback) · unreachable (missing scope: operator.read)         │
 │ Gateway service │ systemd not installed                                                                              │
 │ Node service    │ systemd not installed                                                                              │
-│ Agents          │ 11 · 8 bootstrap files present · sessions 240 · default main active just now                       │
+│ Agents          │ 11 · 8 bootstrap files present · sessions 240 · default main active 1m ago                         │
 │ Memory          │ enabled (plugin memory-core) · unavailable                                                         │
 │ Probes          │ skipped (use --deep)                                                                               │
 │ Events          │ none                                                                                               │
@@ -55,29 +55,29 @@ Channels
 └──────────┴─────────┴────────┴────────────────────────────────────────────────────────────────────────────────────────┘
 
 Sessions
-┌────────────────────────────────┬────────┬──────────┬───────────────────────────────┬─────────────────────────────────┐
-│ Key                            │ Kind   │ Age      │ Model                         │ Tokens                          │
-├────────────────────────────────┼────────┼──────────┼───────────────────────────────┼─────────────────────────────────┤
-│ agent:main:main                │ direct │ just now │ google/gemini-3.1-pro-preview │ 23k/1049k (2%)                  │
-│ agent:main:cron:da0d4fa5-733f- │ direct │ 1m ago   │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f- │ direct │ 1m ago   │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf- │ direct │ 28m ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 100% cached │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf- │ direct │ 28m ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 100% cached │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f- │ direct │ 31m ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf- │ direct │ 58m ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f- │ direct │ 1h ago   │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:09e9053c-4dcf- │ direct │ 1h ago   │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached  │
-│ 4…                             │        │          │                               │                                 │
-│ agent:main:cron:da0d4fa5-733f- │ direct │ 2h ago   │ gemini-2.5-flash-lite         │ 16k/1049k (2%) · 🗄️ 160% cached │
-│ 4…                             │        │          │                               │                                 │
-└────────────────────────────────┴────────┴──────────┴───────────────────────────────┴─────────────────────────────────┘
+┌───────────────────────────────┬────────┬─────────┬───────────────────────────────┬───────────────────────────────────┐
+│ Key                           │ Kind   │ Age     │ Model                         │ Tokens                            │
+├───────────────────────────────┼────────┼─────────┼───────────────────────────────┼───────────────────────────────────┤
+│ agent:main:cron:da0d4fa5-     │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 106k/1049k (10%) · 🗄️ 300% cached │
+│ 733f-4…                       │        │         │                               │                                   │
+│ agent:main:cron:da0d4fa5-     │ direct │ 1m ago  │ gemini-2.5-flash-lite         │ 106k/1049k (10%) · 🗄️ 300% cached │
+│ 733f-4…                       │        │         │                               │                                   │
+│ agent:main:cron:09e9053c-     │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached    │
+│ 4dcf-4…                       │        │         │                               │                                   │
+│ agent:main:cron:09e9053c-     │ direct │ 28m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached    │
+│ 4dcf-4…                       │        │         │                               │                                   │
+│ agent:main:main               │ direct │ 29m ago │ google/gemini-3.1-pro-preview │ 27k/1049k (3%)                    │
+│ agent:main:cron:da0d4fa5-     │ direct │ 31m ago │ google/gemini-3.1-pro-preview │ 106k/1049k (10%) · 🗄️ 300% cached │
+│ 733f-4…                       │        │         │                               │                                   │
+│ agent:main:cron:09e9053c-     │ direct │ 58m ago │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 100% cached   │
+│ 4dcf-4…                       │        │         │                               │                                   │
+│ agent:main:cron:da0d4fa5-     │ direct │ 1h ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached    │
+│ 733f-4…                       │        │         │                               │                                   │
+│ agent:main:cron:09e9053c-     │ direct │ 1h ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached    │
+│ 4dcf-4…                       │        │         │                               │                                   │
+│ agent:main:cron:da0d4fa5-     │ direct │ 2h ago  │ google/gemini-3.1-pro-preview │ 16k/1049k (2%) · 🗄️ 80% cached    │
+│ 733f-4…                       │        │         │                               │                                   │
+└───────────────────────────────┴────────┴─────────┴───────────────────────────────┴───────────────────────────────────┘
 
 FAQ: https://docs.openclaw.ai/faq
 Troubleshooting: https://docs.openclaw.ai/troubleshooting
